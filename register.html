@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear cuenta — AI para tu Negocio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],display:['Space Grotesk','sans-serif']},colors:{dark:{50:'#f8fafc',100:'#e2e8f0',200:'#cbd5e1',300:'#94a3b8',400:'#64748b',500:'#475569',600:'#334155',700:'#1e293b',800:'#0f172a',900:'#020617',950:'#010409'},accent:{DEFAULT:'#6366f1',light:'#818cf8',dark:'#4f46e5'},neon:{green:'#22c55e',yellow:'#facc15'}}}}}
+</script>
+<style>
+body{font-family:'Inter',sans-serif}
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora-blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.1;animation:float 20s infinite ease-in-out}
+.aurora-blob:nth-child(1){width:500px;height:500px;background:#6366f1;top:-15%;left:-10%;animation-delay:0s}
+.aurora-blob:nth-child(2){width:400px;height:400px;background:#22d3ee;bottom:-10%;right:-5%;animation-delay:-8s}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-20px)}}
+.glass{background:rgba(15,23,42,.6);backdrop-filter:blur(32px) saturate(180%);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05)}
+.gradient-text{background:linear-gradient(135deg,#6366f1,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.input-field{width:100%;background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;color:white;font-size:15px;outline:none;transition:all .2s}
+.input-field:focus{border-color:rgba(99,102,241,.5);box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+.input-field::placeholder{color:#475569}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:12px;font-weight:600;font-size:16px;color:white;cursor:pointer;transition:all .3s;border:none}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,.35)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.error-msg{background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);color:#f43f5e;padding:12px 16px;border-radius:10px;font-size:14px}
+.success-msg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#22c55e;padding:12px 16px;border-radius:10px;font-size:14px}
+select.input-field option{background:#0f172a;color:white}
+</style>
+</head>
+<body class="bg-dark-950 text-white min-h-screen flex items-center justify-center px-4 py-12">
+
+<div class="aurora">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+
+<div class="relative z-10 w-full max-w-md">
+
+  <!-- Back link -->
+  <a href="/" class="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors text-sm mb-8">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Volver al sitio
+  </a>
+
+  <div class="glass rounded-2xl p-8">
+
+    <!-- Logo/header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 mb-4">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent-dark flex items-center justify-center text-white font-bold text-sm">S</div>
+        <span class="font-display font-bold text-white">Sergio AI</span>
+      </div>
+      <h1 class="font-display text-2xl font-bold mb-2">Crear cuenta <span class="gradient-text">gratuita</span></h1>
+      <p class="text-dark-400 text-sm">Obtené tu análisis de preparación IA personalizado</p>
+    </div>
+
+    <!-- Message area -->
+    <div id="msg" class="mb-4 hidden"></div>
+
+    <!-- Form -->
+    <form id="registerForm" class="space-y-4">
+      <div>
+        <label class="block text-sm text-dark-300 mb-2 font-medium">Nombre completo</label>
+        <input type="text" id="name" class="input-field" placeholder="Tu nombre" required autocomplete="name">
+      </div>
+      <div>
+        <label class="block text-sm text-dark-300 mb-2 font-medium">Email</label>
+        <input type="email" id="email" class="input-field" placeholder="tu@email.com" required autocomplete="email">
+      </div>
+      <div>
+        <label class="block text-sm text-dark-300 mb-2 font-medium">Contraseña</label>
+        <input type="password" id="password" class="input-field" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password">
+      </div>
+      <div>
+        <label class="block text-sm text-dark-300 mb-2 font-medium">Tipo de negocio</label>
+        <select id="bizType" class="input-field">
+          <option value="">Seleccioná...</option>
+          <option value="services">Servicios profesionales</option>
+          <option value="ecommerce">E-commerce / Tienda</option>
+          <option value="food">Gastronomía / Food</option>
+          <option value="tech">Tech / SaaS</option>
+          <option value="retail">Retail / Local comercial</option>
+          <option value="other">Otro</option>
+        </select>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-primary mt-2">
+        Crear cuenta gratis →
+      </button>
+    </form>
+
+    <p class="text-center text-dark-400 text-sm mt-6">
+      ¿Ya tenés cuenta?
+      <a href="/login" class="text-accent-light hover:text-white transition-colors font-medium">Iniciá sesión</a>
+    </p>
+
+  </div>
+
+  <p class="text-center text-dark-500 text-xs mt-4">
+    Al registrarte, aceptás recibir comunicaciones sobre IA para negocios.
+  </p>
+
+</div>
+
+<script>
+const { createClient } = supabase
+const db = createClient(
+  'https://wdnrdxqkajobjaorssza.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbnJkeHFrYWpvYmphb3Jzc3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjkwMDgsImV4cCI6MjA5NzkwNTAwOH0.5C8ORvvh9AOURwrEjlaNawjNrc-kortPZKKF6TgTPpg'
+)
+
+// Redirect if already logged in
+db.auth.getSession().then(({ data }) => {
+  if (data.session) window.location.href = '/dashboard'
+})
+
+const form = document.getElementById('registerForm')
+const btn = document.getElementById('submitBtn')
+const msg = document.getElementById('msg')
+
+function showMsg(text, type) {
+  msg.className = type === 'error' ? 'mb-4 error-msg' : 'mb-4 success-msg'
+  msg.textContent = text
+  msg.classList.remove('hidden')
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  btn.disabled = true
+  btn.textContent = 'Creando cuenta...'
+  msg.classList.add('hidden')
+
+  const name = document.getElementById('name').value.trim()
+  const email = document.getElementById('email').value.trim()
+  const password = document.getElementById('password').value
+  const bizType = document.getElementById('bizType').value
+
+  const { data, error } = await db.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { full_name: name, business_type: bizType },
+      emailRedirectTo: 'https://sergio-ai-consulting.netlify.app/dashboard'
+    }
+  })
+
+  if (error) {
+    showMsg(error.message === 'User already registered'
+      ? 'Este email ya está registrado. ¿Querés iniciar sesión?'
+      : error.message, 'error')
+    btn.disabled = false
+    btn.textContent = 'Crear cuenta gratis →'
+    return
+  }
+
+  if (data.session) {
+    // Auto-confirmed — go straight to dashboard
+    window.location.href = '/dashboard'
+  } else {
+    // Email confirmation required
+    showMsg('✓ ¡Cuenta creada! Revisá tu email para confirmar y luego iniciá sesión.', 'success')
+    form.style.opacity = '.4'
+    form.style.pointerEvents = 'none'
+    btn.textContent = 'Revisar email →'
+  }
+})
+</script>
+</body>
+</html>

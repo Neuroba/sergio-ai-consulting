@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админка — Sergio AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter'],mono:['JetBrains Mono']},colors:{dark:{950:'#010409',900:'#020617',800:'#0f172a',700:'#1e293b',600:'#334155',500:'#475569',400:'#64748b',300:'#94a3b8',200:'#cbd5e1'},accent:{DEFAULT:'#6366f1',light:'#818cf8',dark:'#4f46e5'},neon:{green:'#22c55e',cyan:'#22d3ee',red:'#f43f5e',yellow:'#facc15',purple:'#a855f7'}}}}}</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#010409;color:#e2e8f0;font-family:'Inter',sans-serif;overflow-x:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px)}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(99,102,241,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.03) 1px,transparent 1px);background-size:60px 60px}
+/* Auth */
+.auth-bg{position:fixed;inset:0;background:#010409;z-index:200;display:flex;align-items:center;justify-content:center}
+.auth-box{background:rgba(15,23,42,.88);backdrop-filter:blur(30px);border:1px solid rgba(99,102,241,.25);border-radius:20px;padding:2.5rem;width:340px;max-width:92vw;position:relative;z-index:1}
+/* Sidebar */
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:215px;background:rgba(2,6,23,.97);border-right:1px solid rgba(255,255,255,.055);backdrop-filter:blur(24px);z-index:100;display:flex;flex-direction:column;padding:1.25rem 0.75rem;transition:transform .3s}
+.nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.55rem 0.75rem;border-radius:10px;cursor:pointer;transition:all .18s;color:#475569;font-size:13.5px;font-weight:500;text-decoration:none;border:1px solid transparent}
+.nav-item:hover{background:rgba(99,102,241,.08);color:#cbd5e1}
+.nav-item.active{background:rgba(99,102,241,.14);color:#818cf8;border-color:rgba(99,102,241,.2)}
+.nav-sep{height:1px;background:rgba(255,255,255,.05);margin:0.65rem 0}
+/* Lang switcher */
+.lang-sw{display:flex;gap:3px;background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:3px}
+.lang-btn{padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;color:#334155;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;border:none;background:transparent}
+.lang-btn.active{background:rgba(99,102,241,.2);color:#818cf8}
+.lang-btn:hover:not(.active){color:#94a3b8}
+/* Main */
+.main{margin-left:215px;min-height:100vh;padding:1.75rem 2rem;position:relative;z-index:10}
+/* Card */
+.card{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.06);border-radius:16px;backdrop-filter:blur(16px)}
+/* HUD */
+.hud{position:relative}
+.hud::before,.hud::after{content:'';position:absolute;width:12px;height:12px;pointer-events:none}
+.hud::before{top:-1px;left:-1px;border-top:1.5px solid rgba(99,102,241,.45);border-left:1.5px solid rgba(99,102,241,.45)}
+.hud::after{bottom:-1px;right:-1px;border-bottom:1.5px solid rgba(34,211,238,.45);border-right:1.5px solid rgba(34,211,238,.45)}
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.b-new{background:rgba(99,102,241,.14);color:#818cf8;border:1px solid rgba(99,102,241,.28)}
+.b-audit{background:rgba(34,211,238,.1);color:#22d3ee;border:1px solid rgba(34,211,238,.22)}
+.b-prog{background:rgba(250,204,21,.1);color:#facc15;border:1px solid rgba(250,204,21,.22)}
+.b-prop{background:rgba(168,85,247,.1);color:#a855f7;border:1px solid rgba(168,85,247,.22)}
+.b-won{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.28)}
+.b-lost{background:rgba(244,63,94,.1);color:#f43f5e;border:1px solid rgba(244,63,94,.2)}
+/* Inputs */
+.inp{background:rgba(15,23,42,.9);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:0.5rem 0.8rem;color:#e2e8f0;font-size:13.5px;width:100%;outline:none;transition:border-color .18s}
+.inp:focus{border-color:rgba(99,102,241,.5);box-shadow:0 0 0 3px rgba(99,102,241,.07)}
+.inp::placeholder{color:#334155}
+select.inp option{background:#0f172a}
+textarea.inp{resize:vertical;min-height:72px;line-height:1.5}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:0.48rem 1rem;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer;transition:all .18s;border:1px solid transparent}
+.btn-p{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;box-shadow:0 3px 16px rgba(99,102,241,.22)}
+.btn-p:hover{box-shadow:0 4px 24px rgba(99,102,241,.4);transform:translateY(-1px)}
+.btn-g{background:rgba(255,255,255,.04);color:#94a3b8;border-color:rgba(255,255,255,.07)}
+.btn-g:hover{background:rgba(255,255,255,.08);color:#e2e8f0}
+.btn-r{background:rgba(244,63,94,.08);color:#f43f5e;border-color:rgba(244,63,94,.18)}
+.btn-r:hover{background:rgba(244,63,94,.15)}
+.btn-sm{padding:0.28rem 0.6rem;font-size:11.5px}
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-box{background:#0b1120;border:1px solid rgba(99,102,241,.2);border-radius:20px;padding:1.75rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
+/* Table */
+.dtable{width:100%;border-collapse:collapse}
+.dtable th{text-align:left;padding:0.7rem 1rem;font-size:9.5px;font-family:'JetBrains Mono',monospace;color:#475569;font-weight:700;letter-spacing:.12em;border-bottom:1px solid rgba(255,255,255,.05)}
+.dtable td{padding:0.7rem 1rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.dtable tr:hover td{background:rgba(255,255,255,.015)}
+.dtable tr:last-child td{border-bottom:none}
+/* Filter tabs */
+.ftab{padding:0.22rem 0.65rem;border-radius:7px;font-size:10.5px;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:all .15s;color:#475569;border:1px solid transparent;background:transparent}
+.ftab:hover{color:#cbd5e1}
+.ftab.on{background:rgba(99,102,241,.14);color:#818cf8;border-color:rgba(99,102,241,.25)}
+/* Link card */
+.link-card{display:flex;align-items:center;gap:0.7rem;padding:0.85rem 1rem;background:rgba(15,23,42,.55);border:1px solid rgba(255,255,255,.055);border-radius:12px;text-decoration:none;transition:all .2s}
+.link-card:hover{border-color:rgba(99,102,241,.28);background:rgba(15,23,42,.88);transform:translateY(-2px);box-shadow:0 8px 30px rgba(99,102,241,.1)}
+.link-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:700}
+/* Stat number */
+.big-num{font-family:'JetBrains Mono',monospace;font-size:2.2rem;font-weight:700;line-height:1}
+/* Sys pulse */
+.sys-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#22d3ee;box-shadow:0 0 7px rgba(34,211,238,.8);animation:sp 2.5s ease-in-out infinite}
+@keyframes sp{0%,100%{opacity:1}50%{opacity:.25}}
+/* Scrollbar */
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(99,102,241,.25);border-radius:99px}
+/* Mobile */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:none}
+  .main{margin-left:0;padding:1.25rem}
+  .mob-hide{display:none!important}
+  .mob-btn{display:flex!important}
+}
+.mob-btn{display:none;position:fixed;top:0.8rem;left:0.8rem;z-index:110;width:38px;height:38px;background:rgba(15,23,42,.9);border:1px solid rgba(99,102,241,.2);border-radius:9px;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.mob-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90}
+.mob-ov.open{display:block}
+</style>
+</head>
+<body>
+
+<!-- ── Auth ── -->
+<div class="auth-bg" id="auth-screen">
+  <canvas id="auth-cv" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.15"></canvas>
+  <div class="auth-box hud">
+    <div style="text-align:center;margin-bottom:1.75rem">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#6366f1,#22d3ee);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace;font-size:17px;box-shadow:0 0 28px rgba(99,102,241,.3)">SZ</div>
+      <div style="font-size:17px;font-weight:700" data-t="auth.title">Панель управления</div>
+      <div style="font-size:10px;font-family:'JetBrains Mono',monospace;margin-top:4px;color:rgba(34,211,238,.5)" data-t="auth.subtitle">sergio-ai-consulting ● ЗАЩИТА</div>
+    </div>
+    <!-- Lang select on login -->
+    <div style="display:flex;justify-content:center;margin-bottom:1.25rem">
+      <div class="lang-sw">
+        <button class="lang-btn active" data-l="ru" onclick="setLang('ru')">RU</button>
+        <button class="lang-btn" data-l="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-l="es" onclick="setLang('es')">ES</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.65rem">
+      <input id="pwd" type="password" class="inp mono" style="text-align:center;letter-spacing:.25em;font-size:15px" data-tp="auth.placeholder" placeholder="••••••••" autofocus>
+      <button class="btn btn-p mono" style="width:100%;letter-spacing:.06em;font-size:13px" onclick="doAuth()" data-t-btn="auth.btn">ВОЙТИ В СИСТЕМУ →</button>
+      <div id="auth-err" style="text-align:center;font-size:11px;font-family:'JetBrains Mono',monospace;color:#f43f5e;display:none" data-t="auth.err">⚠ ДОСТУП_ЗАПРЕЩЁН</div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile overlay -->
+<div class="mob-ov" id="mob-ov" onclick="closeSb()"></div>
+<div class="mob-btn" id="mob-btn" onclick="openSb()">☰</div>
+
+<!-- ── Sidebar ── -->
+<nav class="sidebar" id="sidebar">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;padding:0 4px">
+    <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#6366f1,#22d3ee);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;flex-shrink:0">SZ</div>
+    <div>
+      <div style="font-size:13px;font-weight:600">Sergio Zubov</div>
+      <div style="display:flex;align-items:center;gap:5px;margin-top:2px"><span class="sys-dot"></span><span style="font-size:9px;font-family:'JetBrains Mono',monospace;color:rgba(34,211,238,.5)" data-t="sys.online">● ОНЛАЙН</span></div>
+    </div>
+  </div>
+
+  <!-- Lang switcher -->
+  <div style="margin-bottom:1rem">
+    <div class="lang-sw" style="justify-content:center">
+      <button class="lang-btn active" data-l="ru" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" data-l="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-l="es" onclick="setLang('es')">ES</button>
+    </div>
+  </div>
+
+  <div class="nav-sep"></div>
+
+  <div style="display:flex;flex-direction:column;gap:2px;margin-top:0.5rem">
+    <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#1e293b;letter-spacing:.12em;padding:0 8px;margin-bottom:4px" data-t="nav.sec.main">ГЛАВНОЕ</div>
+    <div class="nav-item active" onclick="go('crm')" id="n-crm"><span>◈</span><span data-t="nav.crm">CRM</span></div>
+    <div class="nav-item" onclick="go('links')" id="n-links"><span>⊞</span><span data-t="nav.links">Быстрый доступ</span></div>
+    <div class="nav-item" onclick="go('analytics')" id="n-analytics"><span>▣</span><span data-t="nav.analytics">Аналитика</span></div>
+  </div>
+
+  <div class="nav-sep" style="margin-top:0.75rem"></div>
+
+  <div style="display:flex;flex-direction:column;gap:2px;margin-top:0.5rem">
+    <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#1e293b;letter-spacing:.12em;padding:0 8px;margin-bottom:4px" data-t="nav.sec.tools">ИНСТРУМЕНТЫ</div>
+    <div class="nav-item" onclick="exportCSV()"><span>↓</span><span data-t="nav.export">Экспорт CSV</span></div>
+    <div class="nav-item" onclick="doBackup()"><span>⟳</span><span data-t="nav.backup">Резервная копия</span></div>
+  </div>
+
+  <div style="margin-top:auto;padding-top:1rem">
+    <div class="nav-sep"></div>
+    <a href="/" class="nav-item" style="color:#334155"><span>←</span><span data-t="nav.site">Главный сайт</span></a>
+    <div class="nav-item" onclick="doLogout()" style="color:#334155"><span>⏻</span><span data-t="nav.logout">Выйти</span></div>
+    <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#1e293b;padding:0.5rem 8px 0">v1.0 · AI Admin · 2026</div>
+  </div>
+</nav>
+
+<!-- ── Main ── -->
+<div class="main" id="main-app" style="display:none">
+
+  <!-- ═══ CRM ═══ -->
+  <section id="s-crm">
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem">
+      <div>
+        <h1 style="font-size:20px;font-weight:700"><span data-t="crm.title">CRM</span> <span style="color:#334155;font-weight:400;font-size:16px">/ <span data-t="crm.subtitle">Лиды — AI Консалтинг</span></span></h1>
+        <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:#475569;margin-top:4px" id="crm-sub">—</div>
+      </div>
+      <button class="btn btn-p" onclick="openAdd()" id="crm-add-btn" data-t-btn="crm.add">+ Добавить лид</button>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:1.25rem">
+      <div class="card p-4 hud"><div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;letter-spacing:.1em;margin-bottom:8px" data-t="st.total">ЛИДОВ</div><div class="big-num" id="st-total">0</div></div>
+      <div class="card p-4 hud"><div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;letter-spacing:.1em;margin-bottom:8px" data-t="st.pipe">ПАЙПЛАЙН $</div><div class="big-num" style="color:#818cf8" id="st-pipe">$0</div></div>
+      <div class="card p-4 hud"><div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;letter-spacing:.1em;margin-bottom:8px" data-t="st.won">ЗАКРЫТО</div><div class="big-num" style="color:#22c55e" id="st-won">0</div></div>
+      <div class="card p-4 hud"><div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;letter-spacing:.1em;margin-bottom:8px" data-t="st.month">В ЭТ. МЕСЯЦЕ</div><div class="big-num" style="color:#22d3ee" id="st-month">0</div></div>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1rem" id="filter-tabs">
+      <button class="ftab on" data-f="all" onclick="setF('all')" data-t-btn="f.all">ВСЕ</button>
+      <button class="ftab" data-f="new" onclick="setF('new')" data-t-btn="f.new">НОВЫЕ</button>
+      <button class="ftab" data-f="audit_scheduled" onclick="setF('audit_scheduled')" data-t-btn="f.audit">АУДИТ</button>
+      <button class="ftab" data-f="in_progress" onclick="setF('in_progress')" data-t-btn="f.prog">В РАБОТЕ</button>
+      <button class="ftab" data-f="proposal" onclick="setF('proposal')" data-t-btn="f.prop">ПРЕДЛОЖЕНИЕ</button>
+      <button class="ftab" data-f="won" onclick="setF('won')" data-t-btn="f.won">ЗАКРЫТО</button>
+      <button class="ftab" data-f="lost" onclick="setF('lost')" data-t-btn="f.lost">ПОТЕРЯНО</button>
+    </div>
+
+    <!-- Table -->
+    <div class="card" style="overflow:hidden">
+      <div style="overflow-x:auto">
+        <table class="dtable">
+          <thead><tr>
+            <th data-t="th.client">КЛИЕНТ</th>
+            <th class="mob-hide" data-t="th.contact">КОНТАКТ</th>
+            <th class="mob-hide" data-t="th.source">ИСТОЧНИК</th>
+            <th data-t="th.status">СТАТУС</th>
+            <th class="mob-hide" data-t="th.value">СУММА $</th>
+            <th class="mob-hide" data-t="th.date">ДАТА</th>
+            <th style="text-align:right" data-t="th.act">ДЕЙ</th>
+          </tr></thead>
+          <tbody id="leads-tb">
+            <tr><td colspan="7" style="text-align:center;padding:3rem;color:#334155;font-family:'JetBrains Mono',monospace;font-size:11.5px" data-t="crm.empty" id="empty-row">НЕТ ЛИДОВ — ДОБАВЬТЕ ПЕРВОГО КЛИЕНТА →</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ QUICK LINKS ═══ -->
+  <section id="s-links" style="display:none">
+    <div style="margin-bottom:1.25rem">
+      <h1 style="font-size:20px;font-weight:700"><span data-t="links.title">Быстрый доступ</span> <span style="color:#334155;font-weight:400;font-size:16px">/ <span data-t="links.sub">Все системы</span></span></h1>
+      <div style="font-size:10.5px;font-family:'JetBrains Mono',monospace;color:#475569;margin-top:4px" data-t="links.desc">ЦЕНТРАЛИЗОВАННЫЙ_ХАБ · Нажми для открытия в новой вкладке</div>
+    </div>
+    <div id="links-wrap"></div>
+  </section>
+
+  <!-- ═══ ANALYTICS ═══ -->
+  <section id="s-analytics" style="display:none">
+    <div style="margin-bottom:1.25rem">
+      <h1 style="font-size:20px;font-weight:700"><span data-t="an.title">Аналитика</span> <span style="color:#334155;font-weight:400;font-size:16px">/ <span data-t="an.sub">Пайплайн</span></span></h1>
+    </div>
+    <div id="analytics-wrap" style="display:flex;flex-direction:column;gap:1rem"></div>
+  </section>
+</div>
+
+<!-- ── Lead Modal ── -->
+<div class="modal-bg" id="lead-modal" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box hud">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+      <h2 style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:14px" id="modal-ttl" data-t="modal.new">НОВЫЙ ЛИД</h2>
+      <button style="color:#475569;font-size:18px;cursor:pointer;background:none;border:none" onclick="closeModal()">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0.75rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.name">ИМЯ *</label><input id="f-name" class="inp" data-tp="ph.name" placeholder="Иван Иванов"></div>
+        <div><label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.co">КОМПАНИЯ</label><input id="f-co" class="inp" data-tp="ph.co" placeholder="Acme SRL"></div>
+      </div>
+      <div><label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.contact">КОНТАКТ (телефон / email)</label><input id="f-contact" class="inp" data-tp="ph.contact" placeholder="+54911... или email@..."></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.src">ИСТОЧНИК</label>
+          <select id="f-src" class="inp">
+            <option value="whatsapp" data-t-opt="src.whatsapp">💬 WhatsApp</option>
+            <option value="email" data-t-opt="src.email">📧 Email</option>
+            <option value="linkedin" data-t-opt="src.linkedin">💼 LinkedIn</option>
+            <option value="referral" data-t-opt="src.referral">👥 Реферал</option>
+            <option value="other" data-t-opt="src.other">• Другое</option>
+          </select>
+        </div>
+        <div>
+          <label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.status">СТАТУС</label>
+          <select id="f-status" class="inp">
+            <option value="new" data-t-opt="sts.new">🆕 Новый</option>
+            <option value="audit_scheduled" data-t-opt="sts.audit">📅 Аудит назначен</option>
+            <option value="in_progress" data-t-opt="sts.prog">⚡ В работе</option>
+            <option value="proposal" data-t-opt="sts.prop">📋 Отправлено предложение</option>
+            <option value="won" data-t-opt="sts.won">✅ Закрыто</option>
+            <option value="lost" data-t-opt="sts.lost">❌ Потеряно</option>
+          </select>
+        </div>
+      </div>
+      <div><label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.val">СУММА СДЕЛКИ ($)</label><input id="f-val" class="inp" type="number" min="0" data-tp="ph.val" placeholder="500"></div>
+      <div><label class="mono" style="display:block;font-size:9.5px;color:#475569;letter-spacing:.1em;margin-bottom:5px" data-t="f.notes">ЗАМЕТКИ / СЛЕДУЮЩИЙ ШАГ</label><textarea id="f-notes" class="inp" data-tp="ph.notes" placeholder="Боли, что нужно, следующий шаг..."></textarea></div>
+      <div style="display:flex;gap:8px;padding-top:4px">
+        <button class="btn btn-g" style="flex:1" onclick="closeModal()" id="modal-cancel" data-t-btn="btn.cancel">ОТМЕНА</button>
+        <button class="btn btn-p mono" style="flex:1;letter-spacing:.04em" onclick="saveLead()" id="modal-btn" data-t-btn="btn.add">ДОБАВИТЬ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Notes Modal ── -->
+<div class="modal-bg" id="notes-modal" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box hud" style="max-width:420px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <h2 style="font-weight:700;font-family:'JetBrains Mono',monospace;font-size:13px" id="nm-title">ЗАМЕТКИ</h2>
+      <button style="color:#475569;cursor:pointer;background:none;border:none;font-size:16px" onclick="document.getElementById('notes-modal').style.display='none'">✕</button>
+    </div>
+    <p style="font-size:14px;line-height:1.65;color:#94a3b8" id="nm-body"></p>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────
+// CONFIG
+const PWD = 'c2VyZ2lvMjAyNg=='; // btoa('sergio2026') — change via btoa() in console
+const KEY = 'ai_crm_v1';
+// ─────────────────────────────────────
+
+// ── Translations ──
+const T = {
+  ru:{
+    'auth.title':'Панель управления','auth.subtitle':'sergio-ai-consulting ● ЗАЩИТА',
+    'auth.placeholder':'пароль','auth.btn':'ВОЙТИ В СИСТЕМУ →','auth.err':'⚠ ДОСТУП_ЗАПРЕЩЁН',
+    'sys.online':'● ОНЛАЙН',
+    'nav.sec.main':'ГЛАВНОЕ','nav.sec.tools':'ИНСТРУМЕНТЫ',
+    'nav.crm':'CRM','nav.links':'Быстрый доступ','nav.analytics':'Аналитика',
+    'nav.export':'Экспорт CSV','nav.backup':'Резервная копия',
+    'nav.site':'Главный сайт','nav.logout':'Выйти',
+    'crm.title':'CRM','crm.subtitle':'Лиды — AI Консалтинг','crm.add':'+ Добавить лид',
+    'st.total':'ЛИДОВ','st.pipe':'ПАЙПЛАЙН $','st.won':'ЗАКРЫТО','st.month':'В ЭТ. МЕСЯЦЕ',
+    'f.all':'ВСЕ','f.new':'НОВЫЕ','f.audit':'АУДИТ','f.prog':'В РАБОТЕ',
+    'f.prop':'ПРЕДЛОЖЕНИЕ','f.won':'ЗАКРЫТО','f.lost':'ПОТЕРЯНО',
+    'th.client':'КЛИЕНТ','th.contact':'КОНТАКТ','th.source':'ИСТОЧНИК',
+    'th.status':'СТАТУС','th.value':'СУММА $','th.date':'ДАТА','th.act':'ДЕЙ',
+    'crm.empty':'НЕТ ЛИДОВ — ДОБАВЬТЕ ПЕРВОГО КЛИЕНТА →',
+    'crm.empty.filter':'НЕТ ЛИДОВ С ЭТИМ СТАТУСОМ',
+    'modal.new':'НОВЫЙ ЛИД','modal.edit':'РЕДАКТИРОВАТЬ ЛИД',
+    'f.name':'ИМЯ *','f.co':'КОМПАНИЯ','f.contact':'КОНТАКТ (телефон / email)',
+    'f.src':'ИСТОЧНИК','f.status':'СТАТУС','f.val':'СУММА СДЕЛКИ ($)',
+    'f.notes':'ЗАМЕТКИ / СЛЕДУЮЩИЙ ШАГ',
+    'ph.name':'Иван Иванов','ph.co':'Acme SRL','ph.contact':'+54911... или email@...',
+    'ph.val':'500','ph.notes':'Боли клиента, что нужно, следующий шаг...',
+    'btn.cancel':'ОТМЕНА','btn.add':'ДОБАВИТЬ','btn.save':'СОХРАНИТЬ',
+    'src.whatsapp':'💬 WhatsApp','src.email':'📧 Email','src.linkedin':'💼 LinkedIn',
+    'src.referral':'👥 Реферал','src.other':'· Другое',
+    'sts.new':'🆕 Новый','sts.audit':'📅 Аудит назначен','sts.prog':'⚡ В работе',
+    'sts.prop':'📋 Отправлено предложение','sts.won':'✅ Закрыто','sts.lost':'❌ Потеряно',
+    'links.title':'Быстрый доступ','links.sub':'Все системы',
+    'links.desc':'ЦЕНТРАЛИЗОВАННЫЙ_ХАБ · Нажми для открытия в новой вкладке',
+    'an.title':'Аналитика','an.sub':'Пайплайн',
+    'an.conv':'КОНВЕРСИЯ','an.won':'ВЫРУЧКА','an.pipe':'ПАЙПЛАЙН','an.avg':'СРЕДНИЙ ЧЕК',
+    'an.by.status':'ПАЙПЛАЙН ПО СТАТУСАМ','an.by.src':'ЛИДЫ ПО ИСТОЧНИКАМ',
+    'sc.new':'НОВЫЙ','sc.audit':'АУДИТ','sc.prog':'В РАБОТЕ',
+    'sc.prop':'ПРЕДЛОЖЕНИЕ','sc.won':'ЗАКРЫТ','sc.lost':'ПОТЕРЯН',
+    'confirm.del':'Удалить этого лида?',
+    'csv.name':'Имя','csv.co':'Компания','csv.contact':'Контакт',
+    'csv.src':'Источник','csv.status':'Статус','csv.val':'Сумма','csv.notes':'Заметки','csv.date':'Дата',
+    'sub.leads':'лидов','sub.pipe':'общий пайплайн',
+  },
+  en:{
+    'auth.title':'Admin Panel','auth.subtitle':'sergio-ai-consulting ● SECURE',
+    'auth.placeholder':'password','auth.btn':'ENTER_SYSTEM →','auth.err':'⚠ ACCESS_DENIED',
+    'sys.online':'● ONLINE',
+    'nav.sec.main':'MAIN','nav.sec.tools':'TOOLS',
+    'nav.crm':'CRM','nav.links':'Quick Links','nav.analytics':'Analytics',
+    'nav.export':'Export CSV','nav.backup':'Backup JSON',
+    'nav.site':'Main Site','nav.logout':'Logout',
+    'crm.title':'CRM','crm.subtitle':'AI Consulting Leads','crm.add':'+ New Lead',
+    'st.total':'TOTAL LEADS','st.pipe':'PIPELINE $','st.won':'WON','st.month':'THIS MONTH',
+    'f.all':'ALL','f.new':'NEW','f.audit':'AUDIT','f.prog':'IN PROG',
+    'f.prop':'PROPOSAL','f.won':'WON','f.lost':'LOST',
+    'th.client':'CLIENT','th.contact':'CONTACT','th.source':'SOURCE',
+    'th.status':'STATUS','th.value':'VALUE $','th.date':'DATE','th.act':'ACT',
+    'crm.empty':'NO LEADS — ADD YOUR FIRST CLIENT →',
+    'crm.empty.filter':'NO LEADS WITH THIS STATUS',
+    'modal.new':'NEW LEAD','modal.edit':'EDIT LEAD',
+    'f.name':'NAME *','f.co':'COMPANY','f.contact':'CONTACT (phone / email)',
+    'f.src':'SOURCE','f.status':'STATUS','f.val':'DEAL VALUE ($)',
+    'f.notes':'NOTES / NEXT STEPS',
+    'ph.name':'John Smith','ph.co':'Acme SRL','ph.contact':'+54911... or email@...',
+    'ph.val':'500','ph.notes':'Pain points, what they need, next action...',
+    'btn.cancel':'CANCEL','btn.add':'ADD_LEAD','btn.save':'SAVE_CHANGES',
+    'src.whatsapp':'💬 WhatsApp','src.email':'📧 Email','src.linkedin':'💼 LinkedIn',
+    'src.referral':'👥 Referral','src.other':'· Other',
+    'sts.new':'🆕 New','sts.audit':'📅 Audit Scheduled','sts.prog':'⚡ In Progress',
+    'sts.prop':'📋 Proposal Sent','sts.won':'✅ Won','sts.lost':'❌ Lost',
+    'links.title':'Quick Access','links.sub':'All Systems',
+    'links.desc':'CENTRALIZED_HUB · Click to open in new tab',
+    'an.title':'Analytics','an.sub':'Pipeline',
+    'an.conv':'CONVERSION','an.won':'WON REVENUE','an.pipe':'TOTAL PIPELINE','an.avg':'AVG DEAL',
+    'an.by.status':'PIPELINE BY STATUS','an.by.src':'LEADS BY SOURCE',
+    'sc.new':'NEW','sc.audit':'AUDIT','sc.prog':'IN PROG',
+    'sc.prop':'PROPOSAL','sc.won':'WON','sc.lost':'LOST',
+    'confirm.del':'Delete this lead?',
+    'csv.name':'Name','csv.co':'Company','csv.contact':'Contact',
+    'csv.src':'Source','csv.status':'Status','csv.val':'Value','csv.notes':'Notes','csv.date':'Date',
+    'sub.leads':'leads','sub.pipe':'total pipeline',
+  },
+  es:{
+    'auth.title':'Panel de Admin','auth.subtitle':'sergio-ai-consulting ● SEGURO',
+    'auth.placeholder':'contraseña','auth.btn':'ENTRAR AL SISTEMA →','auth.err':'⚠ ACCESO_DENEGADO',
+    'sys.online':'● EN LÍNEA',
+    'nav.sec.main':'PRINCIPAL','nav.sec.tools':'HERRAMIENTAS',
+    'nav.crm':'CRM','nav.links':'Acceso Rápido','nav.analytics':'Analítica',
+    'nav.export':'Exportar CSV','nav.backup':'Copia de Seguridad',
+    'nav.site':'Sitio Principal','nav.logout':'Cerrar Sesión',
+    'crm.title':'CRM','crm.subtitle':'Leads — AI Consulting','crm.add':'+ Agregar Lead',
+    'st.total':'LEADS TOTAL','st.pipe':'PIPELINE $','st.won':'GANADOS','st.month':'ESTE MES',
+    'f.all':'TODOS','f.new':'NUEVO','f.audit':'AUDITORÍA','f.prog':'EN PROCESO',
+    'f.prop':'PROPUESTA','f.won':'GANADO','f.lost':'PERDIDO',
+    'th.client':'CLIENTE','th.contact':'CONTACTO','th.source':'FUENTE',
+    'th.status':'ESTADO','th.value':'VALOR $','th.date':'FECHA','th.act':'ACC',
+    'crm.empty':'SIN LEADS — AGREGÁ TU PRIMER CLIENTE →',
+    'crm.empty.filter':'SIN LEADS CON ESTE ESTADO',
+    'modal.new':'NUEVO LEAD','modal.edit':'EDITAR LEAD',
+    'f.name':'NOMBRE *','f.co':'EMPRESA','f.contact':'CONTACTO (teléfono / email)',
+    'f.src':'FUENTE','f.status':'ESTADO','f.val':'VALOR DEL DEAL ($)',
+    'f.notes':'NOTAS / PRÓXIMOS PASOS',
+    'ph.name':'Juan García','ph.co':'Acme SRL','ph.contact':'+54911... o email@...',
+    'ph.val':'500','ph.notes':'Pain points, qué necesita, próxima acción...',
+    'btn.cancel':'CANCELAR','btn.add':'AGREGAR_LEAD','btn.save':'GUARDAR',
+    'src.whatsapp':'💬 WhatsApp','src.email':'📧 Email','src.linkedin':'💼 LinkedIn',
+    'src.referral':'👥 Referido','src.other':'· Otro',
+    'sts.new':'🆕 Nuevo','sts.audit':'📅 Auditoría Agendada','sts.prog':'⚡ En Proceso',
+    'sts.prop':'📋 Propuesta Enviada','sts.won':'✅ Ganado','sts.lost':'❌ Perdido',
+    'links.title':'Acceso Rápido','links.sub':'Todos los Sistemas',
+    'links.desc':'HUB_CENTRALIZADO · Clic para abrir en nueva pestaña',
+    'an.title':'Analítica','an.sub':'Pipeline',
+    'an.conv':'CONVERSIÓN','an.won':'GANANCIA','an.pipe':'PIPELINE TOTAL','an.avg':'DEAL PROMEDIO',
+    'an.by.status':'PIPELINE POR ESTADO','an.by.src':'LEADS POR FUENTE',
+    'sc.new':'NUEVO','sc.audit':'AUDITORÍA','sc.prog':'EN PROCESO',
+    'sc.prop':'PROPUESTA','sc.won':'GANADO','sc.lost':'PERDIDO',
+    'confirm.del':'¿Eliminar este lead?',
+    'csv.name':'Nombre','csv.co':'Empresa','csv.contact':'Contacto',
+    'csv.src':'Fuente','csv.status':'Estado','csv.val':'Valor','csv.notes':'Notas','csv.date':'Fecha',
+    'sub.leads':'leads','sub.pipe':'pipeline total',
+  }
+};
+
+let lang = localStorage.getItem('admin_lang') || 'ru';
+function t(k){ return T[lang][k] || T.en[k] || k; }
+
+function setLang(l){
+  lang = l;
+  localStorage.setItem('admin_lang', l);
+  document.documentElement.lang = l;
+  // update lang buttons (all groups)
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.l === l));
+  // static text
+  document.querySelectorAll('[data-t]').forEach(el => { const v=T[l][el.dataset.t]; if(v) el.textContent=v; });
+  // button text
+  document.querySelectorAll('[data-t-btn]').forEach(el => { const v=T[l][el.dataset.tBtn]; if(v) el.textContent=v; });
+  // placeholders
+  document.querySelectorAll('[data-tp]').forEach(el => { const v=T[l][el.dataset.tp]; if(v) el.placeholder=v; });
+  // select options
+  document.querySelectorAll('[data-t-opt]').forEach(el => { const v=T[l][el.dataset.tOpt]; if(v) el.textContent=v; });
+  // re-render dynamic
+  if(document.getElementById('main-app').style.display !== 'none'){
+    renderLeads();
+    if(curSec === 'analytics') renderAnalytics();
+  }
+}
+
+// ── Auth canvas ──
+(function(){
+  const cv=document.getElementById('auth-cv'); if(!cv)return;
+  const cx=cv.getContext('2d'); let W,H,ns=[];
+  const N=28,C=['rgba(99,102,241,','rgba(34,211,238,'];
+  function rs(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
+  function mk(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,c:C[Math.floor(Math.random()*C.length)]}}
+  function loop(){cx.clearRect(0,0,W,H);ns.forEach(a=>{a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;ns.forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.strokeStyle=a.c+((.4*(1-d/120)).toFixed(2))+')';cx.lineWidth=.5;cx.stroke()}});cx.beginPath();cx.arc(a.x,a.y,1.1,0,Math.PI*2);cx.fillStyle=a.c+'.8)';cx.fill()});requestAnimationFrame(loop)}
+  window.addEventListener('resize',rs); rs(); for(let i=0;i<N;i++)ns.push(mk()); loop();
+})();
+
+// ── Auth ──
+document.getElementById('pwd').addEventListener('keydown', e => { if(e.key==='Enter') doAuth(); });
+function doAuth(){
+  if(btoa(document.getElementById('pwd').value) === PWD){
+    sessionStorage.setItem('sz_admin','1');
+    document.getElementById('auth-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+    setLang(lang);
+    initApp();
+  } else {
+    const el=document.getElementById('auth-err'); el.style.display='block';
+    document.getElementById('pwd').value='';
+    setTimeout(()=>el.style.display='none', 2500);
+  }
+}
+function doLogout(){ sessionStorage.removeItem('sz_admin'); location.reload(); }
+
+// ── Data ──
+function getLeads(){ try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return []} }
+function saveLeads(l){ localStorage.setItem(KEY,JSON.stringify(l)) }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,5) }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+function fdate(d){ if(!d)return '—'; return new Date(d).toLocaleDateString(lang==='ru'?'ru-RU':'en-GB',{day:'2-digit',month:'short',year:'2-digit'}) }
+
+// ── Status / Source ──
+const SCLS = {new:'b-new',audit_scheduled:'b-audit',in_progress:'b-prog',proposal:'b-prop',won:'b-won',lost:'b-lost'};
+const SKEY = {new:'sc.new',audit_scheduled:'sc.audit',in_progress:'sc.prog',proposal:'sc.prop',won:'sc.won',lost:'sc.lost'};
+const SRC  = {whatsapp:'💬',email:'📧',linkedin:'💼',referral:'👥',other:'·'};
+function badge(s){ return `<span class="badge ${SCLS[s]||'b-new'}">${t(SKEY[s]||'sc.new')}</span>`; }
+
+// ── Filter ──
+let activeF='all', curSec='crm';
+function setF(f){
+  activeF=f;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  renderLeads();
+}
+
+// ── Render leads ──
+function renderLeads(){
+  const all=getLeads();
+  const data=activeF==='all'?all:all.filter(l=>l.status===activeF);
+  updateStats(all);
+  const now=new Date();
+  document.getElementById('crm-sub').textContent=
+    `${all.length} ${t('sub.leads')} · $${all.reduce((s,l)=>s+(+l.value||0),0).toLocaleString()} ${t('sub.pipe')} · ${now.toLocaleDateString(lang==='ru'?'ru-RU':'en-GB',{day:'2-digit',month:'long',year:'numeric'})}`;
+
+  const tb=document.getElementById('leads-tb');
+  if(!data.length){
+    const msg=activeF==='all'?t('crm.empty'):t('crm.empty.filter');
+    tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:3rem;color:#334155;font-family:'JetBrains Mono',monospace;font-size:11.5px">${msg}</td></tr>`;
+    return;
+  }
+  tb.innerHTML=data.map(l=>`
+  <tr>
+    <td><div style="font-weight:600;font-size:13.5px">${esc(l.name)}</div>${l.co?`<div style="font-size:11px;color:#475569">${esc(l.co)}</div>`:''}</td>
+    <td class="mob-hide"><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#64748b">${esc(l.contact||'—')}</span></td>
+    <td class="mob-hide"><span style="font-size:13px">${SRC[l.src]||'·'}</span> <span style="font-size:11px;color:#475569">${l.src||'—'}</span></td>
+    <td>${badge(l.status)}</td>
+    <td class="mob-hide"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#22c55e">${l.value?'$'+Number(l.value).toLocaleString():'—'}</span></td>
+    <td class="mob-hide"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#334155">${fdate(l.ts)}</span></td>
+    <td style="text-align:right">
+      <div style="display:flex;gap:4px;justify-content:flex-end">
+        ${l.notes?`<button class="btn btn-g btn-sm" onclick="viewNotes('${l.id}')" title="Notes">📝</button>`:''}
+        <button class="btn btn-g btn-sm" onclick="openEdit('${l.id}')">✏</button>
+        <button class="btn btn-r btn-sm" onclick="del('${l.id}')">✕</button>
+      </div>
+    </td>
+  </tr>`).join('');
+}
+
+function updateStats(leads){
+  const now=new Date(); const m=now.getMonth(),y=now.getFullYear();
+  document.getElementById('st-total').textContent=leads.length;
+  document.getElementById('st-pipe').textContent='$'+leads.filter(l=>l.status!=='lost').reduce((s,l)=>s+(+l.value||0),0).toLocaleString();
+  document.getElementById('st-won').textContent=leads.filter(l=>l.status==='won').length;
+  document.getElementById('st-month').textContent=leads.filter(l=>{const d=new Date(l.ts);return d.getMonth()===m&&d.getFullYear()===y}).length;
+}
+
+// ── Modal ──
+let eid=null;
+const gf=id=>document.getElementById(id);
+function openAdd(){
+  eid=null;
+  ['f-name','f-co','f-contact','f-val','f-notes'].forEach(i=>gf(i).value='');
+  gf('f-src').value='whatsapp'; gf('f-status').value='new';
+  gf('modal-ttl').textContent=t('modal.new');
+  gf('modal-btn').textContent=t('btn.add');
+  gf('modal-cancel').textContent=t('btn.cancel');
+  gf('lead-modal').style.display='flex';
+  setTimeout(()=>gf('f-name').focus(),80);
+}
+function openEdit(id){
+  const l=getLeads().find(x=>x.id===id); if(!l)return;
+  eid=id;
+  gf('f-name').value=l.name||''; gf('f-co').value=l.co||'';
+  gf('f-contact').value=l.contact||''; gf('f-src').value=l.src||'other';
+  gf('f-status').value=l.status||'new'; gf('f-val').value=l.value||''; gf('f-notes').value=l.notes||'';
+  gf('modal-ttl').textContent=t('modal.edit');
+  gf('modal-btn').textContent=t('btn.save');
+  gf('modal-cancel').textContent=t('btn.cancel');
+  gf('lead-modal').style.display='flex';
+}
+function closeModal(){ gf('lead-modal').style.display='none'; eid=null; }
+function saveLead(){
+  const name=gf('f-name').value.trim();
+  if(!name){gf('f-name').style.borderColor='rgba(244,63,94,.5)';gf('f-name').focus();return}
+  gf('f-name').style.borderColor='';
+  const entry={name,co:gf('f-co').value.trim(),contact:gf('f-contact').value.trim(),
+    src:gf('f-src').value,status:gf('f-status').value,value:gf('f-val').value,notes:gf('f-notes').value.trim()};
+  const leads=getLeads();
+  if(eid){ const i=leads.findIndex(x=>x.id===eid); if(i>-1)leads[i]={...leads[i],...entry,upd:new Date().toISOString()} }
+  else{ leads.unshift({id:uid(),ts:new Date().toISOString(),...entry}) }
+  saveLeads(leads); closeModal(); renderLeads();
+}
+function del(id){
+  if(!confirm(t('confirm.del')))return;
+  saveLeads(getLeads().filter(x=>x.id!==id)); renderLeads();
+}
+function viewNotes(id){
+  const l=getLeads().find(x=>x.id===id); if(!l)return;
+  gf('nm-title').textContent=l.name.toUpperCase();
+  gf('nm-body').textContent=l.notes;
+  gf('notes-modal').style.display='flex';
+}
+
+// ── Export ──
+function exportCSV(){
+  const leads=getLeads();
+  const rows=[[t('csv.name'),t('csv.co'),t('csv.contact'),t('csv.src'),t('csv.status'),t('csv.val'),t('csv.notes'),t('csv.date')],
+    ...leads.map(l=>[l.name,l.co||'',l.contact||'',l.src||'',l.status||'',l.value||'',
+      '"'+(l.notes||'').replace(/"/g,'""')+'"',l.ts?new Date(l.ts).toLocaleDateString():'' ])];
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));
+  a.download='crm_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
+}
+function doBackup(){
+  const a=document.createElement('a');
+  a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(getLeads(),null,2));
+  a.download='crm_backup_'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+}
+
+// ── Quick Links ──
+const LINKS=[
+  {cat:{ru:'🧠 ПРОЕКТЫ И ЗАДАЧИ',en:'🧠 PROJECTS & TASKS',es:'🧠 PROYECTOS Y TAREAS'}, items:[
+    {n:'Notion',u:'https://notion.so',d:{ru:'OKR · Kanban · Спринты',en:'OKR · Kanban · Sprints',es:'OKR · Kanban · Sprints'},col:'#818cf8'},
+    {n:'Todoist',u:'https://todoist.com',d:{ru:'Задачи · Приоритеты',en:'Tasks · Priorities',es:'Tareas · Prioridades'},col:'#22d3ee'},
+    {n:'Google Drive',u:'https://drive.google.com',d:{ru:'Файлы · Таблицы · Docs',en:'Files · Sheets · Docs',es:'Archivos · Hojas · Docs'},col:'#facc15'},
+  ]},
+  {cat:{ru:'🌐 САЙТЫ И ИНФРАСТРУКТУРА',en:'🌐 SITES & INFRASTRUCTURE',es:'🌐 SITIOS E INFRAESTRUCTURA'}, items:[
+    {n:'AI Consulting',u:'https://sergio-ai-consulting.netlify.app',d:{ru:'Этот сайт — в сети 🟢',en:'This site — live 🟢',es:'Este sitio — live 🟢'},col:'#6366f1'},
+    {n:'PicadaRica',u:'https://picadarica.netlify.app',d:{ru:'Интернет-магазин вяленого мяса',en:'Beef jerky e-commerce',es:'E-commerce de carne seca'},col:'#f43f5e'},
+    {n:'Netlify',u:'https://app.netlify.com',d:{ru:'Деплои · CDN · DNS',en:'Deploys · CDN · DNS',es:'Deploys · CDN · DNS'},col:'#22d3ee'},
+    {n:'Supabase',u:'https://supabase.com/dashboard/project/wdnrdxqkajobjaorssza',d:{ru:'БД · Auth · Functions · wdnrdxqk',en:'DB · Auth · Functions · wdnrdxqk',es:'DB · Auth · Functions · wdnrdxqk'},col:'#22c55e'},
+    {n:'Codemagic',u:'https://codemagic.io/apps',d:{ru:'iOS CI/CD · PushUp сборки',en:'iOS CI/CD · PushUp builds',es:'iOS CI/CD · Builds PushUp'},col:'#a855f7'},
+  ]},
+  {cat:{ru:'💬 КОММУНИКАЦИИ',en:'💬 COMMUNICATION',es:'💬 COMUNICACIÓN'}, items:[
+    {n:'Gmail',u:'https://mail.google.com',d:{ru:'zsv3003@gmail.com',en:'zsv3003@gmail.com',es:'zsv3003@gmail.com'},col:'#f43f5e'},
+    {n:'WhatsApp Web',u:'https://web.whatsapp.com',d:{ru:'Клиенты · Заказы · Бизнес',en:'Clients · Orders · Business',es:'Clientes · Pedidos · Business'},col:'#22c55e'},
+    {n:'Telegram Web',u:'https://web.telegram.org',d:{ru:'CRM-бот · Группы · Каналы',en:'CRM bot · Groups · Channels',es:'Bot CRM · Grupos · Canales'},col:'#22d3ee'},
+    {n:'LinkedIn',u:'https://linkedin.com/in/sergeizubov',d:{ru:'Профиль · B2B лиды',en:'Profile · B2B leads',es:'Perfil · Leads B2B'},col:'#818cf8'},
+  ]},
+  {cat:{ru:'🥩 PICADARICA',en:'🥩 PICADARICA',es:'🥩 PICADARICA'}, items:[
+    {n:'CRM Telegram Bot',u:'https://t.me/picadarica_crm_bot',d:{ru:'Заказы · Лиды · Статистика',en:'Orders · Leads · Stats',es:'Pedidos · Leads · Estadísticas'},col:'#facc15'},
+    {n:'Магазин / Store',u:'https://picadarica.netlify.app',d:{ru:'Живой сайт продукта',en:'Live product site',es:'Sitio de producto live'},col:'#f43f5e'},
+    {n:'MercadoLibre',u:'https://www.mercadolibre.com.ar',d:{ru:'Маркетплейс · Листинги',en:'Marketplace listings',es:'Listings de marketplace'},col:'#facc15'},
+  ]},
+  {cat:{ru:'💪 PUSHUP APP',en:'💪 PUSHUP APP',es:'💪 PUSHUP APP'}, items:[
+    {n:'Supabase PushUp',u:'https://supabase.com/dashboard/project/wdnrdxqkajobjaorssza',d:{ru:'БД · wdnrdxqkajobjaorssza',en:'DB · wdnrdxqkajobjaorssza',es:'DB · wdnrdxqkajobjaorssza'},col:'#22c55e'},
+    {n:'Codemagic CI',u:'https://codemagic.io/apps',d:{ru:'iOS пайплайн · Сборки',en:'iOS pipeline · Builds',es:'Pipeline iOS · Builds'},col:'#a855f7'},
+    {n:'App Store Connect',u:'https://appstoreconnect.apple.com',d:{ru:'TestFlight · Аналитика',en:'TestFlight · Analytics',es:'TestFlight · Analítica'},col:'#818cf8'},
+  ]},
+  {cat:{ru:'🏦 ФИНАНСЫ И ADMIN',en:'🏦 FINANCE & ADMIN',es:'🏦 FINANZAS Y ADMIN'}, items:[
+    {n:'Freedom Finance',u:'https://frhc.com',d:{ru:'FRHC партнёрство · Аргентина',en:'FRHC partnership · Argentina',es:'Alianza FRHC · Argentina'},col:'#facc15'},
+    {n:'Google Analytics',u:'https://analytics.google.com',d:{ru:'Трафик · Конверсии',en:'Traffic · Conversions',es:'Tráfico · Conversiones'},col:'#f43f5e'},
+    {n:'App Store Connect',u:'https://appstoreconnect.apple.com',d:{ru:'Продажи · Выручка',en:'Sales · Revenue',es:'Ventas · Ingresos'},col:'#22c55e'},
+  ]},
+];
+
+function renderLinks(){
+  gf('links-wrap').innerHTML=LINKS.map(cat=>`
+  <div style="margin-bottom:1.75rem">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#334155;margin-bottom:0.6rem">${cat.cat[lang]||cat.cat.en}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px">
+      ${cat.items.map(it=>`
+        <a href="${it.u}" target="_blank" rel="noopener" class="link-card">
+          <div class="link-icon" style="background:${it.col}18;border:1px solid ${it.col}28;color:${it.col}">↗</div>
+          <div style="min-width:0;flex:1">
+            <div style="font-size:13.5px;font-weight:600">${it.n}</div>
+            <div style="font-size:11px;color:#475569;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.d[lang]||it.d.en}</div>
+          </div>
+        </a>`).join('')}
+    </div>
+  </div>`).join('');
+}
+
+// ── Analytics ──
+function renderAnalytics(){
+  const leads=getLeads();
+  const total=leads.length;
+  const tVal=leads.reduce((s,l)=>s+(+l.value||0),0);
+  const wVal=leads.filter(l=>l.status==='won').reduce((s,l)=>s+(+l.value||0),0);
+  const conv=total?Math.round(leads.filter(l=>l.status==='won').length/total*100):0;
+  const avg=total?Math.round(tVal/total):0;
+  const byS={};['new','audit_scheduled','in_progress','proposal','won','lost'].forEach(s=>{byS[s]=leads.filter(l=>l.status===s).length});
+  const bySrc={};leads.forEach(l=>{bySrc[l.src||'other']=(bySrc[l.src||'other']||0)+1});
+
+  gf('analytics-wrap').innerHTML=`
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px">
+    ${[[t('an.conv'),conv+'%','#22c55e'],[t('an.won'),'$'+wVal.toLocaleString(),'#818cf8'],[t('an.pipe'),'$'+tVal.toLocaleString(),'#22d3ee'],[t('an.avg'),'$'+avg.toLocaleString(),'#facc15']].map(([l,v,c])=>`
+    <div class="card p-4 hud" style="text-align:center">
+      <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#475569;letter-spacing:.1em;margin-bottom:8px">${l}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:1.9rem;font-weight:700;color:${c}">${v}</div>
+    </div>`).join('')}
+  </div>
+  <div class="card p-5 hud">
+    <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#334155;letter-spacing:.12em;margin-bottom:1rem">${t('an.by.status')}</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${Object.entries(byS).map(([s,n])=>{const p=total?Math.round(n/total*100):0;return`
+      <div>
+        <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:4px;color:#64748b">
+          <span>${t(SKEY[s]||'sc.new')}</span><span>${n} · ${p}%</span>
+        </div>
+        <div style="height:5px;background:rgba(255,255,255,.04);border-radius:99px;overflow:hidden">
+          <div style="height:100%;width:${p}%;background:linear-gradient(90deg,#6366f1,#22d3ee);border-radius:99px;transition:width .9s cubic-bezier(.16,1,.3,1)"></div>
+        </div>
+      </div>`}).join('')}
+    </div>
+  </div>
+  <div class="card p-5 hud">
+    <div style="font-size:9px;font-family:'JetBrains Mono',monospace;color:#334155;letter-spacing:.12em;margin-bottom:1rem">${t('an.by.src')}</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px">
+      ${Object.entries(bySrc).map(([s,n])=>`
+      <div style="padding:0.8rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:11px">
+        <div style="font-size:1.3rem;margin-bottom:4px">${SRC[s]||'·'}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700">${n}</div>
+        <div style="font-size:11px;color:#475569">${s}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ── Navigation ──
+function go(sec){
+  ['crm','links','analytics'].forEach(s=>{
+    gf('s-'+s).style.display = s===sec?'block':'none';
+    gf('n-'+s).classList.toggle('active', s===sec);
+  });
+  curSec=sec;
+  if(sec==='links') renderLinks();
+  if(sec==='analytics') renderAnalytics();
+  closeSb();
+}
+
+// ── Mobile sidebar ──
+function openSb(){ gf('sidebar').classList.add('open'); gf('mob-ov').classList.add('open'); }
+function closeSb(){ gf('sidebar').classList.remove('open'); gf('mob-ov').classList.remove('open'); }
+
+// ── Init ──
+function initApp(){ renderLeads(); go('crm'); }
+
+// Auto-login
+if(sessionStorage.getItem('sz_admin')==='1'){
+  gf('auth-screen').style.display='none';
+  gf('main-app').style.display='block';
+  setLang(lang);
+  initApp();
+} else {
+  setLang(lang); // apply lang to auth screen
+}
+</script>
+</body>
+</html>
