@@ -216,15 +216,53 @@ if ($todoist) {
 $settings | ConvertTo-Json -Depth 10 | Set-Content -Path "$CLAUDE_DIR\settings.json" -Encoding UTF8
 Write-Host "   ✓ settings.json сохранён" -ForegroundColor Green
 
-# VS Code расширения
+# VS Code расширения (те же что на Mac)
 Write-Host ""
 Write-Host "   Устанавливаю VS Code расширения..." -ForegroundColor Gray
-$exts = @("anthropic.claude-code", "ms-python.python", "dbaeumer.vscode-eslint",
-          "esbenp.prettier-vscode", "bradlc.vscode-tailwindcss")
+$exts = @(
+    "anthropic.claude-code",
+    "github.vscode-github-actions",
+    "mechatroner.rainbow-csv",
+    "ms-python.debugpy",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.vscode-python-envs",
+    "ms-vscode.powershell",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss"
+)
 foreach ($ext in $exts) {
-    code --install-extension $ext 2>&1 | Out-Null
+    Write-Host "   → $ext" -ForegroundColor Gray
+    code --install-extension $ext --force 2>&1 | Out-Null
 }
 Write-Host "   ✓ VS Code расширения установлены" -ForegroundColor Green
+
+# VS Code settings.json (такой же как на Mac)
+Write-Host "   Создаю VS Code settings.json..." -ForegroundColor Gray
+$vscode_user = "$env:APPDATA\Code\User"
+New-Item -ItemType Directory -Force -Path $vscode_user | Out-Null
+$vscode_settings = @"
+{
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.useTerminal": true,
+    "window.restoreWindows": "all",
+    "workbench.startupEditor": "none",
+    "editor.fontFamily": "'JetBrains Mono', 'Cascadia Code', Consolas, monospace",
+    "editor.fontSize": 14,
+    "editor.lineHeight": 1.6,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+    "terminal.integrated.fontFamily": "'JetBrains Mono', Consolas, monospace",
+    "terminal.integrated.fontSize": 13,
+    "workbench.colorTheme": "Default Dark Modern",
+    "files.autoSave": "onFocusChange",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false
+}
+"@
+Set-Content -Path "$vscode_user\settings.json" -Value $vscode_settings -Encoding UTF8
+Write-Host "   ✓ VS Code settings.json создан" -ForegroundColor Green
 
 # PushUp: npm install
 Write-Host ""
