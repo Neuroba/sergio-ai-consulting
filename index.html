@@ -284,6 +284,11 @@ iconify-icon{display:block;flex-shrink:0;line-height:1;transform-origin:center}
 .case-acc.open .acc-body{max-height:4000px}
 @media(min-width:900px){.acc-hook{display:block}}
 @media(max-width:640px){.acc-mgroup{display:none}.acc-hdr{padding:14px 16px}}
+.acc-mobile-desc{display:none;font-size:11px;color:#475569;margin-top:3px;line-height:1.4}
+@media(max-width:899px){.acc-mobile-desc{display:block}}
+.acc-mobile-pills{display:none;gap:5px;flex-wrap:wrap;margin-top:5px}
+@media(max-width:640px){.acc-mobile-pills{display:flex}}
+.acc-mpill{font-size:10px;padding:2px 7px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-weight:600}
 
 /* Tags */
 .cp-tag{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--cc);color:var(--ct);border:1px solid color-mix(in srgb,var(--ct) 30%,transparent)}
@@ -675,6 +680,12 @@ body{animation:pageFadeIn .35s ease both}
         <div class="acc-info">
           <div class="acc-title">PushUp App</div>
           <div class="acc-sub">iOS · React · Supabase · Capacitor</div>
+          <div class="acc-mobile-desc">Фитнес-приложение для iOS — от идеи до App Store за 30 дней. Без команды, без бюджета, CI/CD полностью автоматизирован.</div>
+          <div class="acc-mobile-pills">
+            <span class="acc-mpill" style="background:rgba(34,211,238,.1);color:#22d3ee">30 дней</span>
+            <span class="acc-mpill" style="background:rgba(129,140,248,.12);color:#818cf8">$0 devops</span>
+            <span class="acc-mpill" style="background:rgba(245,158,11,.1);color:#f59e0b">1 человек</span>
+          </div>
         </div>
         <div class="acc-mgroup">
           <div class="acc-metric"><div class="acc-mnum" style="color:#22d3ee">30</div><div class="acc-mlabel">days</div></div>
@@ -809,6 +820,12 @@ body{animation:pageFadeIn .35s ease both}
         <div class="acc-info">
           <div class="acc-title">PicadaRica</div>
           <div class="acc-sub">E-commerce · Python · Telegram Bot</div>
+          <div class="acc-mobile-desc">Автоматизация бренда говяжьего джерки — бот + CRM + сайт. Ноль потерянных заказов, 12ч экономии в неделю.</div>
+          <div class="acc-mobile-pills">
+            <span class="acc-mpill" style="background:rgba(244,63,94,.12);color:#f43f5e">12h/нед</span>
+            <span class="acc-mpill" style="background:rgba(34,211,238,.1);color:#22d3ee">0 потерь</span>
+            <span class="acc-mpill" style="background:rgba(74,222,128,.1);color:#4ade80">$0 хостинг</span>
+          </div>
         </div>
         <div class="acc-mgroup">
           <div class="acc-metric"><div class="acc-mnum" style="color:#f43f5e">12h</div><div class="acc-mlabel">saved/wk</div></div>
@@ -975,6 +992,12 @@ STATUS_LABELS = {
         <div class="acc-info">
           <div class="acc-title">AI Consulting Site</div>
           <div class="acc-sub">Landing · CRM · Netlify · 3 Languages</div>
+          <div class="acc-mobile-desc">Профессиональный лендинг + CRM — собран за 1 день, три языка, ноль затрат в месяц навсегда.</div>
+          <div class="acc-mobile-pills">
+            <span class="acc-mpill" style="background:rgba(129,140,248,.12);color:#818cf8">1 день</span>
+            <span class="acc-mpill" style="background:rgba(34,211,238,.1);color:#22d3ee">3 языка</span>
+            <span class="acc-mpill" style="background:rgba(74,222,128,.1);color:#4ade80">$0/мес</span>
+          </div>
         </div>
         <div class="acc-mgroup">
           <div class="acc-metric"><div class="acc-mnum" style="color:#818cf8">1</div><div class="acc-mlabel">day built</div></div>
@@ -1092,6 +1115,12 @@ STATUS_LABELS = {
         <div class="acc-info">
           <div class="acc-title">AI Personal OS</div>
           <div class="acc-sub">Notion · Todoist · Health · OKR</div>
+          <div class="acc-mobile-desc">5 бизнесов без хаоса — одна AI-система для жизни и работы. Notion + Todoist + Claude + ежедневные ритуалы.</div>
+          <div class="acc-mobile-pills">
+            <span class="acc-mpill" style="background:rgba(245,158,11,.1);color:#f59e0b">5 проектов</span>
+            <span class="acc-mpill" style="background:rgba(74,222,128,.1);color:#4ade80">90+ дней</span>
+            <span class="acc-mpill" style="background:rgba(129,140,248,.12);color:#818cf8">1 система</span>
+          </div>
         </div>
         <div class="acc-mgroup">
           <div class="acc-metric"><div class="acc-mnum" style="color:#f59e0b">5</div><div class="acc-mlabel">projects</div></div>
