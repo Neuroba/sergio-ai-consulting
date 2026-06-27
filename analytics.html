@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics — Sergio Setup</title>
+<style>
+:root{--bg:#090b12;--card:#10131e;--card2:#151825;--border:#1e2338;--text:#e2e8f8;--muted:#5a6282;--accent:#4f8ef7;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--orange:#f97316;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:0 0 60px;}
+.header{background:linear-gradient(135deg,#090b12,#0d1421);border-bottom:1px solid var(--border);padding:28px 24px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.header h1{font-size:18px;font-weight:800;}
+.header-meta{font-size:12px;color:var(--muted);}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);display:inline-block;animation:pulse 2s infinite;margin-right:5px;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px;}
+.sec{padding:28px 0 0;}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:28px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid var(--accent);}
+.stat-val{font-size:28px;font-weight:800;color:var(--accent);}
+.stat-label{font-size:11px;color:var(--muted);margin-top:4px;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* Heat map */
+.heatmap-outer{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:0;overflow:hidden;position:relative;}
+.heatmap-label{font-size:11px;color:var(--muted);padding:12px 16px 8px;border-bottom:1px solid var(--border);}
+#heatmap{display:block;width:100%;height:auto;cursor:crosshair;}
+.heatmap-legend{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:11px;color:var(--muted);}
+.legend-bar{width:80px;height:8px;border-radius:4px;background:linear-gradient(to right,rgba(0,100,255,.3),rgba(255,50,0,1));}
+
+/* Events */
+.ev-list{display:flex;flex-direction:column;gap:6px;}
+.ev-row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+.ev-name{font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ev-type{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;flex-shrink:0;}
+.ev-type.click{background:rgba(79,142,247,.15);color:var(--accent);}
+.ev-type.scroll{background:rgba(34,197,94,.12);color:var(--green);}
+.ev-type.nav{background:rgba(249,115,22,.12);color:var(--orange);}
+.ev-type.copy{background:rgba(234,179,8,.12);color:var(--yellow);}
+.ev-type.pageview{background:rgba(147,51,234,.12);color:#c084fc;}
+.ev-bar-wrap{width:100px;height:6px;background:var(--border);border-radius:3px;flex-shrink:0;}
+.ev-bar{height:100%;border-radius:3px;background:var(--accent);}
+.ev-count{font-size:12px;color:var(--muted);width:36px;text-align:right;flex-shrink:0;}
+
+/* Scroll depth */
+.scroll-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.scroll-col{text-align:center;}
+.scroll-bar-wrap{height:80px;background:var(--border);border-radius:4px;position:relative;display:flex;align-items:flex-end;}
+.scroll-bar{width:100%;border-radius:4px;background:linear-gradient(to top,var(--accent),#7bb3ff);transition:height .4s;}
+.scroll-pct{font-size:11px;font-weight:700;color:var(--accent);margin-top:4px;}
+.scroll-milestone{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* Sessions table */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl th{text-align:left;padding:8px 12px;color:var(--muted);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);}
+.tbl td{padding:9px 12px;border-bottom:1px solid rgba(30,35,56,.5);}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.tag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;}
+.ts{color:var(--muted);}
+
+/* Two-col layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:640px){.two-col{grid-template-columns:1fr;}.scroll-grid{grid-template-columns:repeat(5,1fr);}.stats{grid-template-columns:repeat(2,1fr);}}
+
+.loading{color:var(--muted);font-size:13px;padding:20px 0;}
+.empty{color:var(--muted);font-size:12px;padding:12px;text-align:center;}
+.refresh-btn{background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);color:var(--accent);font-size:12px;padding:5px 14px;border-radius:8px;cursor:pointer;transition:.1s;}
+.refresh-btn:hover{background:rgba(79,142,247,.22);}
+a.back{color:var(--muted);font-size:12px;text-decoration:none;margin-left:12px;}
+a.back:hover{color:var(--text);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>📊 Аналитика сайта <a class="back" href="setup.html">← setup</a></h1>
+    <div class="header-meta"><span class="live-dot"></span><span id="updated-time">Загрузка данных...</span></div>
+  </div>
+  <button class="refresh-btn" onclick="init()">↻ Обновить</button>
+</div>
+
+<div class="wrap">
+
+  <div class="stats" id="stats-row">
+    <div class="stat-card"><div class="stat-val" id="s-today">—</div><div class="stat-label">Сессий сегодня</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-week">—</div><div class="stat-label">Сессий за 7 дней</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-events">—</div><div class="stat-label">Событий сегодня</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-scroll">—</div><div class="stat-label">Ср. прокрутка</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-copies">—</div><div class="stat-label">Копирований</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-total">—</div><div class="stat-label">Всего сессий</div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Тепловая карта кликов</div>
+    <div class="heatmap-outer">
+      <div class="heatmap-label" id="heatmap-label">Загрузка...</div>
+      <canvas id="heatmap" width="960" height="540"></canvas>
+      <div class="heatmap-legend">
+        <span>Мало</span>
+        <div class="legend-bar"></div>
+        <span>Много</span>
+        <span style="margin-left:auto;font-size:10px" id="heatmap-count"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="two-col">
+      <div>
+        <div class="sec-title">Топ событий</div>
+        <div class="ev-list" id="ev-list"><div class="loading">Загрузка...</div></div>
+      </div>
+      <div>
+        <div class="sec-title">Глубина прокрутки</div>
+        <div class="scroll-grid" id="scroll-depth">
+          <div class="loading">Загрузка...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-title">Последние события</div>
+    <div style="overflow-x:auto;background:var(--card);border:1px solid var(--border);border-radius:12px;">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Время</th>
+            <th>Тип</th>
+            <th>Событие</th>
+            <th>Элемент</th>
+            <th>Прокрутка</th>
+            <th>Экран</th>
+          </tr>
+        </thead>
+        <tbody id="events-tbody"><tr><td colspan="6" class="empty">Загрузка...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SB = 'https://wdnrdxqkajobjaorssza.supabase.co';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbnJkeHFrYWpvYmphb3Jzc3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjkwMDgsImV4cCI6MjA5NzkwNTAwOH0.5C8ORvvh9AOURwrEjlaNawjNrc-kortPZKKF6TgTPpg';
+
+async function query(path) {
+  const r = await fetch(SB + '/rest/v1/' + path, {
+    headers: { 'apikey': KEY, 'Authorization': 'Bearer ' + KEY }
+  });
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+
+function fmt(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('ru', { day:'2-digit', month:'2-digit' }) + ' ' +
+         d.toLocaleTimeString('ru', { hour:'2-digit', minute:'2-digit' });
+}
+
+function typeClass(t) {
+  return ['click','scroll','nav','copy','pageview'].includes(t) ? t : 'click';
+}
+
+async function init() {
+  document.getElementById('updated-time').textContent = 'Обновление...';
+
+  const all = await query('site_analytics?order=created_at.desc&limit=2000').catch(() => []);
+
+  const today = new Date().toISOString().slice(0,10);
+  const weekAgo = new Date(Date.now() - 7*86400000).toISOString();
+
+  const todayEvs = all.filter(e => e.created_at.startsWith(today));
+  const weekEvs  = all.filter(e => e.created_at >= weekAgo);
+
+  const todaySessions = new Set(todayEvs.map(e => e.session_id)).size;
+  const weekSessions  = new Set(weekEvs.map(e => e.session_id)).size;
+  const allSessions   = new Set(all.map(e => e.session_id)).size;
+  const copies        = all.filter(e => e.event_type === 'copy').length;
+
+  const scrollEvs = all.filter(e => e.event_type === 'scroll' && e.scroll_depth != null);
+  const avgScroll = scrollEvs.length
+    ? Math.round(scrollEvs.reduce((a,b) => a + b.scroll_depth, 0) / scrollEvs.length)
+    : 0;
+
+  document.getElementById('s-today').textContent  = todaySessions;
+  document.getElementById('s-week').textContent   = weekSessions;
+  document.getElementById('s-events').textContent = todayEvs.length;
+  document.getElementById('s-scroll').textContent = avgScroll + '%';
+  document.getElementById('s-copies').textContent = copies;
+  document.getElementById('s-total').textContent  = allSessions;
+
+  // Heat map
+  drawHeatmap(all.filter(e => e.event_type === 'click' && e.x_pct != null && e.y_pct != null));
+
+  // Top events
+  renderTopEvents(all);
+
+  // Scroll depth
+  renderScrollDepth(all);
+
+  // Recent events
+  renderTable(all.slice(0, 80));
+
+  document.getElementById('updated-time').textContent =
+    'Обновлено ' + new Date().toLocaleTimeString('ru') + ' · ' + all.length + ' событий в базе';
+}
+
+function drawHeatmap(clicks) {
+  const canvas = document.getElementById('heatmap');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  ctx.fillStyle = '#090b12';
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid lines (section markers)
+  ctx.strokeStyle = 'rgba(30,35,56,0.8)';
+  ctx.lineWidth = 1;
+  [16.6, 33.3, 50, 66.6, 83.3].forEach(p => {
+    ctx.beginPath(); ctx.moveTo(0, p/100*H); ctx.lineTo(W, p/100*H); ctx.stroke();
+  });
+
+  const label = document.getElementById('heatmap-label');
+  document.getElementById('heatmap-count').textContent = clicks.length + ' кликов';
+
+  if (!clicks.length) {
+    ctx.fillStyle = 'rgba(90,98,130,0.5)';
+    ctx.font = '16px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Данные появятся после первых посещений', W/2, H/2);
+    label.textContent = 'Тепловая карта — нет данных';
+    return;
+  }
+
+  label.textContent = `Тепловая карта · ${clicks.length} кликов от ${new Set(clicks.map(c=>c.session_id)).size} сессий`;
+
+  // Draw heat points with additive blending
+  ctx.globalCompositeOperation = 'screen';
+  clicks.forEach(c => {
+    const x = (c.x_pct / 100) * W;
+    const y = (c.y_pct / 100) * H;
+    const r = 28;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0,   'rgba(255, 60,  0, 0.55)');
+    g.addColorStop(0.3, 'rgba(255,140,  0, 0.25)');
+    g.addColorStop(0.7, 'rgba(100,160,255,0.08)');
+    g.addColorStop(1,   'transparent');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+  });
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+function renderTopEvents(all) {
+  const cnt = {};
+  all.forEach(e => {
+    const k = (e.event_type || 'other') + '|' + (e.event_name || '—');
+    cnt[k] = (cnt[k] || 0) + 1;
+  });
+  const sorted = Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  const max = sorted[0]?.[1] || 1;
+
+  const el = document.getElementById('ev-list');
+  if (!sorted.length) { el.innerHTML = '<div class="empty">Нет данных</div>'; return; }
+
+  el.innerHTML = sorted.map(([k, n]) => {
+    const [type, name] = k.split('|');
+    const pct = Math.round(n / max * 100);
+    return `<div class="ev-row">
+      <span class="ev-type ${typeClass(type)}">${type}</span>
+      <span class="ev-name" title="${name}">${name}</span>
+      <div class="ev-bar-wrap"><div class="ev-bar" style="width:${pct}%"></div></div>
+      <span class="ev-count">${n}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderScrollDepth(all) {
+  const milestones = [25, 50, 75, 90, 100];
+  const sessions = new Set(all.map(e => e.session_id)).size || 1;
+
+  const reached = {};
+  milestones.forEach(m => {
+    reached[m] = new Set(
+      all.filter(e => e.event_type === 'scroll' && e.event_name === 'depth_' + m)
+         .map(e => e.session_id)
+    ).size;
+  });
+
+  const el = document.getElementById('scroll-depth');
+  el.innerHTML = milestones.map(m => {
+    const cnt = reached[m] || 0;
+    const pct = Math.round(cnt / sessions * 100);
+    return `<div class="scroll-col">
+      <div class="scroll-bar-wrap">
+        <div class="scroll-bar" style="height:${pct}%"></div>
+      </div>
+      <div class="scroll-pct">${pct}%</div>
+      <div class="scroll-milestone">${m}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(evs) {
+  const tbody = document.getElementById('events-tbody');
+  if (!evs.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">Нет событий</td></tr>'; return; }
+  tbody.innerHTML = evs.map(e => `
+    <tr>
+      <td class="ts">${fmt(e.created_at)}</td>
+      <td><span class="tag ${typeClass(e.event_type)}" style="background:rgba(79,142,247,.1);color:var(--accent)">${e.event_type}</span></td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.event_name || '—'}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)">${e.element_text || e.element_id || '—'}</td>
+      <td>${e.scroll_depth != null ? e.scroll_depth + '%' : '—'}</td>
+      <td style="color:var(--muted)">${e.screen_w ? e.screen_w + '×' + e.screen_h : '—'}</td>
+    </tr>`).join('');
+}
+
+init();
+</script>
+</body>
+</html>

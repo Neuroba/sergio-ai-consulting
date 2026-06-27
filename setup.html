@@ -493,5 +493,81 @@ window.addEventListener('scroll', () => {
   navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#'+cur); });
 });
 </script>
+
+<script>
+// === ANALYTICS ===
+(function() {
+  const SB = 'https://wdnrdxqkajobjaorssza.supabase.co';
+  const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkbnJkeHFrYWpvYmphb3Jzc3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzMjkwMDgsImV4cCI6MjA5NzkwNTAwOH0.5C8ORvvh9AOURwrEjlaNawjNrc-kortPZKKF6TgTPpg';
+
+  let sid = localStorage.getItem('_asid');
+  if (!sid) { sid = Date.now().toString(36) + Math.random().toString(36).slice(2,8); localStorage.setItem('_asid', sid); }
+
+  const q = [];
+
+  function track(type, name, extra) {
+    const docH = Math.max(document.documentElement.scrollHeight, 1);
+    const docW = Math.max(document.documentElement.scrollWidth, 1);
+    q.push(Object.assign({
+      session_id: sid,
+      event_type: type,
+      event_name: name || null,
+      page_path: location.pathname,
+      referrer: document.referrer || null,
+      screen_w: screen.width,
+      screen_h: screen.height,
+      scroll_depth: Math.round(window.scrollY / (docH - window.innerHeight) * 100) || 0
+    }, extra));
+  }
+
+  function flush() {
+    if (!q.length) return;
+    const batch = q.splice(0);
+    fetch(SB + '/rest/v1/site_analytics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': KEY, 'Authorization': 'Bearer ' + KEY, 'Prefer': 'return=minimal' },
+      body: JSON.stringify(batch),
+      keepalive: true
+    }).catch(() => {});
+  }
+
+  // Pageview
+  track('pageview', 'load');
+
+  // Clicks
+  document.addEventListener('click', function(e) {
+    const el = e.target.closest('a,button') || e.target;
+    const docH = Math.max(document.documentElement.scrollHeight, 1);
+    const docW = Math.max(document.documentElement.scrollWidth, 1);
+    track('click', el.textContent.trim().slice(0, 50) || el.tagName, {
+      x_pct: Math.round(e.pageX / docW * 1000) / 10,
+      y_pct: Math.round(e.pageY / docH * 1000) / 10,
+      element_text: el.textContent.trim().slice(0, 80),
+      element_id: el.id || el.getAttribute('href') || el.className.split(' ')[0] || null
+    });
+  });
+
+  // Scroll depth milestones
+  const reached = new Set();
+  window.addEventListener('scroll', function() {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = Math.round(window.scrollY / Math.max(docH, 1) * 100);
+    [25, 50, 75, 90, 100].forEach(m => {
+      if (pct >= m && !reached.has(m)) { reached.add(m); track('scroll', 'depth_' + m, { scroll_depth: m }); }
+    });
+  }, { passive: true });
+
+  // Nav section tracking
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.nav a').forEach(a => {
+      a.addEventListener('click', () => track('nav', a.getAttribute('href')));
+    });
+  });
+
+  setInterval(flush, 3000);
+  window.addEventListener('beforeunload', flush);
+  window.addEventListener('pagehide', flush);
+})();
+</script>
 </body>
 </html>
