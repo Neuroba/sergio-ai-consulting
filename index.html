@@ -269,7 +269,7 @@ iconify-icon{display:block;flex-shrink:0;line-height:1;transform-origin:center}
 .acc-hdr:hover{background:rgba(15,23,42,.8)}
 .case-acc.open .acc-hdr{background:rgba(15,23,42,.65);border-bottom:1px solid rgba(255,255,255,.05)}
 .acc-icon-box{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.07)}
-.acc-info{flex-shrink:0}
+.acc-info{flex-shrink:1;min-width:0}
 .acc-title{font-weight:700;font-size:15px;color:#f1f5f9}
 .acc-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:#475569;letter-spacing:.04em;margin-top:2px}
 .acc-mgroup{display:flex;gap:18px;margin-left:auto;flex-shrink:0}
@@ -290,7 +290,33 @@ iconify-icon{display:block;flex-shrink:0;line-height:1;transform-origin:center}
 .acc-body{max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.16,1,.3,1)}
 .case-acc.open .acc-body{max-height:4000px}
 @media(min-width:900px){.acc-hook{display:block}}
-@media(max-width:640px){.acc-mgroup{display:none}.acc-hdr{padding:14px 16px}}
+@media(max-width:640px){
+  .acc-mgroup{display:none}
+  .acc-hdr{padding:14px 16px}
+  /* Закрытые кейсы: акцентная рамка + тап-индикатор */
+  .case-acc:not(.open){
+    border-color:rgba(var(--acc-rgb),.2);
+  }
+  .case-acc:not(.open) .acc-info::after{
+    content:'↓ Открыть кейс';
+    display:inline-block;
+    margin-top:8px;
+    padding:5px 11px;
+    border-radius:6px;
+    font-size:10px;
+    font-weight:700;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    background:rgba(var(--acc-rgb),.1);
+    border:1px solid rgba(var(--acc-rgb),.3);
+    color:rgba(var(--acc-rgb),1);
+    animation:chev-pulse 2.4s ease-in-out infinite;
+  }
+  .case-acc.open .acc-info::after{display:none}
+  .acc-chev-hint{color:rgba(var(--acc-rgb),.5)!important}
+  .case-acc:not(.open) .acc-hdr:active{background:rgba(var(--acc-rgb),.06)!important}
+}
 .acc-mobile-desc{display:none;font-size:11px;color:#475569;margin-top:3px;line-height:1.4}
 @media(max-width:899px){.acc-mobile-desc{display:block}}
 .acc-mobile-pills{display:none;gap:5px;flex-wrap:wrap;margin-top:5px}
