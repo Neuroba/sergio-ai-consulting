@@ -277,9 +277,16 @@ iconify-icon{display:block;flex-shrink:0;line-height:1;transform-origin:center}
 .acc-mnum{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;line-height:1}
 .acc-mlabel{font-size:9px;color:#475569;letter-spacing:.07em;margin-top:2px;text-transform:uppercase}
 .acc-hook{font-size:12.5px;color:#64748b;padding:0 16px;display:none;flex:1}
-.acc-chev{font-size:10px;color:#475569;flex-shrink:0;display:flex;align-items:center}
-.acc-chev-arrow{display:inline-block;transition:transform .35s}
+.acc-chev{font-size:10px;color:#475569;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding-left:8px}
+.acc-chev-arrow{display:inline-block;transition:transform .35s;font-size:12px}
+.acc-chev-hint{font-size:9px;color:#334155;letter-spacing:.04em;white-space:nowrap;font-family:'JetBrains Mono',monospace;transition:color .2s}
+.case-acc:not(.open) .acc-hdr:hover .acc-chev-hint{color:#64748b}
 .case-acc.open .acc-chev-arrow{transform:rotate(180deg)}
+.case-acc.open .acc-chev-hint{display:none}
+/* Pulse animation on closed chevrons to hint clickability */
+@keyframes chev-pulse{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(2px)}}
+.case-acc:not(.open) .acc-chev-arrow{animation:chev-pulse 2.4s ease-in-out infinite}
+.case-acc:not(.open):hover .acc-chev-arrow,.case-acc.open .acc-chev-arrow{animation:none}
 .acc-body{max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.16,1,.3,1)}
 .case-acc.open .acc-body{max-height:4000px}
 @media(min-width:900px){.acc-hook{display:block}}
@@ -693,7 +700,7 @@ body{animation:pageFadeIn .35s ease both}
           <div class="acc-metric"><div class="acc-mnum" style="color:#f59e0b">1</div><div class="acc-mlabel">person</div></div>
         </div>
         <div class="acc-hook">iOS fitness app — from idea to App Store in 30 days. No team, no budget, fully automated CI/CD.</div>
-        <div class="acc-chev"><span class="acc-chev-arrow">▼</span></div>
+        <div class="acc-chev"><span class="acc-chev-arrow">▼</span><span class="acc-chev-hint">открыть</span></div>
       </div>
       <div class="acc-body">
     <!-- ── Panel: PushUp ── -->
@@ -833,7 +840,7 @@ body{animation:pageFadeIn .35s ease both}
           <div class="acc-metric"><div class="acc-mnum" style="color:#4ade80">$0</div><div class="acc-mlabel">hosting</div></div>
         </div>
         <div class="acc-hook">Beef jerky brand automation — Telegram bot + CRM + site. Zero lost orders, 12h saved every week.</div>
-        <div class="acc-chev"><span class="acc-chev-arrow">▼</span></div>
+        <div class="acc-chev"><span class="acc-chev-arrow">▼</span><span class="acc-chev-hint">открыть</span></div>
       </div>
       <div class="acc-body">
     <!-- ── Panel: PicadaRica ── -->
@@ -983,129 +990,6 @@ STATUS_LABELS = {
       </div><!-- /acc-body -->
     </div><!-- /acc-picadarica -->
 
-    <!-- 3 · AI Consulting -->
-    <div class="case-acc" id="acc-consulting" style="--acc-rgb:129,140,248">
-      <div class="acc-hdr" onclick="toggleAcc('consulting')">
-        <div class="acc-icon-box" style="background:rgba(129,140,248,.07)">
-          <iconify-icon icon="solar:cpu-bolt-bold-duotone" class="i-pulse" style="font-size:20px;color:#818cf8"></iconify-icon>
-        </div>
-        <div class="acc-info">
-          <div class="acc-title">AI Consulting Site</div>
-          <div class="acc-sub">Landing · CRM · Netlify · 3 Languages</div>
-          <div class="acc-mobile-desc">Профессиональный лендинг + CRM — собран за 1 день, три языка, ноль затрат в месяц навсегда.</div>
-          <div class="acc-mobile-pills">
-            <span class="acc-mpill" style="background:rgba(129,140,248,.12);color:#818cf8">1 день</span>
-            <span class="acc-mpill" style="background:rgba(34,211,238,.1);color:#22d3ee">3 языка</span>
-            <span class="acc-mpill" style="background:rgba(74,222,128,.1);color:#4ade80">$0/мес</span>
-          </div>
-        </div>
-        <div class="acc-mgroup">
-          <div class="acc-metric"><div class="acc-mnum" style="color:#818cf8">1</div><div class="acc-mlabel">day built</div></div>
-          <div class="acc-metric"><div class="acc-mnum" style="color:#22d3ee">3</div><div class="acc-mlabel">languages</div></div>
-          <div class="acc-metric"><div class="acc-mnum" style="color:#4ade80">$0</div><div class="acc-mlabel">/month</div></div>
-        </div>
-        <div class="acc-hook">Pro consulting presence + CRM — built in 1 day, three languages, costs zero per month forever.</div>
-        <div class="acc-chev"><span class="acc-chev-arrow">▼</span></div>
-      </div>
-      <div class="acc-body">
-    <!-- ── Panel: Consulting ── -->
-    <div class="case-panel glass-strong rounded-3xl p-8" id="panel-consulting">
-      <div class="grid lg:grid-cols-2 gap-10 items-start">
-
-        <!-- Left: metrics + before/after + bullets -->
-        <div class="space-y-7">
-          <div>
-            <div class="flex flex-wrap gap-2 mb-3">
-              <span class="cp-tag" style="--cc:rgba(99,102,241,.2);--ct:#818cf8">Landing</span>
-              <span class="cp-tag" style="--cc:rgba(34,211,238,.2);--ct:#22d3ee">HTML + Tailwind</span>
-              <span class="cp-tag" style="--cc:rgba(168,85,247,.2);--ct:#c084fc">Admin CRM</span>
-              <span class="cp-tag" style="--cc:rgba(34,197,94,.2);--ct:#4ade80">Netlify</span>
-            </div>
-            <h3 class="font-display text-2xl font-bold" data-i18n="cases.c3h">Professional AI presence + CRM — built in 1 day, costs $0/month</h3>
-          </div>
-          <div class="grid grid-cols-3 gap-3">
-            <div class="cp-metric" style="--mc:#818cf8"><div class="cp-num">1</div><div class="cp-label">day to ship</div></div>
-            <div class="cp-metric" style="--mc:#c084fc"><div class="cp-num">3</div><div class="cp-label">languages</div></div>
-            <div class="cp-metric" style="--mc:#4ade80"><div class="cp-num">$0</div><div class="cp-label">per month</div></div>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <div class="cp-col-head" style="color:#f43f5e">// Before</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c3b1">No online presence</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c3b2">Leads lost in chats</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c3b3">15 browser tabs daily</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c3b4">No client tracking</div>
-            </div>
-            <div>
-              <div class="cp-col-head" style="color:#4ade80">// After</div>
-              <div class="cp-row cp-good" data-i18n="cases.c3a1">Multilingual landing page</div>
-              <div class="cp-row cp-good" data-i18n="cases.c3a2">CRM admin panel</div>
-              <div class="cp-row cp-good" data-i18n="cases.c3a3">Quick Links hub — all in 1</div>
-              <div class="cp-row cp-good" data-i18n="cases.c3a4">Lead pipeline tracked</div>
-            </div>
-          </div>
-          <div class="space-y-2.5">
-            <div class="cp-built-row"><iconify-icon icon="solar:monitor-bold-duotone" style="font-size:16px;color:#818cf8;flex-shrink:0"></iconify-icon><span data-i18n="cases.c3w1">Neuro-cyber landing — animated, Solar icons, EN/ES/RU</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:shield-user-bold-duotone" style="font-size:16px;color:#22d3ee;flex-shrink:0"></iconify-icon><span data-i18n="cases.c3w2">Admin panel + CRM — lead management, pipeline, notes</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:link-bold-duotone" style="font-size:16px;color:#4ade80;flex-shrink:0"></iconify-icon><span data-i18n="cases.c3w3">Quick Links hub — all business logins, one screen</span></div>
-          </div>
-        </div>
-
-        <!-- Right: browser mock + code -->
-        <div class="space-y-5">
-          <!-- Browser mockup -->
-          <div style="background:#1a1b26;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08)">
-            <div style="background:#0f172a;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(255,255,255,.05)">
-              <div style="width:11px;height:11px;border-radius:50%;background:#ff5f57"></div>
-              <div style="width:11px;height:11px;border-radius:50%;background:#ffbd2e"></div>
-              <div style="width:11px;height:11px;border-radius:50%;background:#28c941"></div>
-              <div style="flex:1;background:rgba(255,255,255,.04);border-radius:5px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(148,163,184,.2)">🔒 &nbsp;· · · · · · · · · · · ·</div>
-            </div>
-            <div style="height:200px;background:linear-gradient(135deg,#010409,#0a0f1e);position:relative;overflow:hidden">
-              <div style="position:absolute;inset:0;opacity:.35">
-                <svg width="100%" height="100%" viewBox="0 0 500 200"><line x1="60" y1="40" x2="180" y2="100" stroke="#6366f1" stroke-width=".5" opacity=".5"/><line x1="180" y1="100" x2="340" y2="50" stroke="#22d3ee" stroke-width=".5" opacity=".4"/><line x1="340" y1="50" x2="450" y2="160" stroke="#a855f7" stroke-width=".5" opacity=".4"/><circle cx="60" cy="40" r="2.5" fill="#6366f1" opacity=".8"/><circle cx="180" cy="100" r="2" fill="#22d3ee" opacity=".7"/><circle cx="340" cy="50" r="2.5" fill="#a855f7" opacity=".8"/><circle cx="450" cy="160" r="2" fill="#6366f1" opacity=".6"/></svg>
-              </div>
-              <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;padding:0 20px">
-                <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:rgba(34,211,238,.4)">AI CONSULTING</div>
-                <a href="https://neuroba.github.io/sergio-ai-consulting" target="_blank" style="font-size:20px;font-weight:800;background:linear-gradient(135deg,#818cf8,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Space Grotesk',sans-serif;text-decoration:none">Sergio Zubov — AI ↗</a>
-                <div style="font-size:11px;color:rgba(148,163,184,.35)">I automate businesses with AI</div>
-                <div style="padding:6px 16px;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:8px;font-size:10px;font-weight:700;color:white">Free audit →</div>
-              </div>
-            </div>
-          </div>
-          <!-- Code -->
-          <div class="cp-code">
-            <div class="cp-code-bar"><div class="cp-dot r"></div><div class="cp-dot y"></div><div class="cp-dot g"></div><span class="cp-fname">index.html — Neural canvas</span></div>
-<pre class="cp-pre"><code><span class="cg">// 55 nodes, live connections, adapts to mobile</span>
-(<span class="ct">function</span>() {
-  <span class="ct">const</span> N = isMobile ? <span class="cn">25</span> : <span class="cn">55</span>;
-  <span class="ct">const</span> COLORS = [
-    <span class="cs">'rgba(99,102,241,'</span>,   <span class="cg">// indigo</span>
-    <span class="cs">'rgba(34,211,238,'</span>,   <span class="cg">// cyan</span>
-    <span class="cs">'rgba(168,85,247,'</span>,   <span class="cg">// purple</span>
-  ];
-  <span class="ct">function</span> <span class="cf">draw</span>() {
-    nodes.forEach((a, i) => nodes.slice(i+<span class="cn">1</span>).forEach(b => {
-      <span class="ct">const</span> d = Math.hypot(a.x-b.x, a.y-b.y);
-      <span class="ct">if</span> (d < MAX_DIST) {
-        ctx.strokeStyle = a.color + (<span class="cn">1</span>-d/MAX_DIST)*<span class="cn">0.3</span>+<span class="cs">')'</span>;
-        ctx.stroke();
-      }
-    }));
-    requestAnimationFrame(draw);
-  }
-})();</code></pre>
-          </div>
-        </div>
-      </div>
-      <div class="panel-cta-bar" style="--pcc:rgba(99,102,241,.12);--pca:#818cf8">
-        <div><span class="pcta-stat" style="color:#818cf8">1 day</span> <span class="pcta-text" data-i18n="pcta.p3">to launch, $0/month forever — I'll build YOUR presence</span></div>
-        <a href="https://wa.me/5491140466022" target="_blank" class="pcta-btn" style="--pb:#6366f1"><iconify-icon icon="solar:chat-round-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="pcta.cta">Free audit →</span></a>
-      </div>
-    </div>
-      </div><!-- /acc-body -->
-    </div><!-- /acc-consulting -->
-
     <!-- 4 · AI Personal OS -->
     <div class="case-acc" id="acc-personal" style="--acc-rgb:245,158,11">
       <div class="acc-hdr" onclick="toggleAcc('personal')">
@@ -1128,7 +1012,7 @@ STATUS_LABELS = {
           <div class="acc-metric"><div class="acc-mnum" style="color:#818cf8">1</div><div class="acc-mlabel">system</div></div>
         </div>
         <div class="acc-hook">Managing 5 businesses with zero chaos — one AI-powered operating system for your life and work.</div>
-        <div class="acc-chev"><span class="acc-chev-arrow">▼</span></div>
+        <div class="acc-chev"><span class="acc-chev-arrow">▼</span><span class="acc-chev-hint">открыть</span></div>
       </div>
       <div class="acc-body">
     <!-- ── Panel: AI Personal OS ── -->
