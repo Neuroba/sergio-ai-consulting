@@ -87,6 +87,17 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 /* WARNING */
 .warn{background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.2);border-radius:10px;padding:12px 14px;font-size:12px;color:#ca8a04;margin-top:10px;}
 
+/* START SECTION */
+.start-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:12px;}
+.start-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+.start-hdr{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.start-icon{font-size:24px;width:40px;height:40px;background:rgba(79,142,247,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.start-title{font-size:14px;font-weight:700;}
+.start-os{font-size:11px;color:var(--muted);margin-top:2px;}
+.start-note{font-size:12px;color:var(--muted);margin-top:8px;}
+.start-card .cmd-box{margin-top:0;}
+@media(max-width:600px){.start-grid{grid-template-columns:1fr;}}
+
 /* MAC vs WIN */
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .compare-col{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;}
@@ -117,6 +128,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
   <a href="#skills">⚡ Скиллы</a>
   <a href="#keys">🔑 Токены</a>
   <a href="#tools">🔗 Ссылки</a>
+  <a href="#start">▶️ Старт</a>
   <a href="#mac-win">💻 Mac / Win</a>
 </nav>
 
@@ -316,6 +328,108 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; $z="$env:USERPROFILE\Downloads
       <a class="tool-chip" href="https://app.netlify.com" target="_blank">🚀 Netlify</a>
       <a class="tool-chip" href="https://www.mercadolibre.com.ar/" target="_blank">🛒 MercadoLibre</a>
     </div>
+  </div>
+
+  <!-- СТАРТ -->
+  <div class="section" id="start">
+    <div class="section-title">Команды старта — каждый день</div>
+
+    <div class="start-grid">
+
+      <div class="start-card">
+        <div class="start-hdr"><span class="start-icon">⬡</span><div><div class="start-title">Claude Code</div><div class="start-os">Mac · Windows</div></div></div>
+        <div class="cmd-box" id="s1">
+          <button class="copy-btn" onclick="copy('s1',this)">Копировать</button>
+          claude
+        </div>
+        <div class="start-note">Запускает сессию. Claude читает CLAUDE.md и память автоматически.</div>
+      </div>
+
+      <div class="start-card">
+        <div class="start-hdr"><span class="start-icon">📁</span><div><div class="start-title">Открыть проекты</div><div class="start-os">Mac · Windows</div></div></div>
+        <div class="cmd-box" id="s2">
+          <button class="copy-btn" onclick="copy('s2',this)">Копировать</button>
+          <span class="comment"># Mac</span><br>
+code /Users/sergeizubov/VScode/ClaudeProjects<br><br>
+          <span class="comment"># Windows</span><br>
+code %USERPROFILE%\Projects\ClaudeProjects
+        </div>
+      </div>
+
+      <div class="start-card">
+        <div class="start-hdr"><span class="start-icon">📊</span><div><div class="start-title">Мобильный дашборд</div><div class="start-os">Mac (авто) · Windows (вручную)</div></div></div>
+        <div class="cmd-box" id="s3">
+          <button class="copy-btn" onclick="copy('s3',this)">Копировать</button>
+          <span class="comment"># Mac — уже работает автоматически (LaunchAgent)</span><br>
+          <span class="comment"># Проверить: http://localhost:8765</span><br><br>
+          <span class="comment"># Windows — запустить вручную:</span><br>
+python %USERPROFILE%\Projects\ClaudeProjects\00-Общее\mobile-dashboard\server.py
+        </div>
+        <div class="start-note">На телефоне: <strong>http://[IP]:8765</strong> (та же Wi-Fi)</div>
+      </div>
+
+      <div class="start-card">
+        <div class="start-hdr"><span class="start-icon">💪</span><div><div class="start-title">PushUp — dev режим</div><div class="start-os">Mac · Windows</div></div></div>
+        <div class="cmd-box" id="s4">
+          <button class="copy-btn" onclick="copy('s4',this)">Копировать</button>
+          <span class="comment"># Mac</span><br>
+cd /Users/sergeizubov/VScode/ClaudeProjects/03-PushUp-Приложение/pixel-perfect-clone-59134<br>
+bun run dev<br><br>
+          <span class="comment"># Windows (если bun не установлен — npm)</span><br>
+cd %USERPROFILE%\Projects\ClaudeProjects\03-PushUp-Приложение\pixel-perfect-clone-59134<br>
+npm run dev
+        </div>
+      </div>
+
+      <div class="start-card">
+        <div class="start-hdr"><span class="start-icon">🔨</span><div><div class="start-title">Android APK (Codemagic CI)</div><div class="start-os">Mac · Windows · любой ПК</div></div></div>
+        <div class="cmd-box" id="s5">
+          <button class="copy-btn" onclick="copy('s5',this)">Копировать</button>
+          <span class="comment"># Запустить сборку через API (PowerShell / bash)</span><br>
+curl -H "x-auth-token: [CODEMAGIC_TOKEN]" ^<br>
+&nbsp;&nbsp;&nbsp;&nbsp; -H "Content-Type: application/json" ^<br>
+&nbsp;&nbsp;&nbsp;&nbsp; -d "{\"appId\":\"[APP_ID]\",\"workflowId\":\"android-capacitor\",\"branch\":\"capacitor-android-build\"}" ^<br>
+&nbsp;&nbsp;&nbsp;&nbsp; https://api.codemagic.io/builds
+        </div>
+        <div class="start-note">Токен и App ID — в файле <code>codemagic.yaml</code> проекта PushUp</div>
+      </div>
+
+      <div class="start-card">
+        <div class="start-hdr"><span class="start-icon">🌐</span><div><div class="start-title">Git — синхронизация проектов</div><div class="start-os">Mac · Windows</div></div></div>
+        <div class="cmd-box" id="s6">
+          <button class="copy-btn" onclick="copy('s6',this)">Копировать</button>
+          <span class="comment"># PushUp</span><br>
+cd .../03-PushUp-Приложение/pixel-perfect-clone-59134<br>
+git pull origin main<br><br>
+          <span class="comment"># PicadaRica сайт</span><br>
+cd .../01-PicadaRica-Вяленое-мясо/Сайт<br>
+git pull origin main<br><br>
+          <span class="comment"># AI Consulting сайт</span><br>
+cd .../06-AI-для-бизнеса/site<br>
+git pull origin main
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="section-title" style="margin-top:0">Утренний старт — одна команда (Windows)</div>
+      <div class="cmd-box" id="s-morning">
+        <button class="copy-btn" onclick="copy('s-morning',this)">Копировать</button>
+        <span class="comment"># Открывает VS Code + запускает дашборд + открывает Claude</span><br>
+Start-Process "code" "%USERPROFILE%\Projects\ClaudeProjects"; Start-Process "python" "%USERPROFILE%\Projects\ClaudeProjects\00-Общее\mobile-dashboard\server.py"; Start-Sleep 3; Start-Process "http://localhost:8765"; claude
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="section-title" style="margin-top:0">Утренний старт — одна команда (Mac)</div>
+      <div class="cmd-box" id="s-morning-mac">
+        <button class="copy-btn" onclick="copy('s-morning-mac',this)">Копировать</button>
+        <span class="comment"># Дашборд уже работает (LaunchAgent). Просто:</span><br>
+code /Users/sergeizubov/VScode/ClaudeProjects && claude
+      </div>
+    </div>
+
   </div>
 
   <!-- MAC vs WINDOWS -->
