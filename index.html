@@ -292,30 +292,35 @@ iconify-icon{display:block;flex-shrink:0;line-height:1;transform-origin:center}
 @media(min-width:900px){.acc-hook{display:block}}
 @media(max-width:640px){
   .acc-mgroup{display:none}
-  .acc-hdr{padding:14px 16px}
-  /* Закрытые кейсы: акцентная рамка + тап-индикатор */
-  .case-acc:not(.open){
-    border-color:rgba(var(--acc-rgb),.2);
-  }
-  .case-acc:not(.open) .acc-info::after{
-    content:'↓ Открыть кейс';
-    display:inline-block;
-    margin-top:8px;
-    padding:5px 11px;
-    border-radius:6px;
-    font-size:10px;
+  /* Flex-wrap позволяет ::after занять отдельную строку */
+  .acc-hdr{padding:14px 16px;flex-wrap:wrap}
+  /* Закрытые кейсы: акцентная рамка */
+  .case-acc:not(.open){border-color:rgba(var(--acc-rgb),.22)}
+  /* Прячем мелкий шеврон — заменяем полноширинной полосой */
+  .case-acc:not(.open) .acc-chev{display:none}
+  /* Полноширинная полоса "ОТКРЫТЬ" через ::after на flex-контейнере */
+  .case-acc:not(.open) .acc-hdr::after{
+    content:'↓  ОТКРЫТЬ КЕЙС';
+    flex:0 0 100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-top:10px;
+    padding:10px 0;
+    font-size:11px;
     font-weight:700;
     font-family:'JetBrains Mono',monospace;
-    letter-spacing:.06em;
-    text-transform:uppercase;
-    background:rgba(var(--acc-rgb),.1);
-    border:1px solid rgba(var(--acc-rgb),.3);
-    color:rgba(var(--acc-rgb),1);
+    letter-spacing:.1em;
+    border-top:1px solid rgba(var(--acc-rgb),.15);
+    color:rgba(var(--acc-rgb),.9);
+    background:rgba(var(--acc-rgb),.05);
+    border-radius:0 0 4px 4px;
     animation:chev-pulse 2.4s ease-in-out infinite;
   }
-  .case-acc.open .acc-info::after{display:none}
-  .acc-chev-hint{color:rgba(var(--acc-rgb),.5)!important}
-  .case-acc:not(.open) .acc-hdr:active{background:rgba(var(--acc-rgb),.06)!important}
+  .case-acc:not(.open) .acc-hdr:active{background:rgba(var(--acc-rgb),.07)!important}
+  /* Открытый кейс — обычный шеврон вниз */
+  .case-acc.open .acc-chev{display:flex}
 }
 .acc-mobile-desc{display:none;font-size:11px;color:#475569;margin-top:3px;line-height:1.4}
 @media(max-width:899px){.acc-mobile-desc{display:block}}
