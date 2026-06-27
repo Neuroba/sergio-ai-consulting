@@ -94,7 +94,7 @@ const db = createClient(
 // Handle email confirmation redirect (hash contains tokens)
 db.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_IN' && session) {
-    window.location.href = '/dashboard'
+    window.location.href = '/sergio-ai-consulting/dashboard.html'
   }
 })
 
@@ -105,7 +105,7 @@ if (window.location.search.includes('confirmed=true')) {
 
 // Redirect if already logged in
 db.auth.getSession().then(({ data }) => {
-  if (data.session) window.location.href = '/dashboard'
+  if (data.session) window.location.href = '/sergio-ai-consulting/dashboard.html'
 })
 
 const form = document.getElementById('loginForm')
@@ -140,7 +140,7 @@ form.addEventListener('submit', async (e) => {
     return
   }
 
-  window.location.href = '/dashboard'
+  window.location.href = '/sergio-ai-consulting/dashboard.html'
 })
 </script>
 </body>
