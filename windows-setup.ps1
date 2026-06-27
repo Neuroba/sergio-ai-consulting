@@ -258,11 +258,29 @@ $vscode_settings = @"
     "workbench.colorTheme": "Default Dark Modern",
     "files.autoSave": "onFocusChange",
     "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false
+    "explorer.confirmDragAndDrop": false,
+    "workbench.statusBar.visible": true
 }
 "@
 Set-Content -Path "$vscode_user\settings.json" -Value $vscode_settings -Encoding UTF8
 Write-Host "   ✓ VS Code settings.json создан" -ForegroundColor Green
+
+# Горячая клавиша: Ctrl+Shift+A → открыть Claude
+$vscode_keys = @"
+[
+    {
+        "key": "ctrl+shift+a",
+        "command": "claude.openInPanel"
+    },
+    {
+        "key": "ctrl+shift+a",
+        "command": "workbench.view.extension.claude-code-panel",
+        "when": "!claudeCodePanelOpen"
+    }
+]
+"@
+Set-Content -Path "$vscode_user\keybindings.json" -Value $vscode_keys -Encoding UTF8
+Write-Host "   ✓ Горячая клавиша Ctrl+Shift+A → Claude" -ForegroundColor Green
 
 # PushUp: npm install
 Write-Host ""
