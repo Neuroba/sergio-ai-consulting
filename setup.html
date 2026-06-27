@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sergio — Рабочая среда</title>
+<style>
+:root {
+  --bg:#090b12; --card:#10131e; --card2:#151825; --border:#1e2338;
+  --text:#e2e8f8; --muted:#5a6282; --accent:#4f8ef7;
+  --green:#22c55e; --red:#ef4444; --yellow:#eab308; --orange:#f97316;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;padding:0 0 60px;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#090b12 0%,#0d1421 60%,#0a1128 100%);border-bottom:1px solid var(--border);padding:48px 24px 40px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(79,142,247,.12),transparent);}
+.hero-logo{font-size:36px;font-weight:900;letter-spacing:.08em;position:relative;}
+.hero-logo span{color:var(--accent);}
+.hero-sub{font-size:15px;color:var(--muted);margin-top:6px;position:relative;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);color:var(--accent);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-top:14px;position:relative;}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* NAV */
+.nav{display:flex;gap:0;border-bottom:1px solid var(--border);background:rgba(10,11,18,.92);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav a{padding:14px 20px;font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;}
+.nav a:hover,.nav a.active{color:var(--text);border-bottom-color:var(--accent);}
+
+/* CONTENT */
+.wrap{max-width:860px;margin:0 auto;padding:0 20px;}
+.section{padding:36px 0 0;}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* COMMAND BOX */
+.cmd-box{background:#060810;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:16px 18px;font-family:'Fira Code','Cascadia Code','Courier New',monospace;font-size:13px;color:#7dd3fc;line-height:1.7;position:relative;overflow:hidden;}
+.cmd-box .comment{color:var(--muted);}
+.copy-btn{position:absolute;top:10px;right:10px;background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);color:var(--accent);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .12s;}
+.copy-btn:hover{background:rgba(79,142,247,.3);}
+.copy-btn.copied{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--green);}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:12px;}
+.step{display:flex;gap:14px;align-items:flex-start;}
+.step-num{width:32px;height:32px;border-radius:50%;background:rgba(79,142,247,.15);border:1px solid rgba(79,142,247,.3);color:var(--accent);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.step-body{}
+.step-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--muted);}
+
+/* PROJECTS GRID */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
+.proj-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;border-top:3px solid var(--pc,#444);}
+.proj-icon{font-size:22px;margin-bottom:8px;}
+.proj-name{font-size:14px;font-weight:700;margin-bottom:3px;}
+.proj-desc{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.tag{font-size:10px;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.06);color:var(--muted);}
+.tag.live{background:rgba(34,197,94,.12);color:var(--green);}
+.tag.wip{background:rgba(234,179,8,.12);color:var(--yellow);}
+.tag.git{background:rgba(79,142,247,.12);color:var(--accent);}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+.skill-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.skill-name{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:4px;}
+.skill-desc{font-size:11px;color:var(--muted);}
+
+/* TOOLS */
+.tools-row{display:flex;flex-wrap:wrap;gap:8px;}
+.tool-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;text-decoration:none;color:var(--text);transition:background .1s;}
+.tool-chip:hover{background:var(--card2);}
+
+/* KEYS */
+.key-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.key-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.key-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.key-val{font-family:'Fira Code','Courier New',monospace;font-size:12px;color:#7dd3fc;word-break:break-all;background:#060810;padding:8px 10px;border-radius:6px;}
+.key-note{font-size:11px;color:var(--muted);margin-top:6px;}
+
+/* INFO BOX */
+.info{background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.2);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--muted);margin-top:14px;}
+.info strong{color:var(--accent);}
+
+/* WARNING */
+.warn{background:rgba(234,179,8,.07);border:1px solid rgba(234,179,8,.2);border-radius:10px;padding:12px 14px;font-size:12px;color:#ca8a04;margin-top:10px;}
+
+/* MAC vs WIN */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.compare-col{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.compare-col h4{font-size:12px;font-weight:700;margin-bottom:10px;}
+.compare-col ul{list-style:none;display:flex;flex-direction:column;gap:5px;}
+.compare-col li{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;}
+.compare-col li::before{content:'·';color:var(--accent);}
+.mac-col h4{color:#a8c7fa;}
+.win-col h4{color:#9fe0a8;}
+
+@media(max-width:600px){
+  .compare{grid-template-columns:1fr;}
+  .hero-logo{font-size:26px;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-logo">⬡ <span>SERGIO</span> SETUP</div>
+  <div class="hero-sub">Рабочая среда · Buenos Aires</div>
+  <div class="hero-badge"><span class="pulse"></span> Документация актуальна</div>
+</div>
+
+<nav class="nav">
+  <a href="#install" class="active">🚀 Установка</a>
+  <a href="#projects">📁 Проекты</a>
+  <a href="#skills">⚡ Скиллы</a>
+  <a href="#keys">🔑 Токены</a>
+  <a href="#tools">🔗 Ссылки</a>
+  <a href="#mac-win">💻 Mac / Win</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- УСТАНОВКА -->
+  <div class="section" id="install">
+    <div class="section-title">Установка на Windows</div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Скачай архив с Mac</div>
+          <div class="step-desc">Файл <code>sergio-windows-transfer.zip</code> лежит на рабочем столе Mac. Перенеси через USB, Telegram (себе в Избранное) или Google Drive.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Открой PowerShell</div>
+          <div class="step-desc"><strong>Win + R</strong> → введи <code>powershell</code> → Enter</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Запусти одну команду</div>
+          <div class="step-desc">Если архив в папке <strong>Downloads</strong>:</div>
+          <div style="height:8px"></div>
+          <div class="cmd-box" id="cmd-main">
+            <button class="copy-btn" onclick="copyCmd('cmd-main',this)">Копировать</button>
+            <span class="comment"># Вставь в PowerShell и нажми Enter</span><br>
+Set-ExecutionPolicy Bypass -Scope Process -Force; $z="$env:USERPROFILE\Downloads\sergio-windows-transfer.zip"; $d="$env:USERPROFILE\Downloads\sergio-setup"; Expand-Archive $z -DestinationPath $d -Force; & "$d\sergio-windows-transfer\windows-install.ps1"
+          </div>
+          <div class="warn">⚠️ Если архив не в Downloads — измени путь после <code>$z=</code></div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Авторизуй Claude Code</div>
+          <div class="step-desc">После установки в PowerShell набери <code>claude</code> — откроется браузер, войди в аккаунт Anthropic.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Открой проекты в VS Code</div>
+          <div class="cmd-box" id="cmd-vscode">
+            <button class="copy-btn" onclick="copyCmd('cmd-vscode',this)">Копировать</button>
+            code %USERPROFILE%\Projects\ClaudeProjects
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info" style="margin-top:20px">
+      <strong>Что установится автоматически:</strong> Git · Node.js · Python 3 · VS Code · Claude Code · все 14 скиллов · память Claude · все проекты
+    </div>
+  </div>
+
+  <!-- ПРОЕКТЫ -->
+  <div class="section" id="projects">
+    <div class="section-title">Проекты</div>
+    <div class="proj-grid">
+
+      <div class="proj-card" style="--pc:#ef4444">
+        <div class="proj-icon">🥩</div>
+        <div class="proj-name">PicadaRica</div>
+        <div class="proj-desc">Premium beef jerky · 50г/$8 · 250г/$35 · маржа ~60%</div>
+        <div class="proj-tags">
+          <span class="tag live">Активный</span>
+          <span class="tag">CRM Bot</span>
+          <span class="tag git">GitHub Pages</span>
+        </div>
+      </div>
+
+      <div class="proj-card" style="--pc:#4f8ef7">
+        <div class="proj-icon">💪</div>
+        <div class="proj-name">PushUp App</div>
+        <div class="proj-desc">iOS-приложение · React + Supabase + Capacitor · MVP</div>
+        <div class="proj-tags">
+          <span class="tag wip">MVP баги</span>
+          <span class="tag git">GitHub</span>
+          <span class="tag">Codemagic CI</span>
+        </div>
+      </div>
+
+      <div class="proj-card" style="--pc:#22c55e">
+        <div class="proj-icon">♠️</div>
+        <div class="proj-name">Покерный клуб</div>
+        <div class="proj-desc">Members-only · Пн/Чт/Сб · аренда $700/мес</div>
+        <div class="proj-tags">
+          <span class="tag live">Активный</span>
+          <span class="tag">Excel финсистема</span>
+        </div>
+      </div>
+
+      <div class="proj-card" style="--pc:#f97316">
+        <div class="proj-icon">🚚</div>
+        <div class="proj-name">Comida Smart</div>
+        <div class="proj-desc">Мобильные гастро-модули · pre-seed</div>
+        <div class="proj-tags">
+          <span class="tag wip">Phase 0</span>
+          <span class="tag">Валидация</span>
+        </div>
+      </div>
+
+      <div class="proj-card" style="--pc:#eab308">
+        <div class="proj-icon">🏦</div>
+        <div class="proj-name">Freedom Finance</div>
+        <div class="proj-desc">Партнёрство FRHC · представитель в Аргентине</div>
+        <div class="proj-tags">
+          <span class="tag wip">Переговоры</span>
+        </div>
+      </div>
+
+      <div class="proj-card" style="--pc:#39d353">
+        <div class="proj-icon">🤖</div>
+        <div class="proj-name">AI для бизнеса</div>
+        <div class="proj-desc">B2B · аудит → setup → retainer · предприниматели BA</div>
+        <div class="proj-tags">
+          <span class="tag wip">Phase 0</span>
+          <span class="tag git">GitHub Pages</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- СКИЛЛЫ -->
+  <div class="section" id="skills">
+    <div class="section-title">Скиллы Claude Code</div>
+    <div class="skills-grid">
+      <div class="skill-card"><div class="skill-name">/excel-model</div><div class="skill-desc">Финмодели, трекеры, калькуляторы прибыли (openpyxl)</div></div>
+      <div class="skill-card"><div class="skill-name">/unit-economics</div><div class="skill-desc">Маржа, breakeven, план продаж, мотивация продавца</div></div>
+      <div class="skill-card"><div class="skill-name">/rioplatense-copy</div><div class="skill-desc">Тексты на аргентинском испанском (voseo)</div></div>
+      <div class="skill-card"><div class="skill-name">/site-from-ref</div><div class="skill-desc">Сайт по референсу → HTML/Tailwind (один файл)</div></div>
+      <div class="skill-card"><div class="skill-name">/deploy-netlify</div><div class="skill-desc">Деплой статического сайта/PWA на Netlify</div></div>
+      <div class="skill-card"><div class="skill-name">/pwa-build</div><div class="skill-desc">Превращение веб-приложения в PWA</div></div>
+      <div class="skill-card"><div class="skill-name">/context-scan</div><div class="skill-desc">Скан задач Notion + Todoist в начале сессии</div></div>
+      <div class="skill-card"><div class="skill-name">/skill-creator</div><div class="skill-desc">Создание и рефакторинг скиллов</div></div>
+      <div class="skill-card"><div class="skill-name">/capacitor-build</div><div class="skill-desc">Сборка Capacitor iOS (только Mac + Xcode)</div></div>
+      <div class="skill-card"><div class="skill-name">/app-aso</div><div class="skill-desc">Подготовка к публикации App Store / Google Play</div></div>
+      <div class="skill-card"><div class="skill-name">/sales-funnel</div><div class="skill-desc">Воронка продаж, скрипты, конверсия</div></div>
+      <div class="skill-card"><div class="skill-name">/ui-designer</div><div class="skill-desc">UI дизайн компонентов и страниц</div></div>
+    </div>
+  </div>
+
+  <!-- ТОКЕНЫ -->
+  <div class="section" id="keys">
+    <div class="section-title">Токены и API</div>
+    <div class="key-grid">
+      <div class="key-card">
+        <div class="key-label">Todoist API Token</div>
+        <div class="key-val">— в файле claude-config/settings.json из архива —</div>
+        <div class="key-note">Для скиллов, мобильного дашборда и Scriptable виджета</div>
+      </div>
+      <div class="key-card">
+        <div class="key-label">Notion Integration Token</div>
+        <div class="key-val">— в файле claude-config/settings.json из архива —</div>
+        <div class="key-note">MCP сервер Notion в Claude Code · скопируется автоматически</div>
+      </div>
+      <div class="key-card">
+        <div class="key-label">Supabase (PushUp) Project ID</div>
+        <div class="key-val">wdnrdxqkajobjaorssza</div>
+        <div class="key-note">Dashboard: supabase.com/dashboard/project/wdnrdxqkajobjaorssza</div>
+      </div>
+      <div class="key-card">
+        <div class="key-label">GitHub Organization</div>
+        <div class="key-val">Neuroba</div>
+        <div class="key-note">github.com/Neuroba · все публичные репозитории</div>
+      </div>
+    </div>
+    <div class="info" style="margin-top:12px"><strong>Токены API</strong> находятся в архиве <code>sergio-windows-transfer.zip</code> → файл <code>claude-config/settings.json</code>. Установщик копирует их автоматически.</div>
+  </div>
+
+  <!-- ССЫЛКИ -->
+  <div class="section" id="tools">
+    <div class="section-title">Быстрые ссылки</div>
+    <div class="tools-row">
+      <a class="tool-chip" href="https://notion.so/38a6a70ce737813681c7e1db922bd1f8" target="_blank">📋 Notion Dashboard</a>
+      <a class="tool-chip" href="https://app.todoist.com" target="_blank">✅ Todoist</a>
+      <a class="tool-chip" href="https://docs.google.com/spreadsheets/d/136qqtgUzHFDYakHvNkdA_AnOI1VlLYa86ZbL50nbJmk/edit" target="_blank">📊 PicadaRica CRM</a>
+      <a class="tool-chip" href="https://t.me/picadarica_crm_bot" target="_blank">🤖 CRM Bot</a>
+      <a class="tool-chip" href="https://neuroba.github.io/picadarica" target="_blank">🥩 PicadaRica сайт</a>
+      <a class="tool-chip" href="https://neuroba.github.io/sergio-ai-consulting" target="_blank">🤖 AI сайт</a>
+      <a class="tool-chip" href="https://supabase.com/dashboard/project/wdnrdxqkajobjaorssza" target="_blank">🗄️ Supabase PushUp</a>
+      <a class="tool-chip" href="https://codemagic.io/apps" target="_blank">🔨 Codemagic</a>
+      <a class="tool-chip" href="https://github.com/Neuroba" target="_blank">🐙 GitHub Neuroba</a>
+      <a class="tool-chip" href="https://claude.ai" target="_blank">⬡ Claude.ai</a>
+      <a class="tool-chip" href="https://app.netlify.com" target="_blank">🚀 Netlify</a>
+      <a class="tool-chip" href="https://www.mercadolibre.com.ar/" target="_blank">🛒 MercadoLibre</a>
+    </div>
+  </div>
+
+  <!-- MAC vs WINDOWS -->
+  <div class="section" id="mac-win">
+    <div class="section-title">Mac vs Windows — разделение задач</div>
+    <div class="compare">
+      <div class="compare-col mac-col">
+        <h4>🍎 Mac (основной)</h4>
+        <ul>
+          <li>iOS сборка (Xcode + Capacitor)</li>
+          <li>Мобильный дашборд автозапуск</li>
+          <li>iCloud синхронизация (Scriptable)</li>
+          <li>Claude метрики (JSONL локально)</li>
+          <li>Git push в основных ветках</li>
+        </ul>
+      </div>
+      <div class="compare-col win-col">
+        <h4>🪟 Windows (второй)</h4>
+        <ul>
+          <li>Веб-разработка (HTML/CSS/JS)</li>
+          <li>Excel финмодели</li>
+          <li>Claude Code — все проекты</li>
+          <li>Android (через Codemagic CI)</li>
+          <li>Мобильный дашборд вручную</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:14px">
+      <div class="section-title" style="margin-top:0">Мобильный дашборд на Windows</div>
+      <div class="cmd-box" id="cmd-dash">
+        <button class="copy-btn" onclick="copyCmd('cmd-dash',this)">Копировать</button>
+        <span class="comment"># Запустить дашборд (порт 8765)</span><br>
+python %USERPROFILE%\Projects\ClaudeProjects\00-Общее\mobile-dashboard\server.py
+      </div>
+      <div class="info" style="margin-top:10px">Открой в браузере: <strong>http://localhost:8765</strong> · На телефоне: <strong>http://[IP_Windows]:8765</strong></div>
+    </div>
+  </div>
+
+  <div style="height:40px"></div>
+
+</div>
+
+<script>
+function copyCmd(id, btn) {
+  const box = document.getElementById(id);
+  const text = box.innerText.replace('Копировать','').replace('# Вставь в PowerShell и нажми Enter\n','').replace('# Запустить дашборд (порт 8765)\n','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Копировать'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// Nav highlight on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#'+cur); });
+});
+</script>
+</body>
+</html>
