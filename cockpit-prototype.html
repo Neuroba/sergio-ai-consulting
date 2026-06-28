@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobriety Cockpit — App Prototype</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+body { background: #070B14; color: #F1F5F9; min-height: 100vh; overflow-x: auto; }
+
+/* Showcase page */
+.showcase { display: flex; gap: 32px; padding: 60px 48px; align-items: flex-start; min-width: max-content; }
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.phone-label { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #475569; }
+
+/* Phone frame */
+.phone {
+  width: 280px; height: 580px;
+  background: #0D1117;
+  border-radius: 40px;
+  border: 1.5px solid #1E293B;
+  box-shadow: 0 0 0 6px #0A0E18, 0 0 0 7px #1E293B, 0 40px 120px rgba(0,0,0,.8);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Notch */
+.notch {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 90px; height: 28px;
+  background: #0D1117;
+  border-radius: 0 0 18px 18px;
+  z-index: 20;
+}
+
+/* Status bar */
+.status-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 44px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 20px 6px;
+  z-index: 15;
+  font-size: 11px; font-weight: 600; color: #94A3B8;
+}
+
+/* Screen content */
+.screen { position: absolute; inset: 0; display: flex; flex-direction: column; }
+
+/* Bottom nav */
+.bottom-nav {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 64px;
+  background: #0D1117cc;
+  backdrop-filter: blur(20px);
+  border-top: 1px solid #1E293B;
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 0 8px 8px;
+  z-index: 10;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+.nav-item .icon { font-size: 18px; }
+.nav-item .label { font-size: 9px; font-weight: 500; color: #475569; }
+.nav-item.active .label { color: #6366F1; }
+.nav-item.active .icon { filter: drop-shadow(0 0 6px #6366F1); }
+
+/* Scrollable content area */
+.content { flex: 1; overflow: hidden; padding: 52px 16px 64px; display: flex; flex-direction: column; }
+
+/* Cards */
+.card {
+  background: #161B27;
+  border: 1px solid #1E293B;
+  border-radius: 16px;
+  padding: 14px;
+}
+.card-sm { border-radius: 12px; padding: 10px 12px; }
+
+/* Streak ring */
+.ring-wrap { display: flex; align-items: center; justify-content: center; margin: 8px 0 16px; }
+
+/* Gradient text */
+.grad-amber { background: linear-gradient(135deg, #F59E0B, #FB923C); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.grad-green { background: linear-gradient(135deg, #22C55E, #4ADE80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.grad-indigo { background: linear-gradient(135deg, #6366F1, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.grad-cyan { background: linear-gradient(135deg, #22D3EE, #6366F1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* Pill */
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.pill-amber { background: rgba(245,158,11,.12); color: #F59E0B; border: 1px solid rgba(245,158,11,.2); }
+.pill-green { background: rgba(34,197,94,.12); color: #22C55E; border: 1px solid rgba(34,197,94,.2); }
+.pill-indigo { background: rgba(99,102,241,.15); color: #818CF8; border: 1px solid rgba(99,102,241,.25); }
+.pill-red { background: rgba(239,68,68,.12); color: #F87171; border: 1px solid rgba(239,68,68,.2); }
+
+/* Button */
+.btn-primary {
+  background: linear-gradient(135deg, #6366F1, #4F46E5);
+  border-radius: 14px; padding: 14px; width: 100%;
+  text-align: center; font-size: 14px; font-weight: 700;
+  box-shadow: 0 8px 24px rgba(99,102,241,.35);
+  cursor: pointer; color: white;
+}
+.btn-green {
+  background: linear-gradient(135deg, #16A34A, #22C55E);
+  border-radius: 14px; padding: 14px; width: 100%;
+  text-align: center; font-size: 14px; font-weight: 700;
+  box-shadow: 0 8px 24px rgba(34,197,94,.3);
+  cursor: pointer; color: white;
+}
+
+/* Separator */
+.sep { height: 1px; background: #1E293B; margin: 12px 0; }
+
+/* Mood emoji */
+.mood-opt { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+.mood-opt .em { font-size: 22px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 12px; background: #161B27; border: 1.5px solid #1E293B; }
+.mood-opt.sel .em { background: rgba(99,102,241,.15); border-color: #6366F1; }
+.mood-opt .ml { font-size: 9px; color: #475569; font-weight: 500; }
+.mood-opt.sel .ml { color: #818CF8; }
+
+/* Progress bar */
+.prog-track { height: 6px; background: #1E293B; border-radius: 99px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 99px; }
+
+/* Milestone row */
+.ms-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; }
+.ms-dot { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+.ms-dot.done { background: rgba(34,197,94,.15); border: 1.5px solid rgba(34,197,94,.3); }
+.ms-dot.next { background: rgba(245,158,11,.12); border: 1.5px solid rgba(245,158,11,.3); }
+.ms-dot.locked { background: #161B27; border: 1.5px solid #1E293B; }
+
+/* Bar chart */
+.bar-chart { display: flex; gap: 6px; align-items: flex-end; height: 70px; }
+.bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+.bar { border-radius: 4px 4px 0 0; width: 100%; }
+.bar-day { font-size: 9px; color: #475569; font-weight: 500; }
+
+/* Trigger card */
+.trig-card { background: #161B27; border: 1px solid #1E293B; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+.play-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #818CF8; font-weight: 600; }
+
+/* Page title */
+.page-title { font-size: 17px; font-weight: 800; color: #F1F5F9; letter-spacing: -.02em; }
+.page-sub { font-size: 11px; color: #475569; font-weight: 500; }
+
+/* Showcase header */
+.showcase-header { text-align: center; padding: 48px 48px 0; }
+</style>
+</head>
+<body>
+
+<div class="showcase-header">
+  <div style="display:inline-flex;align-items:center;gap:10px;margin-bottom:12px;">
+    <span style="font-size:28px;">🛩️</span>
+    <span style="font-size:22px;font-weight:900;letter-spacing:-.03em;background:linear-gradient(135deg,#6366F1,#22D3EE,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Sobriety Cockpit</span>
+  </div>
+  <p style="color:#475569;font-size:13px;font-weight:500;max-width:480px;margin:0 auto;">App prototype — 5 screens · Dark mode · iOS</p>
+</div>
+
+<div class="showcase">
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 1: HOME / DASHBOARD
+  ═══════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <span style="display:flex;gap:4px;align-items:center;letter-spacing:.02em;">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="#94A3B8"><rect x="0" y="3" width="3" height="7" rx="1"/><rect x="4" y="2" width="3" height="8" rx="1"/><rect x="8" y="0" width="3" height="10" rx="1"/><rect x="12" y="0" width="2" height="10" rx="1" opacity=".3"/></svg>
+          <svg width="15" height="11" viewBox="0 0 20 14" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M1 4.5C4.5 1 9 0 10 0s5.5 1 9 4.5"/><path d="M4 8c1.5-1.5 3.5-2.5 6-2.5s4.5 1 6 2.5"/><circle cx="10" cy="12" r="1.5" fill="#94A3B8" stroke="none"/></svg>
+          🔋
+        </span>
+      </div>
+
+      <div class="screen">
+        <div class="content" style="padding-top:52px;">
+
+          <!-- Top bar -->
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:.15em;color:#475569;text-transform:uppercase;">COCKPIT</div>
+              <div style="font-size:13px;font-weight:600;color:#94A3B8;">Sunday, Jun 28</div>
+            </div>
+            <div style="width:34px;height:34px;border-radius:50%;background:#161B27;border:1.5px solid #1E293B;display:flex;align-items:center;justify-content:center;font-size:16px;">⚙️</div>
+          </div>
+
+          <!-- Streak hero -->
+          <div class="card" style="text-align:center;padding:20px 14px;margin-bottom:12px;background:linear-gradient(135deg,#0F1624,#161B27);border-color:#252F42;position:relative;overflow:hidden;">
+            <!-- glow -->
+            <div style="position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:150px;height:150px;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 70%);pointer-events:none;"></div>
+
+            <!-- ring SVG -->
+            <div style="position:relative;display:inline-block;margin-bottom:8px;">
+              <svg width="110" height="110" viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r="46" fill="none" stroke="#1E293B" stroke-width="5"/>
+                <circle cx="55" cy="55" r="46" fill="none" stroke="url(#ringGrad)" stroke-width="5"
+                  stroke-dasharray="289" stroke-dashoffset="72" stroke-linecap="round" transform="rotate(-90 55 55)"/>
+                <defs>
+                  <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F59E0B"/>
+                    <stop offset="100%" stop-color="#FB923C"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                <div class="grad-amber" style="font-size:38px;font-weight:900;letter-spacing:-.04em;line-height:1;">47</div>
+                <div style="font-size:9px;font-weight:700;letter-spacing:.15em;color:#6B7280;text-transform:uppercase;">days</div>
+              </div>
+            </div>
+
+            <div style="font-size:15px;font-weight:700;color:#F1F5F9;margin-bottom:4px;">🔥 Current Streak</div>
+            <div style="font-size:11px;color:#475569;">Started June 11, 2026</div>
+          </div>
+
+          <!-- Stats row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div class="card card-sm" style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;" class="grad-indigo">312</div>
+              <div style="font-size:9px;color:#475569;font-weight:500;margin-top:2px;">Lifetime<br>Days</div>
+            </div>
+            <div class="card card-sm" style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;color:#22C55E;">4</div>
+              <div style="font-size:9px;color:#475569;font-weight:500;margin-top:2px;">Milestones<br>Hit</div>
+            </div>
+            <div class="card card-sm" style="text-align:center;">
+              <div style="font-size:16px;font-weight:800;color:#E2E8F0;">6/7</div>
+              <div style="font-size:9px;color:#475569;font-weight:500;margin-top:2px;">Check-ins<br>Week</div>
+            </div>
+          </div>
+
+          <!-- Check-in CTA -->
+          <div class="card" style="margin-bottom:12px;background:linear-gradient(135deg,rgba(34,197,94,.08),rgba(16,185,129,.05));border-color:rgba(34,197,94,.2);">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#F1F5F9;">Daily Check-in</div>
+                <div style="font-size:11px;color:#475569;margin-top:2px;">Log today's mood & energy</div>
+              </div>
+              <div style="background:linear-gradient(135deg,#16A34A,#22C55E);border-radius:12px;padding:8px 14px;font-size:12px;font-weight:700;color:white;box-shadow:0 4px 14px rgba(34,197,94,.3);">
+                Tap →
+              </div>
+            </div>
+          </div>
+
+          <!-- Next milestone -->
+          <div class="card card-sm">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <span style="font-size:11px;font-weight:600;color:#94A3B8;">Next milestone</span>
+              <span class="pill pill-amber">3 days</span>
+            </div>
+            <div style="font-size:13px;font-weight:700;color:#F1F5F9;margin-bottom:6px;">🏅 50 Days</div>
+            <div class="prog-track">
+              <div class="prog-fill" style="width:94%;background:linear-gradient(90deg,#F59E0B,#FB923C);"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom nav -->
+        <div class="bottom-nav">
+          <div class="nav-item active"><div class="icon">🏠</div><div class="label" style="color:#6366F1;">Home</div></div>
+          <div class="nav-item"><div class="icon">✅</div><div class="label">Check-in</div></div>
+          <div class="nav-item"><div class="icon">⚡</div><div class="label">Triggers</div></div>
+          <div class="nav-item"><div class="icon">🏆</div><div class="label">Milestones</div></div>
+          <div class="nav-item"><div class="icon">📊</div><div class="label">Insights</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">01 · Home</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 2: DAILY CHECK-IN
+  ═══════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>🔋</span>
+      </div>
+
+      <div class="screen">
+        <div class="content">
+
+          <div style="margin-bottom:20px;">
+            <div class="page-title">Daily Check-in ✅</div>
+            <div class="page-sub">Sunday, Jun 28 · Day 47</div>
+          </div>
+
+          <!-- Mood -->
+          <div class="card" style="margin-bottom:10px;">
+            <div style="font-size:12px;font-weight:600;color:#94A3B8;margin-bottom:12px;">How are you feeling?</div>
+            <div style="display:flex;justify-content:space-between;">
+              <div class="mood-opt"><div class="em">😢</div><div class="ml">Rough</div></div>
+              <div class="mood-opt"><div class="em">😐</div><div class="ml">Okay</div></div>
+              <div class="mood-opt sel"><div class="em">🙂</div><div class="ml">Good</div></div>
+              <div class="mood-opt"><div class="em">😊</div><div class="ml">Great</div></div>
+              <div class="mood-opt"><div class="em">🤩</div><div class="ml">Amazing</div></div>
+            </div>
+          </div>
+
+          <!-- Energy -->
+          <div class="card" style="margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+              <div style="font-size:12px;font-weight:600;color:#94A3B8;">Energy level</div>
+              <div style="font-size:16px;font-weight:800;color:#6366F1;">7<span style="font-size:11px;color:#475569;font-weight:500;">/10</span></div>
+            </div>
+            <div style="position:relative;">
+              <div class="prog-track" style="height:8px;">
+                <div class="prog-fill" style="width:70%;background:linear-gradient(90deg,#6366F1,#A78BFA);"></div>
+              </div>
+              <div style="position:absolute;top:50%;left:70%;transform:translate(-50%,-50%);">
+                <div style="width:16px;height:16px;border-radius:50%;background:#6366F1;border:2px solid white;box-shadow:0 0 8px rgba(99,102,241,.5);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cravings -->
+          <div class="card" style="margin-bottom:10px;">
+            <div style="font-size:12px;font-weight:600;color:#94A3B8;margin-bottom:10px;">Cravings today?</div>
+            <div style="display:flex;gap:8px;">
+              <div class="pill pill-green" style="cursor:pointer;padding:6px 14px;font-size:12px;">✓ None</div>
+              <div style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#161B27;border:1.5px solid #1E293B;color:#94A3B8;cursor:pointer;">Mild</div>
+              <div style="padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#161B27;border:1.5px solid #1E293B;color:#94A3B8;cursor:pointer;">Strong</div>
+            </div>
+          </div>
+
+          <!-- Trigger today -->
+          <div class="card" style="margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:600;color:#94A3B8;margin-bottom:8px;">Trigger today? <span style="color:#475569;font-weight:400;">(optional)</span></div>
+            <div style="background:#0D1117;border:1.5px solid #1E293B;border-radius:10px;padding:10px 12px;font-size:12px;color:#475569;">
+              Tap to log a trigger...
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="btn-green" style="display:flex;align-items:center;justify-content:center;gap:8px;">
+            <span>✓</span> Log Today
+          </div>
+
+          <!-- Honest streak note -->
+          <div style="text-align:center;margin-top:10px;font-size:10px;color:#334155;line-height:1.5;">
+            Honest-streak: lifetime counter never resets 💙
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="icon">🏠</div><div class="label">Home</div></div>
+          <div class="nav-item active"><div class="icon">✅</div><div class="label" style="color:#6366F1;">Check-in</div></div>
+          <div class="nav-item"><div class="icon">⚡</div><div class="label">Triggers</div></div>
+          <div class="nav-item"><div class="icon">🏆</div><div class="label">Milestones</div></div>
+          <div class="nav-item"><div class="icon">📊</div><div class="label">Insights</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">02 · Check-in</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 3: TRIGGERS & PLAYS
+  ═══════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>🔋</span>
+      </div>
+
+      <div class="screen">
+        <div class="content">
+
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+            <div>
+              <div class="page-title">Triggers & Plays ⚡</div>
+              <div class="page-sub">Your personal protocol</div>
+            </div>
+            <div style="background:#161B27;border:1.5px solid #1E293B;border-radius:10px;padding:6px 10px;font-size:11px;font-weight:600;color:#818CF8;cursor:pointer;">+ Add</div>
+          </div>
+
+          <!-- Trigger 1 -->
+          <div class="trig-card" style="border-left:3px solid #F59E0B;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div style="font-size:13px;font-weight:700;color:#F1F5F9;">😤 Work stress</div>
+              <span class="pill pill-amber" style="font-size:9px;padding:2px 7px;">High risk</span>
+            </div>
+            <div style="background:#0D1117;border-radius:8px;padding:8px 10px;border:1px solid #1E293B;">
+              <div class="play-tag" style="margin-bottom:4px;">▶ PLAY</div>
+              <div style="font-size:11px;color:#94A3B8;line-height:1.5;">Take a 15-min walk. Call your sponsor. No decisions until tomorrow.</div>
+            </div>
+          </div>
+
+          <!-- Trigger 2 -->
+          <div class="trig-card" style="border-left:3px solid #EF4444;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div style="font-size:13px;font-weight:700;color:#F1F5F9;">🍻 Social events</div>
+              <span class="pill pill-red" style="font-size:9px;padding:2px 7px;">Critical</span>
+            </div>
+            <div style="background:#0D1117;border-radius:8px;padding:8px 10px;border:1px solid #1E293B;">
+              <div class="play-tag" style="margin-bottom:4px;">▶ PLAY</div>
+              <div style="font-size:11px;color:#94A3B8;line-height:1.5;">Attend with exit plan. Hold sparkling water. Leave after 1h.</div>
+            </div>
+          </div>
+
+          <!-- Trigger 3 -->
+          <div class="trig-card" style="border-left:3px solid #6366F1;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div style="font-size:13px;font-weight:700;color:#F1F5F9;">🌙 Evening loneliness</div>
+              <span class="pill pill-indigo" style="font-size:9px;padding:2px 7px;">Medium</span>
+            </div>
+            <div style="background:#0D1117;border-radius:8px;padding:8px 10px;border:1px solid #1E293B;">
+              <div class="play-tag" style="margin-bottom:4px;">▶ PLAY</div>
+              <div style="font-size:11px;color:#94A3B8;line-height:1.5;">10min meditation. Text a friend. Watch something engaging.</div>
+            </div>
+          </div>
+
+          <!-- Trigger 4 -->
+          <div class="trig-card" style="border-left:3px solid #22C55E;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+              <div style="font-size:13px;font-weight:700;color:#F1F5F9;">🎉 Celebrations</div>
+              <span class="pill pill-green" style="font-size:9px;padding:2px 7px;">Managed</span>
+            </div>
+            <div style="background:#0D1117;border-radius:8px;padding:8px 10px;border:1px solid #1E293B;">
+              <div class="play-tag" style="margin-bottom:4px;">▶ PLAY</div>
+              <div style="font-size:11px;color:#94A3B8;line-height:1.5;">Celebrate with mocktails. Share the win. Own your choice.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="icon">🏠</div><div class="label">Home</div></div>
+          <div class="nav-item"><div class="icon">✅</div><div class="label">Check-in</div></div>
+          <div class="nav-item active"><div class="icon">⚡</div><div class="label" style="color:#6366F1;">Triggers</div></div>
+          <div class="nav-item"><div class="icon">🏆</div><div class="label">Milestones</div></div>
+          <div class="nav-item"><div class="icon">📊</div><div class="label">Insights</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">03 · Triggers</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 4: MILESTONES
+  ═══════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>🔋</span>
+      </div>
+
+      <div class="screen">
+        <div class="content">
+
+          <div style="margin-bottom:18px;">
+            <div class="page-title">Milestones 🏆</div>
+            <div class="page-sub">Your journey so far</div>
+          </div>
+
+          <!-- Next milestone hero -->
+          <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(251,146,60,.04));border-color:rgba(245,158,11,.25);text-align:center;padding:16px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;color:#D97706;text-transform:uppercase;margin-bottom:6px;">NEXT MILESTONE</div>
+            <div style="font-size:26px;margin-bottom:2px;">🏅</div>
+            <div style="font-size:16px;font-weight:800;color:#F1F5F9;margin-bottom:2px;">50 Days</div>
+            <div class="pill pill-amber" style="font-size:10px;margin:6px auto;display:inline-flex;">3 days to go</div>
+            <div class="prog-track" style="margin-top:10px;">
+              <div class="prog-fill" style="width:94%;background:linear-gradient(90deg,#F59E0B,#FB923C);"></div>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="card" style="padding:12px 14px;">
+            <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:10px;letter-spacing:.05em;">JOURNEY TIMELINE</div>
+
+            <div class="ms-row">
+              <div class="ms-dot done">✅</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:700;color:#F1F5F9;">1 Day</div>
+                <div style="font-size:10px;color:#22C55E;">Jun 11 · You started</div>
+              </div>
+            </div>
+            <div style="height:1px;background:#1E293B;margin:4px 0 4px 15px;"></div>
+
+            <div class="ms-row">
+              <div class="ms-dot done">✅</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:700;color:#F1F5F9;">7 Days</div>
+                <div style="font-size:10px;color:#22C55E;">Jun 17 · One week strong</div>
+              </div>
+            </div>
+            <div style="height:1px;background:#1E293B;margin:4px 0 4px 15px;"></div>
+
+            <div class="ms-row">
+              <div class="ms-dot done">✅</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:700;color:#F1F5F9;">30 Days</div>
+                <div style="font-size:10px;color:#22C55E;">Jul 10 · One month</div>
+              </div>
+            </div>
+            <div style="height:1px;background:#1E293B;margin:4px 0 4px 15px;"></div>
+
+            <div class="ms-row" style="background:rgba(245,158,11,.05);border-radius:10px;padding:8px;margin:-4px;">
+              <div class="ms-dot next">🔥</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:700;color:#F59E0B;">50 Days ← You're here</div>
+                <div style="font-size:10px;color:#D97706;">Jul 30 · Almost there!</div>
+              </div>
+            </div>
+            <div style="height:1px;background:#1E293B;margin:4px 0 4px 15px;"></div>
+
+            <div class="ms-row">
+              <div class="ms-dot locked">🔒</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#475569;">90 Days</div>
+                <div style="font-size:10px;color:#334155;">Sep 8 · 43 days ahead</div>
+              </div>
+            </div>
+            <div style="height:1px;background:#1E293B;margin:4px 0 4px 15px;"></div>
+
+            <div class="ms-row">
+              <div class="ms-dot locked">🔒</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#475569;">180 Days</div>
+                <div style="font-size:10px;color:#334155;">Dec 6</div>
+              </div>
+            </div>
+            <div style="height:1px;background:#1E293B;margin:4px 0 4px 15px;"></div>
+
+            <div class="ms-row" style="padding-bottom:0;">
+              <div class="ms-dot locked">🔒</div>
+              <div style="flex:1;">
+                <div style="font-size:12px;font-weight:600;color:#475569;">1 Year ⭐</div>
+                <div style="font-size:10px;color:#334155;">Jun 11, 2027</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="icon">🏠</div><div class="label">Home</div></div>
+          <div class="nav-item"><div class="icon">✅</div><div class="label">Check-in</div></div>
+          <div class="nav-item"><div class="icon">⚡</div><div class="label">Triggers</div></div>
+          <div class="nav-item active"><div class="icon">🏆</div><div class="label" style="color:#6366F1;">Milestones</div></div>
+          <div class="nav-item"><div class="icon">📊</div><div class="label">Insights</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">04 · Milestones</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 5: WEEKLY INSIGHT
+  ═══════════════════════════════════════════ -->
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <span>🔋</span>
+      </div>
+
+      <div class="screen">
+        <div class="content">
+
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+            <div>
+              <div class="page-title">Weekly Insight 📊</div>
+              <div class="page-sub">Jun 22 – Jun 28</div>
+            </div>
+            <div class="pill pill-indigo" style="cursor:pointer;">This week ▾</div>
+          </div>
+
+          <!-- Mood chart -->
+          <div class="card" style="margin-bottom:10px;">
+            <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:12px;">MOOD PATTERN</div>
+            <div class="bar-chart">
+              <div class="bar-col">
+                <div class="bar" style="height:35px;background:linear-gradient(to top,rgba(99,102,241,.6),rgba(167,139,250,.4));"></div>
+                <div class="bar-day">Mon</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height:50px;background:linear-gradient(to top,rgba(99,102,241,.7),rgba(167,139,250,.5));"></div>
+                <div class="bar-day">Tue</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height:42px;background:linear-gradient(to top,rgba(99,102,241,.65),rgba(167,139,250,.45));"></div>
+                <div class="bar-day">Wed</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height:55px;background:linear-gradient(to top,rgba(99,102,241,.8),rgba(167,139,250,.6));"></div>
+                <div class="bar-day">Thu</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height:30px;background:linear-gradient(to top,rgba(99,102,241,.5),rgba(167,139,250,.35));"></div>
+                <div class="bar-day">Fri</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height:20px;background:linear-gradient(to top,rgba(239,68,68,.5),rgba(239,68,68,.3));"></div>
+                <div class="bar-day">Sat</div>
+              </div>
+              <div class="bar-col">
+                <div class="bar" style="height:48px;border:1.5px solid #6366F1;background:linear-gradient(to top,rgba(99,102,241,.3),rgba(167,139,250,.15));"></div>
+                <div class="bar-day" style="color:#818CF8;font-weight:700;">Sun</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats grid -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div class="card card-sm" style="text-align:center;">
+              <div style="font-size:15px;font-weight:800;" class="grad-indigo">3.8</div>
+              <div style="font-size:9px;color:#475569;margin-top:2px;">Avg Mood</div>
+              <div style="font-size:9px;color:#22C55E;font-weight:600;">↑ +0.4</div>
+            </div>
+            <div class="card card-sm" style="text-align:center;">
+              <div style="font-size:15px;font-weight:800;color:#22C55E;">7.2</div>
+              <div style="font-size:9px;color:#475569;margin-top:2px;">Energy</div>
+              <div style="font-size:9px;color:#22C55E;font-weight:600;">↑ +1.1</div>
+            </div>
+            <div class="card card-sm" style="text-align:center;">
+              <div style="font-size:15px;font-weight:800;color:#F59E0B;">2×</div>
+              <div style="font-size:9px;color:#475569;margin-top:2px;">Cravings</div>
+              <div style="font-size:9px;color:#22C55E;font-weight:600;">↓ mild</div>
+            </div>
+          </div>
+
+          <!-- AI Insight card -->
+          <div class="card" style="background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(34,211,238,.04));border-color:rgba(99,102,241,.2);margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <div style="width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,#6366F1,#22D3EE);display:flex;align-items:center;justify-content:center;font-size:12px;">🤖</div>
+              <div style="font-size:11px;font-weight:700;color:#818CF8;">AI INSIGHT</div>
+            </div>
+            <div style="font-size:12px;color:#CBD5E1;line-height:1.6;">
+              Your energy peaks <strong style="color:#F1F5F9;">Tuesday–Thursday</strong>. Saturday shows mood dips — evenings may be a trigger window. You logged <strong style="color:#22C55E;">6/7 days</strong> this week. 🎯
+            </div>
+          </div>
+
+          <!-- Pattern -->
+          <div class="card card-sm" style="display:flex;align-items:center;gap:10px;">
+            <div style="font-size:22px;">💡</div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:#F1F5F9;">Pattern detected</div>
+              <div style="font-size:10px;color:#475569;line-height:1.4;">Cravings appear on low-sleep nights. Try 9pm cutoff.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="icon">🏠</div><div class="label">Home</div></div>
+          <div class="nav-item"><div class="icon">✅</div><div class="label">Check-in</div></div>
+          <div class="nav-item"><div class="icon">⚡</div><div class="label">Triggers</div></div>
+          <div class="nav-item"><div class="icon">🏆</div><div class="label">Milestones</div></div>
+          <div class="nav-item active"><div class="icon">📊</div><div class="label" style="color:#6366F1;">Insights</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone-label">05 · Insights</div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div style="text-align:center;padding:20px 48px 48px;color:#1E293B;font-size:11px;font-weight:500;letter-spacing:.05em;">
+  SOBRIETY COCKPIT · PROTOTYPE v0.1 · 2026 · Sergio Zubov
+</div>
+
+</body>
+</html>
