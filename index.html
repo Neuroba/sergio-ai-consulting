@@ -1649,7 +1649,8 @@ const OS_TEMPLATES={
 };
 const OS_BTN_TEXT={en:'Get template →',es:'Obtener plantilla →',ru:'Получить шаблон →'};
 
-let curLang=localStorage.getItem('lang')||'en';
+function detectLang(){const nav=navigator.language||'';if(nav.startsWith('ru'))return'ru';if(nav.startsWith('es'))return'es';return'en';}
+let curLang=localStorage.getItem('lang')||detectLang();
 function setLang(l){curLang=l;localStorage.setItem('lang',l);document.documentElement.lang=l;
 document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
 const d=T[l];document.querySelectorAll('[data-i18n]').forEach(e=>{if(d[e.dataset.i18n])e.textContent=d[e.dataset.i18n]});
