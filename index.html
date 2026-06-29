@@ -784,20 +784,27 @@ body{animation:pageFadeIn .35s ease both}
         <div class="space-y-5">
           <!-- Phone mockup -->
           <style>
-          .pu-tab{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;padding:8px 13px;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:rgba(15,23,42,.5);color:#94a3b8;cursor:pointer;transition:.2s;white-space:nowrap}
-          .pu-tab:hover{color:#cbd5e1;border-color:rgba(255,255,255,.16)}
-          .pu-tab.act{border-color:rgba(34,211,238,.5);background:rgba(34,211,238,.1);color:#e6f9ff;box-shadow:0 0 16px rgba(34,211,238,.12)}
+          .pu-hint{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#67e8f9;font-weight:600;margin-bottom:10px;font-family:'Space Grotesk',sans-serif}
+          .pu-hint .pt{display:inline-block;font-size:15px;animation:puPoint 1.2s ease-in-out infinite}
+          @keyframes puPoint{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+          .pu-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+          .pu-tab{display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;padding:9px 13px;border-radius:12px;border:1px solid rgba(34,211,238,.28);background:rgba(15,23,42,.6);color:#cbd5e1;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 0 rgba(34,211,238,.12)}
+          .pu-tab iconify-icon{font-size:15px;color:#67e8f9}
+          .pu-tab:hover{transform:translateY(-2px);border-color:rgba(34,211,238,.55);color:#e6f9ff;box-shadow:0 6px 16px rgba(34,211,238,.2)}
+          .pu-tab.act{background:linear-gradient(180deg,#22d3ee,#06b6d4);border-color:#22d3ee;color:#04222a;box-shadow:0 0 18px rgba(34,211,238,.4)}
+          .pu-tab.act iconify-icon{color:#04222a}
           .pu-phone{width:242px;border-radius:32px;border:7px solid #060a14;box-shadow:0 28px 60px rgba(0,0,0,.55),0 0 0 1px rgba(34,211,238,.1);overflow:hidden;background:#060a14}
           .pu-phone img{display:block;width:100%}
+          @media (prefers-reduced-motion:reduce){.pu-hint .pt{animation:none}}
           </style>
-          <div class="text-[11px] text-slate-500 mb-3" style="font-family:'JetBrains Mono',monospace;letter-spacing:.05em">// app screens · real</div>
-          <div id="pu-tabs" class="flex gap-2 flex-wrap mb-4">
-            <div class="pu-tab act" onclick="puShow(0)"></div>
-            <div class="pu-tab" onclick="puShow(1)"></div>
-            <div class="pu-tab" onclick="puShow(2)"></div>
-            <div class="pu-tab" onclick="puShow(3)"></div>
-            <div class="pu-tab" onclick="puShow(4)"></div>
-            <div class="pu-tab" onclick="puShow(5)"></div>
+          <div id="pu-hint" class="pu-hint"><span class="pt">👆</span><span id="pu-hint-t"></span></div>
+          <div id="pu-tabs" class="pu-tabs">
+            <div class="pu-tab act" onclick="puShow(0)"><iconify-icon icon="solar:login-3-bold-duotone"></iconify-icon><span class="pu-lbl"></span></div>
+            <div class="pu-tab" onclick="puShow(1)"><iconify-icon icon="solar:dumbbell-bold-duotone"></iconify-icon><span class="pu-lbl"></span></div>
+            <div class="pu-tab" onclick="puShow(2)"><iconify-icon icon="solar:confetti-minimalistic-bold-duotone"></iconify-icon><span class="pu-lbl"></span></div>
+            <div class="pu-tab" onclick="puShow(3)"><iconify-icon icon="solar:medal-ribbon-star-bold-duotone"></iconify-icon><span class="pu-lbl"></span></div>
+            <div class="pu-tab" onclick="puShow(4)"><iconify-icon icon="solar:cup-star-bold-duotone"></iconify-icon><span class="pu-lbl"></span></div>
+            <div class="pu-tab" onclick="puShow(5)"><iconify-icon icon="solar:user-circle-bold-duotone"></iconify-icon><span class="pu-lbl"></span></div>
           </div>
           <div class="flex flex-col items-center">
             <div class="pu-phone"><img id="pu-shot" src="cases/pushup/01-auth.png" alt="PushUp" loading="lazy"></div>
@@ -1801,7 +1808,8 @@ const PU=[
 ];
 let puCur=0;
 function puLng(){var s=localStorage.getItem('lang');return (s==='ru'||s==='en'||s==='es')?s:'en';}
-function puRender(){var l=puLng();var tabs=document.querySelectorAll('#pu-tabs .pu-tab');for(var i=0;i<tabs.length;i++){tabs[i].textContent=PU[i].t[l];tabs[i].classList.toggle('act',i===puCur);}var sh=document.getElementById('pu-shot');if(sh)sh.src=PU[puCur].img;var de=document.getElementById('pu-desc');if(de)de.textContent=PU[puCur].d[l];}
+var PU_HINT={ru:'Нажми на вкладку — сменятся экран и описание',en:'Tap a tab — the screen and description change',es:'Tocá una pestaña — cambian la pantalla y la descripción'};
+function puRender(){var l=puLng();var tabs=document.querySelectorAll('#pu-tabs .pu-tab');for(var i=0;i<tabs.length;i++){var lb=tabs[i].querySelector('.pu-lbl');if(lb)lb.textContent=PU[i].t[l];tabs[i].classList.toggle('act',i===puCur);}var sh=document.getElementById('pu-shot');if(sh)sh.src=PU[puCur].img;var de=document.getElementById('pu-desc');if(de)de.textContent=PU[puCur].d[l];var ht=document.getElementById('pu-hint-t');if(ht)ht.textContent=PU_HINT[l];}
 function puShow(i){puCur=i;puRender();}
 puRender();
 document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setTimeout(puRender,0);});});
