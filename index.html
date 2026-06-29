@@ -1441,27 +1441,68 @@ STATUS_LABELS = {
           </div>
         </div>
         <div class="space-y-5">
-          <div class="flex justify-center">
-            <div style="width:248px;background:#0a0f1c;border:8px solid #0a0f1c;border-radius:34px;box-shadow:0 36px 70px rgba(0,0,0,.55),0 0 0 1px rgba(16,185,129,.08)">
-              <div style="background:#fffaf3;border-radius:27px;overflow:hidden;min-height:432px;color:#1f2937">
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 14px 6px">
-                  <div style="display:flex;align-items:center;gap:8px"><div style="width:34px;height:34px;border-radius:12px;background:#d1fae5;display:flex;align-items:center;justify-content:center;font-size:18px">🌱</div><div><div style="font-weight:700;font-size:13px;font-family:'Space Grotesk',sans-serif">¡Hola, Mateo!</div><div style="font-size:10px;color:#d97706">Crecés · Nivel 3</div></div></div>
-                  <span style="font-size:11px;font-weight:600;background:#fef9c3;color:#a16207;border-radius:99px;padding:4px 9px">🪙 320</span>
-                </div>
-                <div style="margin:8px 14px 0;padding:11px;border-radius:20px;background:linear-gradient(180deg,#ecfdf5,#d1fae5)"><div style="display:flex;gap:8px;align-items:flex-start"><div style="font-size:20px">🌱</div><div style="font-size:12px;font-weight:600;color:#065f46;line-height:1.3">Subieron los precios mientras no estabas 📈</div></div></div>
-                <div style="margin:11px 14px 0;padding:11px;border-radius:16px;background:#fff;box-shadow:0 6px 18px #0000000d"><div style="display:flex;justify-content:space-between;font-weight:600;font-size:12px"><span>🚲 Mi bici</span><span style="color:#8b5cf6">42%</span></div><div style="height:8px;background:#f3f4f6;border-radius:99px;margin-top:5px;overflow:hidden"><div style="width:42%;height:100%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div></div></div>
-                <div style="margin:11px 14px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                  <div style="padding:9px;border-radius:16px;background:#fff;text-align:center;box-shadow:0 6px 18px #0000000d"><div style="font-weight:700;font-size:14px">🔥 6</div><div style="font-size:9px;color:#6b7280">🛡️ 2 resguardos</div></div>
-                  <div style="padding:9px;border-radius:16px;background:#ecfdf5;text-align:center"><div style="font-weight:700;font-size:14px;color:#047857">+12% 🌱</div><div style="font-size:9px;color:#059669">creciste</div></div>
-                </div>
-                <div style="margin:13px 14px 14px"><div style="padding:13px;border-radius:18px;text-align:center;color:#fff;font-weight:700;font-size:15px;background:linear-gradient(180deg,#34d399,#10b981);font-family:'Space Grotesk',sans-serif">Jugar · 5 min ▶</div></div>
-              </div>
-            </div>
+          <style>
+          .fkg-hint{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#34d399;font-weight:600;margin-bottom:10px;font-family:'Space Grotesk',sans-serif;justify-content:center}
+          .fkg-hint .pt{display:inline-block;font-size:15px;animation:fkgPoint 1.2s ease-in-out infinite}
+          @keyframes fkgPoint{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+          .fkg-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;justify-content:center}
+          .fkg-tab{display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;padding:8px 11px;border-radius:11px;border:1px solid rgba(16,185,129,.3);background:rgba(15,23,42,.6);color:#cbd5e1;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 0 rgba(16,185,129,.12)}
+          .fkg-tab iconify-icon{font-size:14px;color:#34d399}
+          .fkg-tab:hover{transform:translateY(-2px);border-color:rgba(16,185,129,.55);color:#eafff4;box-shadow:0 6px 14px rgba(16,185,129,.2)}
+          .fkg-tab.act{background:linear-gradient(180deg,#34d399,#10b981);border-color:#10b981;color:#04261b;box-shadow:0 0 16px rgba(16,185,129,.4)}
+          .fkg-tab.act iconify-icon{color:#04261b}
+          .fkg-screen{display:none}.fkg-screen.act{display:block}
+          @media (prefers-reduced-motion:reduce){.fkg-hint .pt{animation:none}}
+          </style>
+          <div class="fkg-hint"><span class="pt">👆</span><span id="fkg-hint-t"></span></div>
+          <div id="fkg-tabs" class="fkg-tabs">
+            <div class="fkg-tab act" onclick="fkgShow(0)"><iconify-icon icon="solar:home-2-bold-duotone"></iconify-icon><span class="fkg-lbl"></span></div>
+            <div class="fkg-tab" onclick="fkgShow(1)"><iconify-icon icon="solar:gamepad-bold-duotone"></iconify-icon><span class="fkg-lbl"></span></div>
+            <div class="fkg-tab" onclick="fkgShow(2)"><iconify-icon icon="solar:graph-up-bold-duotone"></iconify-icon><span class="fkg-lbl"></span></div>
+            <div class="fkg-tab" onclick="fkgShow(3)"><iconify-icon icon="solar:target-bold-duotone"></iconify-icon><span class="fkg-lbl"></span></div>
+            <div class="fkg-tab" onclick="fkgShow(4)"><iconify-icon icon="solar:buildings-2-bold-duotone"></iconify-icon><span class="fkg-lbl"></span></div>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-            <a href="finkids-app.html" target="_blank" class="pcta-btn" style="--pb:#10b981;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.35)"><iconify-icon icon="solar:gamepad-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="fk.see_app">Ver app infantil →</span></a>
-            <a href="finkids-bank.html" target="_blank" class="pcta-btn" style="--pb:#22d3ee"><iconify-icon icon="solar:buildings-2-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="fk.see_bank">Demo banco →</span></a>
+          <div id="fkg-screens" class="flex justify-center" style="min-height:446px">
+            <!-- 0 · Mundo -->
+            <div class="fkg-screen act"><div style="width:248px;background:#0a0f1c;border:8px solid #0a0f1c;border-radius:34px;box-shadow:0 36px 70px rgba(0,0,0,.55),0 0 0 1px rgba(16,185,129,.08)"><div style="background:#fffaf3;border-radius:27px;overflow:hidden;min-height:430px;color:#1f2937">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 14px 6px"><div style="display:flex;align-items:center;gap:8px"><div style="width:34px;height:34px;border-radius:12px;background:#d1fae5;display:flex;align-items:center;justify-content:center;font-size:18px">🌱</div><div><div style="font-weight:700;font-size:13px;font-family:'Space Grotesk',sans-serif">¡Hola, Mateo!</div><div style="font-size:10px;color:#d97706">Crecés · Nivel 3</div></div></div><span style="font-size:11px;font-weight:600;background:#fef9c3;color:#a16207;border-radius:99px;padding:4px 9px">🪙 320</span></div>
+              <div style="margin:8px 14px 0;padding:11px;border-radius:20px;background:linear-gradient(180deg,#ecfdf5,#d1fae5)"><div style="display:flex;gap:8px;align-items:flex-start"><div style="font-size:20px">🌱</div><div style="font-size:12px;font-weight:600;color:#065f46;line-height:1.3">Subieron los precios mientras no estabas 📈</div></div></div>
+              <div style="margin:11px 14px 0;padding:11px;border-radius:16px;background:#fff;box-shadow:0 6px 18px #0000000d"><div style="display:flex;justify-content:space-between;font-weight:600;font-size:12px"><span>🚲 Mi bici</span><span style="color:#8b5cf6">42%</span></div><div style="height:8px;background:#f3f4f6;border-radius:99px;margin-top:5px;overflow:hidden"><div style="width:42%;height:100%;background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div></div></div>
+              <div style="margin:11px 14px 0;display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="padding:9px;border-radius:16px;background:#fff;text-align:center;box-shadow:0 6px 18px #0000000d"><div style="font-weight:700;font-size:14px">🔥 6</div><div style="font-size:9px;color:#6b7280">🛡️ 2 resguardos</div></div><div style="padding:9px;border-radius:16px;background:#ecfdf5;text-align:center"><div style="font-weight:700;font-size:14px;color:#047857">+12% 🌱</div><div style="font-size:9px;color:#059669">creciste</div></div></div>
+              <div style="margin:13px 14px 14px"><div style="padding:13px;border-radius:18px;text-align:center;color:#fff;font-weight:700;font-size:15px;background:linear-gradient(180deg,#34d399,#10b981);font-family:'Space Grotesk',sans-serif">Jugar · 5 min ▶</div></div>
+            </div></div></div>
+            <!-- 1 · Simulador -->
+            <div class="fkg-screen"><div style="width:248px;background:#0a0f1c;border:8px solid #0a0f1c;border-radius:34px;box-shadow:0 36px 70px rgba(0,0,0,.55),0 0 0 1px rgba(16,185,129,.08)"><div style="background:#fffaf3;border-radius:27px;overflow:hidden;min-height:430px;color:#1f2937">
+              <div style="padding:14px 14px 4px;font-family:'Space Grotesk';font-weight:600;font-size:12px;text-align:center;color:#64748b">El kiosco · decisión</div>
+              <div style="margin:4px 14px 0;padding:11px;border-radius:16px;background:#fff;box-shadow:0 6px 18px #0000000d"><div style="font-size:12px;font-weight:700">Tu mesada: <span style="color:#059669">$1.000</span></div><div style="font-size:11px;color:#6b7280;margin-top:2px">El alfajor subió de <s>$100</s> a <b style="color:#d97706">$120</b> 📈</div></div>
+              <div style="margin:9px 14px 0;display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:12px;font-weight:600;text-align:center"><div style="padding:9px;border-radius:14px;background:#fff1f2;color:#e11d48">🛒 Gastar</div><div style="padding:9px;border-radius:14px;background:#f0f9ff;color:#0284c7">🐷 Guardar</div><div style="padding:9px;border-radius:14px;background:#ecfdf5;color:#047857;outline:2px solid #34d399">💵 A USD</div><div style="padding:9px;border-radius:14px;background:#f5f3ff;color:#7c3aed">🎯 Meta</div></div>
+              <div style="margin:9px 14px 0;padding:11px;border-radius:16px;background:#fff;box-shadow:0 6px 18px #0000000d"><div style="font-size:10px;font-weight:700;color:#475569;margin-bottom:5px">En 3 meses, tus $1.000…</div><div style="display:flex;align-items:flex-end;gap:10px;height:50px"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%"><div style="font-size:10px;font-weight:700;color:#f43f5e">$790</div><div style="width:100%;height:62%;border-radius:6px 6px 0 0;background:#fda4af"></div><div style="font-size:8px;color:#94a3b8">cajón</div></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%"><div style="font-size:10px;font-weight:700;color:#059669">$1.000</div><div style="width:100%;height:100%;border-radius:6px 6px 0 0;background:#34d399"></div><div style="font-size:8px;color:#94a3b8">protegido</div></div></div></div>
+              <div style="margin:9px 14px 14px;padding:10px;border-radius:14px;color:#fff;font-size:11px;font-weight:600;background:linear-gradient(90deg,#10b981,#059669)">👏 ¡Buen pensamiento! +20</div>
+            </div></div></div>
+            <!-- 2 · Crecimiento -->
+            <div class="fkg-screen"><div style="width:248px;background:#0a0f1c;border:8px solid #0a0f1c;border-radius:34px;box-shadow:0 36px 70px rgba(0,0,0,.55),0 0 0 1px rgba(16,185,129,.08)"><div style="background:#fffaf3;border-radius:27px;overflow:hidden;min-height:430px;color:#1f2937">
+              <div style="padding:14px 14px 2px;font-family:'Space Grotesk';font-weight:700;font-size:15px">Mi crecimiento 🌱</div>
+              <div style="font-size:10px;color:#6b7280;padding:0 14px">Vos hoy vs vos hace un mes</div>
+              <div style="margin:10px 14px 0;padding:11px;border-radius:16px;background:#fff;box-shadow:0 6px 18px #0000000d"><div style="font-size:10px;font-weight:600;color:#475569">Proteger tu valor</div><svg viewBox="0 0 200 80" style="width:100%;margin-top:4px"><defs><linearGradient id="fkgc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#10b981" stop-opacity=".3"/><stop offset="1" stop-color="#10b981" stop-opacity="0"/></linearGradient></defs><path d="M5,64 C50,62 70,52 100,40 C130,28 160,17 195,10 L195,78 L5,78 Z" fill="url(#fkgc)"/><path d="M5,64 C50,62 70,52 100,40 C130,28 160,17 195,10" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round"/><circle cx="5" cy="64" r="3.5" fill="#cbd5e1"/><circle cx="195" cy="10" r="4.5" fill="#10b981"/></svg><div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;margin-top:2px"><span style="color:#9ca3af">23%</span><span style="color:#059669">71% 🎉</span></div></div>
+              <div style="margin:10px 14px 0;display:flex;gap:7px;text-align:center;font-size:9px;font-weight:600"><div style="flex:1;padding:8px 4px;border-radius:14px;background:#ecfdf5;color:#047857">🌱<br>Intento</div><div style="flex:1;padding:8px 4px;border-radius:14px;background:#fffbeb;color:#b45309">🔁<br>Recuperación</div><div style="flex:1;padding:8px 4px;border-radius:14px;background:#f3f4f6;color:#9ca3af;opacity:.6">⬆️<br>Mejora</div></div>
+              <div style="margin:10px 14px 14px;padding:10px;border-radius:14px;background:#fff;box-shadow:0 6px 18px #0000000d;font-size:10px;font-weight:600;text-align:center;color:#475569">Sos un <b>Ahorrista</b> → próximo: <b>Inversor</b></div>
+            </div></div></div>
+            <!-- 3 · Meta -->
+            <div class="fkg-screen"><div style="width:248px;background:#0a0f1c;border:8px solid #0a0f1c;border-radius:34px;box-shadow:0 36px 70px rgba(0,0,0,.55),0 0 0 1px rgba(16,185,129,.08)"><div style="background:#fffaf3;border-radius:27px;overflow:hidden;min-height:430px;color:#1f2937">
+              <div style="padding:14px 14px 2px;font-family:'Space Grotesk';font-weight:700;font-size:15px">Mi meta 🎯</div>
+              <div style="display:flex;flex-direction:column;align-items:center;margin-top:8px"><div style="position:relative;width:130px;height:130px"><svg width="130" height="130" viewBox="0 0 100 100"><defs><linearGradient id="fkgg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#c084fc"/></linearGradient></defs><circle cx="50" cy="50" r="42" fill="none" stroke="#efeaf9" stroke-width="9"/><circle cx="50" cy="50" r="42" fill="none" stroke="url(#fkgg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="110.8 263.9" transform="rotate(-90 50 50)"/></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:34px">🚲</div><div style="font-weight:700;font-size:13px">42%</div></div></div><div style="font-weight:600;font-size:12px;margin-top:6px">$4.250 <span style="color:#9ca3af">/ $10.000</span></div></div>
+              <div style="margin:11px 14px 0;padding:9px;border-radius:14px;background:#fff6e9;border:1px solid #fcd9a8;font-size:10px;color:#b45309"><b>⚠️ Tu meta subió:</b> $9.200 → $10.000. Protegé tu valor.</div>
+              <div style="margin:9px 14px 14px;padding:10px;border-radius:14px;background:#fff;box-shadow:0 6px 18px #0000000d;font-size:10px;color:#475569"><b>🛡️ Resguardo (2)</b> — como un ahorro de emergencia para tu racha.</div>
+            </div></div></div>
+            <!-- 4 · Banco -->
+            <div class="fkg-screen"><div style="width:300px;max-width:100%;background:#0f1a2e;border-radius:20px;padding:16px;color:#e6edf3;box-shadow:0 30px 60px rgba(0,0,0,.4)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-family:'Space Grotesk';font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px"><iconify-icon icon="solar:buildings-2-bold-duotone" style="color:#34d399"></iconify-icon> Panel · banco</div><span style="font-size:9px;background:rgba(16,185,129,.12);color:#34d399;border-radius:99px;padding:3px 8px">datos agregados</span></div>
+              <div style="display:flex;gap:14px;align-items:center"><div style="position:relative;width:84px;height:84px;flex:none"><svg width="84" height="84" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#0c1526" stroke-width="9"/><circle cx="50" cy="50" r="42" fill="none" stroke="#10b981" stroke-width="9" stroke-linecap="round" stroke-dasharray="187 264" transform="rotate(-90 50 50)"/></svg><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;color:#34d399;font-size:17px">71%</div></div><div><div style="font-size:11px;color:#94a3b8">protegen su valor</div><div style="font-size:11px;color:#94a3b8;margin-top:8px">aprendizaje</div><div style="font-family:'Space Grotesk';font-weight:700;font-size:20px;color:#34d399">+34%</div></div></div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;font-size:10px"><span style="background:#16223a;color:#cbd5e1;border-radius:8px;padding:4px 8px">1.248 niños</span><span style="background:#16223a;color:#cbd5e1;border-radius:8px;padding:4px 8px">980 familias</span><span style="background:#16223a;color:#cbd5e1;border-radius:8px;padding:4px 8px">RSE · BCRA</span></div>
+              <div style="margin-top:12px;padding:9px;border-radius:12px;background:#16223a;font-size:10px;color:#94a3b8"><iconify-icon icon="solar:lock-keyhole-bold-duotone" style="color:#34d399"></iconify-icon> Sin vender datos del menor · marca blanca</div>
+            </div></div>
           </div>
+          <div id="fkg-desc" class="text-[12.5px] text-slate-400 mt-4 text-center max-w-[340px] mx-auto leading-relaxed"></div>
         </div>
       </div>
     </div>
@@ -1813,6 +1854,22 @@ function puRender(){var l=puLng();var tabs=document.querySelectorAll('#pu-tabs .
 function puShow(i){puCur=i;puRender();}
 puRender();
 document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setTimeout(puRender,0);});});
+</script>
+<script>
+const FKG=[
+ {t:{ru:'Главная',en:'Home',es:'Mundo'},d:{ru:'Главная: маскот Broti, событие мира (инфляция), цель-копилка, серия, рост за неделю.',en:'Home: Broti mascot, world event (inflation), goal piggy-bank, streak, weekly growth.',es:'Inicio: mascota Broti, evento del mundo (inflación), meta-alcancía, racha, crecimiento semanal.'}},
+ {t:{ru:'Симулятор',en:'Simulator',es:'Simulador'},d:{ru:'Ядро: решение с месадой → последствие под инфляцией ($790 в ящике vs $1.000 защищено) + похвала за усилие.',en:'Core: allowance decision → consequence under inflation ($790 in the drawer vs $1,000 protected) + effort praise.',es:'Núcleo: decisión con la mesada → consecuencia bajo inflación ($790 en el cajón vs $1.000 protegido) + elogio al esfuerzo.'}},
+ {t:{ru:'Рост',en:'Growth',es:'Crecimiento'},d:{ru:'«Vos vs vos»: кривая роста 23%→71% (защита ценности) + медали за усилие. Метанавык расти.',en:'“You vs you”: growth curve 23%→71% (value protection) + effort badges. The meta-skill of growing.',es:'“Vos vs vos”: curva 23%→71% (proteger valor) + medallas al esfuerzo. El meta-hábito de crecer.'}},
+ {t:{ru:'Цель',en:'Goal',es:'Meta'},d:{ru:'Цель-копилка с кольцом прогресса; цель дорожает от инфляции; «resguardo» = подушка безопасности.',en:'Goal piggy-bank with a progress ring; the goal inflates; “resguardo” = emergency fund.',es:'Meta-alcancía con anillo de progreso; la meta sube por inflación; “resguardo” = ahorro de emergencia.'}},
+ {t:{ru:'Банк',en:'Bank',es:'Banco'},d:{ru:'White-label панель банку: «защитили ценность 71%», обучение +34%, KPI — агрегированно, без данных детей.',en:'White-label bank panel: “protected value 71%”, learning +34%, KPIs — aggregated, no kids’ data.',es:'Panel marca blanca para el banco: “protegen valor 71%”, aprendizaje +34%, KPIs — agregado, sin datos del menor.'}}
+];
+var FKG_HINT={ru:'Нажми на вкладку — сменится экран',en:'Tap a tab — the screen changes',es:'Tocá una pestaña — cambia la pantalla'};
+let fkgCur=0;
+function fkgLng(){var s=localStorage.getItem('lang');return (s==='ru'||s==='en'||s==='es')?s:'es';}
+function fkgRender(){var l=fkgLng();var tabs=document.querySelectorAll('#fkg-tabs .fkg-tab');for(var i=0;i<tabs.length;i++){var lb=tabs[i].querySelector('.fkg-lbl');if(lb)lb.textContent=FKG[i].t[l];tabs[i].classList.toggle('act',i===fkgCur);}var scr=document.querySelectorAll('#fkg-screens .fkg-screen');for(var j=0;j<scr.length;j++){scr[j].classList.toggle('act',j===fkgCur);}var de=document.getElementById('fkg-desc');if(de)de.textContent=FKG[fkgCur].d[l];var ht=document.getElementById('fkg-hint-t');if(ht)ht.textContent=FKG_HINT[l];}
+function fkgShow(i){fkgCur=i;fkgRender();}
+fkgRender();
+document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setTimeout(fkgRender,0);});});
 </script>
 </body>
 </html>
