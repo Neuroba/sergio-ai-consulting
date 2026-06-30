@@ -793,6 +793,23 @@ body{animation:pageFadeIn .35s ease both}
           .pu-tab:hover{transform:translateY(-2px);border-color:rgba(34,211,238,.55);color:#e6f9ff;box-shadow:0 6px 16px rgba(34,211,238,.2)}
           .pu-tab.act{background:linear-gradient(180deg,#22d3ee,#06b6d4);border-color:#22d3ee;color:#04222a;box-shadow:0 0 18px rgba(34,211,238,.4)}
           .pu-tab.act iconify-icon{color:#04222a}
+          .cv-hint{display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;color:#c084fc;font-weight:600;margin-bottom:10px;font-family:'Space Grotesk',sans-serif}
+          .cv-hint .pt{display:inline-block;font-size:15px;animation:cvPoint 1.2s ease-in-out infinite}
+          @keyframes cvPoint{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+          @media (prefers-reduced-motion:reduce){.cv-hint .pt{animation:none}}
+          .cv-tabs{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+          .cv-tab{display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:11.5px;padding:7px 11px;border-radius:11px;border:1px solid rgba(168,85,247,.28);background:rgba(15,23,42,.6);color:#cbd5e1;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 0 rgba(168,85,247,.12)}
+          .cv-tab iconify-icon{font-size:14px;color:#c084fc}
+          .cv-tab:hover{transform:translateY(-2px);border-color:rgba(168,85,247,.55);color:#f3e8ff;box-shadow:0 6px 16px rgba(168,85,247,.2)}
+          .cv-tab.act{background:linear-gradient(180deg,#a855f7,#7c3aed);border-color:#a855f7;color:#fff;box-shadow:0 0 16px rgba(168,85,247,.4)}
+          .cv-tab.act iconify-icon{color:#fff}
+          .cv-phone{width:248px;height:506px;background:linear-gradient(145deg,#160d28,#0b0d14);border-radius:34px;border:2px solid rgba(168,85,247,.22);position:relative;box-shadow:0 30px 70px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden;flex-shrink:0}
+          .cv-notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:68px;height:16px;background:#000;border-radius:9px;z-index:10}
+          .cv-scr{position:absolute;inset:0;padding:30px 13px 13px;overflow:hidden}
+          .cv-srow{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:7px 9px;margin-bottom:6px}
+          .cv-bar{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin-top:4px}
+          .cv-fill{height:100%;border-radius:99px}
+          .cv-chip{font-size:8.5px;border-radius:5px;padding:2px 6px;font-weight:600}
           .pu-phone{width:242px;border-radius:32px;border:7px solid #060a14;box-shadow:0 28px 60px rgba(0,0,0,.55),0 0 0 1px rgba(34,211,238,.1);overflow:hidden;background:#060a14}
           .pu-phone img{display:block;width:100%}
           @media (prefers-reduced-motion:reduce){.pu-hint .pt{animation:none}}
@@ -1182,21 +1199,21 @@ STATUS_LABELS = {
           <iconify-icon icon="solar:heart-pulse-bold-duotone" class="i-beat" style="font-size:20px;color:#a855f7"></iconify-icon>
         </div>
         <div class="acc-info">
-          <div class="acc-title">Sobriety Cockpit</div>
-          <div class="acc-sub">Notion · Gumroad · AI Insights · Mobile App</div>
-          <div class="acc-mobile-desc">Personal recovery tracker built with AI — honest streak counter, daily check-in, trigger protocols. Notion template → Gumroad product.</div>
+          <div class="acc-title">Cockpit</div>
+          <div class="acc-sub">AI Research · Notion · Money-ladder · Mobile concept</div>
+          <div class="acc-mobile-desc">Personal-metrics constructor designed with AI — honest-streak engine, daily check-in, trigger protocols. From category research to a packaged product concept.</div>
           <div class="acc-mobile-pills">
-            <span class="acc-mpill" style="background:rgba(168,85,247,.12);color:#a855f7">47d streak</span>
-            <span class="acc-mpill" style="background:rgba(245,158,11,.1);color:#f59e0b">$19–$59</span>
+            <span class="acc-mpill" style="background:rgba(168,85,247,.12);color:#a855f7">concept</span>
+            <span class="acc-mpill" style="background:rgba(245,158,11,.1);color:#f59e0b">3-tier ladder</span>
             <span class="acc-mpill" style="background:rgba(34,197,94,.1);color:#4ade80">5 modules</span>
           </div>
         </div>
         <div class="acc-mgroup">
-          <div class="acc-metric"><div class="acc-mnum" style="color:#a855f7">47</div><div class="acc-mlabel">day streak</div></div>
+          <div class="acc-metric"><div class="acc-mnum" style="color:#a855f7">5</div><div class="acc-mlabel">modules</div></div>
           <div class="acc-metric"><div class="acc-mnum" style="color:#f59e0b">3</div><div class="acc-mlabel">price tiers</div></div>
-          <div class="acc-metric"><div class="acc-mnum" style="color:#4ade80">90d</div><div class="acc-mlabel">horizon</div></div>
+          <div class="acc-metric"><div class="acc-mnum" style="color:#4ade80">90d</div><div class="acc-mlabel">launch plan</div></div>
         </div>
-        <div class="acc-hook">Recovery tracker turned product — AI-powered dashboard for sobriety, discipline & honest streaks. Personal tool → Gumroad launch.</div>
+        <div class="acc-hook">Personal-metrics constructor — research → concept → money-ladder, designed with AI in days. Build-for-myself-first, then productize. Phase 0, ready to launch.</div>
         <div class="acc-chev"><span class="acc-chev-arrow">▼</span><span class="acc-chev-hint">открыть</span></div>
       </div>
       <div class="acc-body">
@@ -1208,39 +1225,33 @@ STATUS_LABELS = {
         <div class="space-y-7">
           <div>
             <div class="flex flex-wrap gap-2 mb-3">
-              <span class="cp-tag" style="--cc:rgba(168,85,247,.2);--ct:#a855f7">Notion Template</span>
-              <span class="cp-tag" style="--cc:rgba(245,158,11,.2);--ct:#f59e0b">Gumroad</span>
-              <span class="cp-tag" style="--cc:rgba(34,197,94,.2);--ct:#4ade80">AI Insights</span>
-              <span class="cp-tag" style="--cc:rgba(99,102,241,.2);--ct:#818cf8">Mobile App</span>
+              <span class="cp-tag" style="--cc:rgba(168,85,247,.2);--ct:#a855f7">Notion + Todoist</span>
+              <span class="cp-tag" style="--cc:rgba(34,197,94,.2);--ct:#4ade80">AI Council</span>
+              <span class="cp-tag" style="--cc:rgba(245,158,11,.2);--ct:#f59e0b">Money-ladder</span>
+              <span class="cp-tag" style="--cc:rgba(99,102,241,.2);--ct:#818cf8">Mobile concept</span>
             </div>
-            <h3 class="font-display text-2xl font-bold" data-i18n="cases.c5h">Sobriety Cockpit — personal recovery tracker that became a product</h3>
+            <h3 class="font-display text-2xl font-bold" id="ck-h"></h3>
           </div>
 
           <div class="grid grid-cols-3 gap-3">
-            <div class="cp-metric" style="--mc:#a855f7"><div class="cp-num">47</div><div class="cp-label">days streak</div></div>
-            <div class="cp-metric" style="--mc:#f59e0b"><div class="cp-num">5</div><div class="cp-label">modules</div></div>
-            <div class="cp-metric" style="--mc:#4ade80"><div class="cp-num">$39</div><div class="cp-label">avg. ticket</div></div>
+            <div class="cp-metric" style="--mc:#a855f7"><div class="cp-num">5</div><div class="cp-label">screens</div></div>
+            <div class="cp-metric" style="--mc:#f59e0b"><div class="cp-num">3</div><div class="cp-label">price tiers</div></div>
+            <div class="cp-metric" style="--mc:#4ade80"><div class="cp-num">6</div><div class="cp-label">AI roles</div></div>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
               <div class="cp-col-head" style="color:#f43f5e">// Before</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c5b1">Streak apps don't fit real life</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c5b2">No trigger protocol system</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c5b3">Relapse = zero (punishes honesty)</div>
-              <div class="cp-row cp-bad" data-i18n="cases.c5b4">Recovery is lonely and generic</div>
+              <div id="ck-before"></div>
             </div>
             <div>
               <div class="cp-col-head" style="color:#4ade80">// After</div>
-              <div class="cp-row cp-good" data-i18n="cases.c5a1">Honest streak — never resets</div>
-              <div class="cp-row cp-good" data-i18n="cases.c5a2">Trigger → Play protocol</div>
-              <div class="cp-row cp-good" data-i18n="cases.c5a3">AI weekly insight from your data</div>
-              <div class="cp-row cp-good" data-i18n="cases.c5a4">Notion template → shipped on Gumroad</div>
+              <div id="ck-after"></div>
             </div>
           </div>
 
-          <!-- Honest streak concept -->
-          <div style="background:rgba(168,85,247,.04);border:1px solid rgba(168,85,247,.14);border-radius:14px;padding:14px 16px">
+          <!-- Honest streak concept (hidden — founder-cockpit framing) -->
+          <div style="display:none;background:rgba(168,85,247,.04);border:1px solid rgba(168,85,247,.14);border-radius:14px;padding:14px 16px">
             <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(168,85,247,.5);letter-spacing:.1em;margin-bottom:10px">// HONEST-STREAK FORMULA</div>
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
               <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2);border-radius:8px;padding:6px 10px;font-size:12px;color:#c084fc;font-weight:600">⏱ Current Streak</div>
@@ -1251,18 +1262,21 @@ STATUS_LABELS = {
             </div>
           </div>
 
-          <div class="space-y-2.5">
-            <div class="cp-built-row"><iconify-icon icon="solar:notebook-bold-duotone" style="font-size:16px;color:#a855f7;flex-shrink:0"></iconify-icon><span data-i18n="cases.c5w1">Notion template — 5 modules: streak, check-in, triggers, milestones, weekly insight</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:smartphone-bold-duotone" style="font-size:16px;color:#818cf8;flex-shrink:0"></iconify-icon><span data-i18n="cases.c5w2">Mobile app prototype — iPhone screens, dark UI, AI-powered weekly patterns</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:shop-bold-duotone" style="font-size:16px;color:#f59e0b;flex-shrink:0"></iconify-icon><span data-i18n="cases.c5w3">Gumroad listing — 3 tiers ($19 Core / $39 Complete / $59 Founder)</span></div>
-          </div>
+          <div class="space-y-2.5" id="ck-built"></div>
         </div>
 
         <!-- Right: phone mockup + Gumroad pricing card -->
         <div class="space-y-5">
 
-          <!-- Phone mockup — Sobriety Cockpit streak screen -->
-          <div class="flex justify-center">
+          <!-- Interactive product viewer (5 screens) -->
+          <div id="cv-hint" class="cv-hint"><span class="pt">👆</span><span></span></div>
+          <div id="cv-tabs" class="cv-tabs"></div>
+          <div class="flex flex-col items-center mb-2">
+            <div class="cv-phone"><div class="cv-notch"></div><div class="cv-scr" id="cv-scr"></div></div>
+            <div id="cv-desc" class="text-[12.5px] text-slate-400 mt-4 text-center max-w-[300px] leading-relaxed"></div>
+          </div>
+          <!-- old sobriety mockup (hidden) -->
+          <div class="flex justify-center" style="display:none">
             <div style="width:260px;height:520px;background:linear-gradient(145deg,#1a0d2e,#0d0f14);border-radius:38px;border:2px solid rgba(168,85,247,.22);position:relative;box-shadow:0 40px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(168,85,247,.08);overflow:hidden;flex-shrink:0">
               <!-- Notch -->
               <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);width:80px;height:20px;background:#000;border-radius:10px;z-index:10"></div>
@@ -1348,8 +1362,8 @@ STATUS_LABELS = {
           <div style="background:#0d1117;border-radius:14px;overflow:hidden;border:1px solid rgba(168,85,247,.2)">
             <div style="background:#161b22;padding:9px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.05)">
               <div style="width:16px;height:16px;border-radius:4px;background:linear-gradient(135deg,#a855f7,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:10px">G</div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(100,116,139,.7)">gumroad.com/sobriety-cockpit</span>
-              <span style="margin-left:auto;font-size:10px;color:#a855f7;font-family:'JetBrains Mono',monospace">↗ Live</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(100,116,139,.7)">gumroad.com/founder-cockpit</span>
+              <span style="margin-left:auto;font-size:10px;color:#f59e0b;font-family:'JetBrains Mono',monospace">Phase 0 · draft</span>
             </div>
             <div style="padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px">
               <div style="background:#161b22;border:1px solid rgba(168,85,247,.15);border-radius:9px;padding:9px 7px;text-align:center">
@@ -2161,6 +2175,83 @@ function fkgRender(){var l=fkgLng();var tabs=document.querySelectorAll('#fkg-tab
 function fkgShow(i){fkgCur=i;fkgRender();}
 fkgRender();
 document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setTimeout(fkgRender,0);});});
+</script>
+<script>
+/* ── Cockpit case: interactive 5-screen viewer (founder portfolio OS) ── */
+(function(){
+  var ICONS=['solar:widget-5-bold-duotone','solar:calendar-mark-bold-duotone','solar:ghost-bold-duotone','solar:target-bold-duotone','solar:chart-square-bold-duotone'];
+  var D=[
+    {n:"📰 Newsletter",st:"Launch",p:60,pri:"Focus",c:"#34d399"},
+    {n:"🧩 SaaS Plugin",st:"Prototype",p:35,pri:"Hold",c:"#60a5fa"},
+    {n:"💼 Agency",st:"Running",p:80,pri:"Focus",c:"#34d399"},
+    {n:"🎓 Course",st:"Idea",p:10,pri:"Dropped",c:"#fb7185"},
+    {n:"🎙 Podcast",st:"Paused",p:20,pri:"Pause",c:"#a78bfa"},
+    {n:"🛍 Shop",st:"Running",p:55,pri:"Focus",c:"#34d399"}
+  ];
+  var DIMS=["Cash","Pull","Ready","Value","Risk↓","Eff↓"];
+  var M=[["Newsletter",[3,3,4,4,4,4]],["SaaS",[0,2,3,5,3,2]],["Agency",[4,4,5,2,4,3]],["Course",[0,1,2,2,3,2]],["Podcast",[0,2,3,2,4,3]],["Shop",[2,3,4,3,4,4]]];
+  function colr(v){return 'hsl('+(v/5*125)+',55%,'+(22+v*3)+'%)';}
+  function row(d){return '<div class="cv-srow"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;font-weight:600;color:#e6edf3">'+d.n+'</span><span class="cv-chip" style="background:'+d.c+'22;color:'+d.c+'">'+d.pri+'</span></div><div class="cv-bar"><div class="cv-fill" style="width:'+d.p+'%;background:'+d.c+'"></div></div><div style="display:flex;justify-content:space-between;font-size:8px;color:#64748b;margin-top:3px"><span>'+d.st+'</span><span>'+d.p+'%</span></div></div>';}
+  function foc(p,clr){return D.filter(function(d){return d.pri===p;}).map(function(d){return '<div class="cv-srow" style="padding:6px 9px;margin-bottom:5px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:10.5px;font-weight:600;color:#e6edf3">'+d.n+'</span><span style="font-size:8px;color:'+clr+'">'+d.st+' · '+d.p+'%</span></div></div>';}).join('');}
+  var sc0='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div><div style="font-size:8.5px;font-family:\'JetBrains Mono\',monospace;color:#c084fc;letter-spacing:.12em">PORTFOLIO</div><div style="font-size:13px;font-weight:700;color:#fff">6 projects</div></div><div style="font-size:8.5px;color:#64748b">Sun · Jun 28</div></div>'+D.map(row).join('');
+  var sc1='<div style="font-size:8.5px;font-family:\'JetBrains Mono\',monospace;color:#c084fc;letter-spacing:.12em;margin-bottom:4px">SUNDAY REVIEW</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:9px">What to move this week</div><div class="cv-srow" style="border-color:rgba(168,85,247,.25)"><div style="font-size:9.5px;color:#c084fc;font-weight:700;margin-bottom:4px">⚡ 3 MOVES</div><div style="font-size:10px;color:#cbd5e1;line-height:1.55">1 · Newsletter — 5 sponsor emails<br>2 · SaaS — 5 custdev before code<br>3 · Course — finish it or kill it</div></div><div class="cv-srow" style="background:rgba(124,58,237,.08);border-color:rgba(124,58,237,.3)"><div style="font-size:9.5px;color:#a78bfa;font-weight:700;margin-bottom:3px">🔥 HARD TRUTH</div><div style="font-size:9.5px;color:#cbd5e1;line-height:1.5">One profitable project — the agency. The other five you “develop” to avoid admitting the agency is the business.</div></div>';
+  var sc2='<div style="font-size:8.5px;font-family:\'JetBrains Mono\',monospace;color:#fb7185;letter-spacing:.12em;margin-bottom:9px">FORGOTTEN RADAR</div><div class="cv-srow" style="background:rgba(127,29,29,.18);border-color:rgba(127,29,29,.4)"><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:600;color:#fff">🎓 Course</span><span class="cv-chip" style="background:#7f1d1d;color:#fca5a5">critical</span></div><div style="font-size:8.5px;color:#fca5a5;margin-top:3px">0 actions in 12 days · deadline in 5</div></div><div class="cv-srow" style="background:rgba(146,64,14,.16);border-color:rgba(146,64,14,.4)"><div style="display:flex;justify-content:space-between"><span style="font-size:11px;font-weight:600;color:#fff">🎙 Podcast</span><span class="cv-chip" style="background:#78350f;color:#fcd34d">stalled</span></div><div style="font-size:8.5px;color:#fcd34d;margin-top:3px">21 days of silence</div></div><div class="cv-srow" style="background:rgba(20,83,45,.16);border-color:rgba(20,83,45,.4)"><div style="display:flex;justify-content:space-between"><span style="font-size:10.5px;color:#86efac;font-weight:600">Moving</span><span class="cv-chip" style="background:#14532d;color:#86efac">4 projects</span></div></div><div style="font-size:8.5px;color:#64748b;text-align:center;margin-top:10px">Arrives on its own — nothing fails silently</div>';
+  var sc3='<div style="font-size:8.5px;font-family:\'JetBrains Mono\',monospace;color:#c084fc;letter-spacing:.12em;margin-bottom:4px">FOCUS · WIP</div><div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:8px">Max 3 in progress</div><div style="font-size:8.5px;color:#34d399;font-weight:700;margin:6px 0 4px">🎯 IN FOCUS</div>'+foc('Focus','#34d399')+'<div style="font-size:8.5px;color:#60a5fa;font-weight:700;margin:8px 0 4px">⏸ HOLD</div>'+foc('Hold','#60a5fa')+'<div style="font-size:8.5px;color:#a78bfa;font-weight:700;margin:8px 0 4px">💤 PAUSE / DROPPED</div>'+foc('Pause','#a78bfa')+foc('Dropped','#fb7185');
+  var sc4='<div style="font-size:8.5px;font-family:\'JetBrains Mono\',monospace;color:#c084fc;letter-spacing:.12em;margin-bottom:9px">VALUE MATRIX</div><table style="width:100%;border-collapse:collapse;font-size:8px"><tr><th></th>'+DIMS.map(function(d){return '<th style="color:#64748b;font-weight:500;padding-bottom:3px">'+d+'</th>';}).join('')+'</tr>'+M.map(function(r){return '<tr><td style="color:#cbd5e1;font-weight:600;padding:2px 3px 2px 0;white-space:nowrap;font-size:8.5px">'+r[0]+'</td>'+r[1].map(function(v){return '<td style="background:'+colr(v)+';color:#fff;text-align:center;border:1px solid #0b0d14;padding:3px 1px;font-weight:600">'+v+'</td>';}).join('')+'</tr>';}).join('')+'</table><div style="font-size:8px;color:#64748b;text-align:center;margin-top:10px">🟢 high · 🔴 low — what to push, what to kill</div>';
+  var SCREENS=[sc0,sc1,sc2,sc3,sc4];
+  var CK={
+    en:{title:"Cockpit — a founder's portfolio OS I built for myself, then productized",
+      before:["10 tabs, zero overview of what's moving","Projects you quietly dropped surface too late","Decisions by gut — no view from above","Dashboards you build but never open"],
+      after:["All projects in one cockpit — stage, progress, priority","Forgotten-radar flags what you abandoned","Weekly AI review: 3 moves + one hard truth","It pushes the insight to you every Sunday"],
+      built:["Notion portfolio + 6 views — roadmap, stages, priority, focus, scoring","5-screen mobile cockpit concept — clickable walkthrough","AI council — 6 roles + contrarian → one-page weekly review"],
+      hint:"tap a tab — the screen switches",
+      tabs:["Cockpit","Review","Radar","Focus","Matrix"],
+      desc:["All your projects from Notion on one screen — stage, progress, priority. The whole portfolio in 5 seconds. → “What's even going on across all my projects?”",
+        "AI advice on your own data: 3 moves for the week + one uncomfortable truth. Not a task list — a priority. → “What do I do next?”",
+        "Projects with no activity for days + deadlines you don't notice. Nothing fails silently. → “What did I quietly drop?”",
+        "2–3 projects in focus, the rest held or paused. A WIP limit — less spread, more finished. → “What to focus on this week?”",
+        "Every project scored across 6 dimensions, by colour. See what to push, what to kill. → “Which project is actually worth it?”"]},
+    es:{title:"Cockpit — un sistema operativo de portafolio que construí para mí y luego producticé",
+      before:["10 pestañas, cero visión de qué se mueve","Los proyectos que abandonaste aparecen tarde","Decisiones a ojo — sin vista desde arriba","Dashboards que armás y nunca abrís"],
+      after:["Todos los proyectos en un cockpit — etapa, progreso, prioridad","El radar de olvido marca lo abandonado","Revisión IA semanal: 3 jugadas + una verdad incómoda","Te empuja el insight cada domingo"],
+      built:["Portafolio Notion + 6 vistas — roadmap, etapas, prioridad, foco, scoring","Concepto de cockpit móvil de 5 pantallas — recorrido clickeable","Consejo IA — 6 roles + contrarian → revisión semanal de una página"],
+      hint:"tocá una pestaña — la pantalla cambia",
+      tabs:["Cockpit","Revisión","Radar","Foco","Matriz"],
+      desc:["Todos tus proyectos de Notion en una pantalla — etapa, progreso, prioridad. Todo el portafolio en 5 segundos. → «¿Qué está pasando en todos mis proyectos?»",
+        "Consejo IA sobre tus datos: 3 jugadas + una verdad incómoda. No una lista de tareas — una prioridad. → «¿Qué hago ahora?»",
+        "Proyectos sin actividad por días + deadlines que no ves. Nada falla en silencio. → «¿Qué abandoné sin darme cuenta?»",
+        "2–3 proyectos en foco, el resto en espera o pausa. Un límite WIP — menos dispersión, más terminado. → «¿En qué enfocarme esta semana?»",
+        "Cada proyecto puntuado en 6 dimensiones, por color. Qué empujar, qué cerrar. → «¿Qué proyecto vale realmente la pena?»"]},
+    ru:{title:"Cockpit — операционная система портфеля: построил для себя, потом упаковал в продукт",
+      before:["10 вкладок, ноль картины — что движется","Заброшенные проекты всплывают слишком поздно","Решения наугад — нет взгляда сверху","Дашборды, которые строишь, но не открываешь"],
+      after:["Все проекты в одном кокпите — стадия, прогресс, приоритет","Светофор забвения подсвечивает заброшенное","Недельный AI-разбор: 3 хода + одна правда","Сам выталкивает инсайт каждое воскресенье"],
+      built:["Notion-портфель + 6 видов — роадмап, стадии, приоритет, фокус, скоринг","5-экранный мобильный кокпит-концепт — кликабельный обзор","AI-совет — 6 ролей + контрарианец → разбор на одну страницу"],
+      hint:"нажми вкладку — экран сменится",
+      tabs:["Кокпит","Разбор","Светофор","Фокус","Матрица"],
+      desc:["Все твои проекты из Notion на одном экране — стадия, прогресс, приоритет. Весь портфель за 5 секунд. → «Что вообще происходит по всем проектам?»",
+        "AI-совет по твоим данным: 3 хода на неделю + одна неудобная правда. Не список задач, а приоритет. → «Что делать дальше?»",
+        "Проекты без активности днями + дедлайны, которые ты не замечаешь. Ничто не проваливается молча. → «Что я тихо забросил?»",
+        "2–3 проекта в фокусе, остальное держим/пауза. Лимит WIP — меньше распыления, больше доведённого. → «На чём сосредоточиться на этой неделе?»",
+        "Каждый проект по 6 измерениям, цветом. Что тащить, что закрыть. → «Какой проект реально стоит усилий?»"]}
+  };
+  var cur=0;
+  function lng(){var l=(localStorage.getItem('lang')||'en');return CK[l]?l:'en';}
+  function render(){
+    var t=CK[lng()];var h=document.getElementById('ck-h');if(!h)return;
+    h.textContent=t.title;
+    document.getElementById('ck-before').innerHTML=t.before.map(function(x){return '<div class="cp-row cp-bad">'+x+'</div>';}).join('');
+    document.getElementById('ck-after').innerHTML=t.after.map(function(x){return '<div class="cp-row cp-good">'+x+'</div>';}).join('');
+    var ic=['solar:notebook-bold-duotone','solar:smartphone-bold-duotone','solar:users-group-rounded-bold-duotone'],cl=['#a855f7','#818cf8','#4ade80'];
+    document.getElementById('ck-built').innerHTML=t.built.map(function(x,i){return '<div class="cp-built-row"><iconify-icon icon="'+ic[i]+'" style="font-size:16px;color:'+cl[i]+';flex-shrink:0"></iconify-icon><span>'+x+'</span></div>';}).join('');
+    var hs=document.querySelector('#cv-hint span:last-child');if(hs)hs.textContent=t.hint;
+    document.getElementById('cv-tabs').innerHTML=t.tabs.map(function(lb,i){return '<div class="cv-tab'+(i===cur?' act':'')+'" onclick="ckShow('+i+')"><iconify-icon icon="'+ICONS[i]+'"></iconify-icon>'+lb+'</div>';}).join('');
+    document.getElementById('cv-scr').innerHTML=SCREENS[cur];
+    document.getElementById('cv-desc').textContent=t.desc[cur];
+  }
+  window.ckShow=function(i){cur=i;render();};
+  render();
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setTimeout(render,0);});});
+})();
 </script>
 </body>
 </html>
