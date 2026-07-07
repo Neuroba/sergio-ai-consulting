@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PushUp — кейс (превью)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--ac:#22d3ee;--bg:#0a0f1e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:radial-gradient(900px 500px at 80% -10%,rgba(34,211,238,.07),transparent 60%),#0a0f1e;color:#e6edf3;font-family:'Inter',system-ui,sans-serif;padding:28px}
+  h1,h2,h3,.g{font-family:'Space Grotesk',sans-serif}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .wrap{max-width:1180px;margin:0 auto}
+  .glass{background:rgba(15,23,42,.55);border:1px solid rgba(255,255,255,.06);backdrop-filter:blur(8px)}
+  .tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--cc);color:var(--ct)}
+  .metric{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:12px;text-align:center}
+  .mnum{font-family:'Space Grotesk';font-weight:700;font-size:22px;color:var(--mc)}
+  .mlbl{font-size:11px;color:#94a3b8;margin-top:2px}
+  .row{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#cbd5e1;padding:6px 0}
+  .tab{font-family:'Space Grotesk';font-weight:600;font-size:13px;padding:9px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(15,23,42,.5);color:#94a3b8;cursor:pointer;transition:.2s;white-space:nowrap}
+  .tab.act{border-color:rgba(34,211,238,.5);background:rgba(34,211,238,.1);color:#e6f9ff;box-shadow:0 0 16px rgba(34,211,238,.12)}
+  .phone{width:268px;border-radius:34px;border:8px solid #060a14;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 1px rgba(34,211,238,.1);overflow:hidden;background:#060a14}
+  .phone img{display:block;width:100%}
+  .cta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);border-radius:14px;padding:14px 18px}
+</style>
+</head>
+<body><div class="wrap">
+
+<div class="text-[11px] inline-block px-2 py-1 rounded-full bg-amber-500/10 text-amber-300 font-semibold mb-4">ПРЕВЬЮ КЕЙСА · до интеграции на сайт · 3 языка добавлю при интеграции</div>
+
+<!-- header -->
+<div class="glass rounded-2xl p-5 flex items-center gap-4 flex-wrap">
+  <div class="rounded-2xl flex items-center justify-center" style="width:48px;height:48px;background:rgba(34,211,238,.08)"><iconify-icon icon="solar:dumbbell-bold-duotone" style="font-size:24px;color:#22d3ee"></iconify-icon></div>
+  <div class="flex-1 min-w-[200px]">
+    <div class="g font-bold text-xl">PushUp App</div>
+    <div class="text-[12px] text-slate-400 mono">iOS · React · Supabase · Capacitor · Codemagic</div>
+  </div>
+  <div class="flex gap-3">
+    <div class="metric" style="--mc:#22d3ee"><div class="mnum">30</div><div class="mlbl">дней</div></div>
+    <div class="metric" style="--mc:#818cf8"><div class="mnum">$0</div><div class="mlbl">devops</div></div>
+    <div class="metric" style="--mc:#f59e0b"><div class="mnum">1</div><div class="mlbl">человек</div></div>
+  </div>
+</div>
+
+<!-- panel -->
+<div class="glass rounded-3xl p-7 mt-4 grid lg:grid-cols-2 gap-9 items-start">
+
+  <!-- left: narrative -->
+  <div class="space-y-6">
+    <div>
+      <div class="flex flex-wrap gap-2 mb-3">
+        <span class="tag" style="--cc:rgba(34,211,238,.18);--ct:#67e8f9">iOS App</span>
+        <span class="tag" style="--cc:rgba(129,140,248,.18);--ct:#a5b4fc">React + Capacitor</span>
+        <span class="tag" style="--cc:rgba(34,197,94,.18);--ct:#86efac">Supabase</span>
+        <span class="tag" style="--cc:rgba(245,158,11,.18);--ct:#fcd34d">Gamification</span>
+      </div>
+      <h2 class="g text-2xl font-bold leading-snug">iOS-приложение за 30 дней соло:<br>счёт отжиманий <span style="color:#22d3ee">датчиком телефона</span> + полная геймификация</h2>
+    </div>
+
+    <!-- hero feature -->
+    <div class="rounded-2xl p-4" style="background:linear-gradient(180deg,rgba(34,211,238,.08),rgba(34,211,238,.02));border:1px solid rgba(34,211,238,.18)">
+      <div class="flex items-center gap-2 text-[13px] g font-semibold text-cyan-200"><iconify-icon icon="solar:smartphone-2-bold-duotone" style="color:#22d3ee"></iconify-icon> Killer-фича</div>
+      <div class="text-[13px] text-slate-300 mt-1">Считает отжимания <b>датчиком приближения</b>: телефон под грудью, экран гаснет — счёт идёт <b>голосом и вибрацией</b>. Без носимых устройств, без рук.</div>
+    </div>
+
+    <!-- work -->
+    <div>
+      <div class="text-[12px] mono text-slate-400 mb-2">// что сделано</div>
+      <div class="row"><iconify-icon icon="solar:code-bold-duotone" style="font-size:17px;color:#818cf8;flex:none"></iconify-icon><span>React + Capacitor (iOS) — анимированный сенсор-счётчик, голосовой коуч</span></div>
+      <div class="row"><iconify-icon icon="solar:database-bold-duotone" style="font-size:17px;color:#22d3ee;flex:none"></iconify-icon><span>Supabase — авторизация, профили, история тренировок, синхронизация, рейтинг</span></div>
+      <div class="row"><iconify-icon icon="solar:cup-star-bold-duotone" style="font-size:17px;color:#f59e0b;flex:none"></iconify-icon><span>Геймификация: XP, уровни, 12 наград, лиги, дневная цель, серия</span></div>
+      <div class="row"><iconify-icon icon="solar:settings-bold-duotone" style="font-size:17px;color:#4ade80;flex:none"></iconify-icon><span>Codemagic CI/CD — авто-сборка iOS на push · i18n RU/EN/ES · голосовой коуч</span></div>
+    </div>
+
+    <!-- benefit -->
+    <div class="cta">
+      <div class="text-[13px]"><span class="g font-bold text-cyan-300">Соло + AI, за недели</span> <span class="text-slate-400">— то, за что команда берёт $15K+ и 6 месяцев</span></div>
+      <a href="#" class="px-4 py-2 rounded-xl g font-semibold text-[13px]" style="background:linear-gradient(90deg,#22d3ee,#06b6d4);color:#04222a">Бесплатный аудит →</a>
+    </div>
+  </div>
+
+  <!-- right: screenshot gallery -->
+  <div>
+    <div class="text-[12px] mono text-slate-400 mb-3">// экраны приложения (реальные)</div>
+    <div class="flex gap-2 flex-wrap mb-4">
+      <div class="tab act" onclick="show(0)">Вход</div>
+      <div class="tab" onclick="show(1)">Тренировка</div>
+      <div class="tab" onclick="show(2)">Результат</div>
+      <div class="tab" onclick="show(3)">Награды</div>
+      <div class="tab" onclick="show(4)">Рейтинг</div>
+      <div class="tab" onclick="show(5)">Профиль</div>
+    </div>
+    <div class="flex flex-col items-center">
+      <div class="phone"><img id="shot" src="cases/pushup/01-auth.png" alt="PushUp"></div>
+      <div id="shotdesc" class="text-[12.5px] text-slate-400 mt-4 text-center max-w-[340px] leading-relaxed">Тёмный экран входа: email/пароль, вход через Google, бета-доступ. Переключатель языков RU/EN/ES прямо на входе.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="text-[11px] text-slate-600 mt-6 text-center">Это превью контента/структуры кейса. При интеграции на сайт: вставлю как аккордеон-кейс PushUp (заменит стилизованный орб-мокап), добавлю 3 языка (RU/EN/ES) и форму бета-доступа.</div>
+
+<script>
+const SHOTS=[
+ {img:'cases/pushup/01-auth.png',d:'Тёмный экран входа: email/пароль, вход через Google, бета-доступ. Переключатель языков RU/EN/ES прямо на входе.'},
+ {img:'cases/pushup/02-workout.png',d:'★ Killer-фича: счёт отжиманий датчиком приближения. Телефон под грудью, экран гаснет — счёт голосом и вибрацией. Пульсирующий орб + XP за повтор.'},
+ {img:'cases/pushup/03-result.png',d:'Итог тренировки: повторы, +XP, прогресс дневной цели. Празднование и быстрый переход.'},
+ {img:'cases/pushup/04-achievements.png',d:'Коллекция наград (3/12) с прогрессом: первый шаг, рекорд, уровень 10, 1000 Клуб, серия 7 — крючок удержания.'},
+ {img:'cases/pushup/05-leaderboard.png',d:'Лидерборд на 25 участников, лиги (Изумрудная/Сапфир), боты для наполнения на старте. Соревновательная мотивация.'},
+ {img:'cases/pushup/06-profile.png',d:'Уровень 14, настройки: дневная цель (слайдер), аватар, язык, тёмная тема, голосовой коуч.'}
+];
+function show(i){document.getElementById('shot').src=SHOTS[i].img;document.getElementById('shotdesc').textContent=SHOTS[i].d;document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('act',j===i));}
+</script>
+</div></body></html>

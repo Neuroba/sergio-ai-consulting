@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PushUp — Duolingo для тела</title>
+<meta name="description" content="PushUp — телефон сам считает отжимания. Рабочий продукт на iOS/Android/Telegram, собранный соло + AI. Pre-seed раунд.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--ac:#22d3ee;--ac2:#818cf8;--bg:#0a0f1e}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1100px 600px at 82% -8%,rgba(34,211,238,.10),transparent 60%),
+      radial-gradient(900px 600px at 10% 8%,rgba(129,140,248,.08),transparent 55%),
+      #0a0f1e;
+    color:#e6edf3;font-family:'Inter',system-ui,sans-serif;line-height:1.5;overflow-x:hidden;
+  }
+  .grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:54px 54px;mask-image:radial-gradient(1200px 700px at 50% 0%,#000,transparent 75%);}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 22px;position:relative;z-index:1}
+  h1,h2,h3,.g{font-family:'Space Grotesk',sans-serif;letter-spacing:-.01em}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .glass{background:rgba(15,23,42,.55);border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(9px)}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#5eead4}
+  .sec{padding:64px 0;position:relative;z-index:1}
+  .h2{font-size:clamp(24px,3.4vw,36px);font-weight:700;line-height:1.12}
+  .lead{color:#9fb0c3;font-size:16px;max-width:640px}
+  /* badges */
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+  .b-ok{background:rgba(34,197,94,.14);color:#86efac;border:1px solid rgba(34,197,94,.3)}
+  .b-beta{background:rgba(34,211,238,.14);color:#67e8f9;border:1px solid rgba(34,211,238,.3)}
+  .b-work{background:rgba(245,158,11,.14);color:#fcd34d;border:1px solid rgba(245,158,11,.3)}
+  .b-live{background:rgba(129,140,248,.16);color:#c4b5fd;border:1px solid rgba(129,140,248,.32)}
+  .b-plan{background:rgba(148,163,184,.12);color:#cbd5e1;border:1px solid rgba(148,163,184,.25)}
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk';font-weight:600;font-size:15px;padding:13px 22px;border-radius:14px;cursor:pointer;transition:.2s;border:1px solid transparent;text-decoration:none}
+  .btn-p{background:linear-gradient(92deg,#22d3ee,#0891b2);color:#04222a;box-shadow:0 10px 30px rgba(34,211,238,.22)}
+  .btn-p:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(34,211,238,.34)}
+  .btn-g{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12);color:#e6edf3}
+  .btn-g:hover{border-color:rgba(34,211,238,.4);color:#a5f3fc}
+  /* phone */
+  .phone{border-radius:32px;border:7px solid #05070f;box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 0 1px rgba(34,211,238,.12);overflow:hidden;background:#05070f}
+  .phone img{display:block;width:100%}
+  .card{background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:22px}
+  .tab{font-family:'Space Grotesk';font-weight:600;font-size:13px;padding:8px 13px;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:rgba(15,23,42,.5);color:#94a3b8;cursor:pointer;transition:.18s;white-space:nowrap}
+  .tab.act{border-color:rgba(34,211,238,.5);background:rgba(34,211,238,.1);color:#e6f9ff}
+  .step{position:relative;padding-left:20px}
+  .step:before{content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;background:var(--ac);box-shadow:0 0 12px rgba(34,211,238,.6)}
+  .li{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:#cbd5e1;padding:7px 0}
+  .price{background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px;text-align:center}
+  .price .cur{font-family:'Space Grotesk';font-weight:700;font-size:26px;color:#e6edf3}
+  table.ue{width:100%;border-collapse:collapse;font-size:14px}
+  table.ue th,table.ue td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.07)}
+  table.ue th{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#7c8ba1;font-weight:500}
+  table.ue td.num{font-family:'JetBrains Mono';color:#a5f3fc}
+  /* nav */
+  .nav{position:sticky;top:0;z-index:40;backdrop-filter:blur(12px);background:rgba(10,15,30,.72);border-bottom:1px solid rgba(255,255,255,.06)}
+  .langbtn{font-family:'JetBrains Mono';font-size:12px;padding:5px 9px;border-radius:8px;color:#7c8ba1;cursor:pointer;border:1px solid transparent}
+  .langbtn.act{color:#a5f3fc;background:rgba(34,211,238,.1);border-color:rgba(34,211,238,.28)}
+  .field{width:100%;background:rgba(2,6,16,.6);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;color:#e6edf3;font-size:14px;font-family:'Inter'}
+  .field:focus{outline:none;border-color:rgba(34,211,238,.5)}
+  .funnel-b{border-radius:12px;padding:14px 16px;font-size:13.5px;border:1px solid rgba(255,255,255,.08)}
+  @media(max-width:860px){.sec{padding:48px 0}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap flex items-center justify-between" style="height:60px">
+    <div class="flex items-center gap-2">
+      <iconify-icon icon="solar:dumbbell-bold-duotone" style="font-size:22px;color:#22d3ee"></iconify-icon>
+      <span class="g font-bold text-lg">PushUp</span>
+      <span class="badge b-beta" style="margin-left:6px" data-t="nav.badge">pre-seed</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="#invest" class="hidden sm:inline g text-sm text-slate-300 hover:text-cyan-300" data-t="nav.invest">Инвесторам</a>
+      <div class="flex items-center gap-1">
+        <span class="langbtn" data-l="ru" onclick="applyLang('ru')">RU</span>
+        <span class="langbtn" data-l="en" onclick="applyLang('en')">EN</span>
+        <span class="langbtn" data-l="es" onclick="applyLang('es')">ES</span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- 1 · HERO -->
+<header class="sec" style="padding-top:52px">
+  <div class="wrap grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="eyebrow mb-4" data-t="hero.eyebrow">// продукт на пороге запуска</div>
+      <h1 style="font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.05" data-t="hero.h1">Duolingo для тела.<br>Телефон <span style="color:#22d3ee">сам считает</span> отжимания.</h1>
+      <p class="lead mt-5" data-t="hero.sub">Killer-фича уже работает на iOS: кладёшь телефон под грудь — датчик приближения считает каждое отжимание голосом и вибрацией. Без камеры, без часов, без подписки.</p>
+      <div class="flex flex-wrap gap-3 mt-7">
+        <a href="https://t.me/pushup_xxx_bot" target="_blank" class="btn btn-p"><iconify-icon icon="solar:play-bold"></iconify-icon><span data-t="hero.cta1">Попробовать в Telegram</span></a>
+        <a href="#invest" class="btn btn-g"><span data-t="hero.cta2">Инвесторам</span> ↓</a>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-9 max-w-[440px]">
+        <div class="card" style="padding:14px;text-align:center"><div class="g font-bold text-cyan-300" style="font-size:15px" data-t="hero.m1">killer на iOS</div><div class="text-[11px] text-slate-500 mt-1" data-t="hero.m1l">работает</div></div>
+        <div class="card" style="padding:14px;text-align:center"><div class="g font-bold" style="font-size:15px;color:#c4b5fd" data-t="hero.m2">3 платформы</div><div class="text-[11px] text-slate-500 mt-1" data-t="hero.m2l">1 бэкенд</div></div>
+        <div class="card" style="padding:14px;text-align:center"><div class="g font-bold" style="font-size:15px;color:#fcd34d" data-t="hero.m3">соло + AI</div><div class="text-[11px] text-slate-500 mt-1" data-t="hero.m3l">~$0 burn</div></div>
+      </div>
+    </div>
+    <!-- carousel -->
+    <div>
+      <div class="flex gap-2 flex-wrap mb-4 justify-center">
+        <div class="tab act" onclick="show(0)" data-t="shot.t0">Главная</div>
+        <div class="tab" onclick="show(1)" data-t="shot.t1">Тренировка</div>
+        <div class="tab" onclick="show(2)" data-t="shot.t2">Награды</div>
+        <div class="tab" onclick="show(3)" data-t="shot.t3">Рейтинг</div>
+        <div class="tab" onclick="show(4)" data-t="shot.t4">Профиль</div>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="phone" style="width:262px"><img id="shot" src="now-home.png" alt="PushUp"></div>
+        <div id="shotcap" class="text-[13px] text-slate-400 mt-4 text-center max-w-[320px]" data-t="shot.c0">Главный экран: герой-капибара, форма, дневная цель, XP и уровень.</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 2 · KILLER -->
+<section class="sec">
+  <div class="wrap grid lg:grid-cols-2 gap-12 items-center">
+    <div class="flex justify-center order-2 lg:order-1">
+      <div class="phone" style="width:250px"><img src="02-workout.png" alt="Счёт датчиком"></div>
+    </div>
+    <div class="order-1 lg:order-2">
+      <div class="eyebrow mb-3" data-t="kil.eyebrow">// killer-фича</div>
+      <h2 class="h2" data-t="kil.h">Телефон сам считает.<br>Это <span style="color:#22d3ee">нельзя накликать</span>.</h2>
+      <p class="lead mt-4" data-t="kil.sub">Датчик приближения = «proof of effort». 6 типов отжиманий, каждый со своей ставкой XP.</p>
+      <div class="mt-6 space-y-3">
+        <div class="step g text-[15px]" data-t="kil.s1">Положи телефон под грудь</div>
+        <div class="step g text-[15px]" data-t="kil.s2">Экран гаснет</div>
+        <div class="step g text-[15px]" data-t="kil.s3">Отжимаешься — голос и вибрация считают</div>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-7">
+        <span class="badge b-ok" data-t="kil.b1">iOS — работает</span>
+        <span class="badge b-work" data-t="kil.b2">Android — в работе</span>
+        <span class="badge b-live" data-t="kil.b3">Telegram — акселерометр</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 · PLATFORMS -->
+<section class="sec">
+  <div class="wrap">
+    <div class="eyebrow mb-3" data-t="plat.eyebrow">// мультиплатформа</div>
+    <h2 class="h2" data-t="plat.h">Три фронта. Один бэкенд.</h2>
+    <p class="lead mt-4" data-t="plat.sub">Общий Supabase → серии, XP, лиги и прогресс сквозные. Натив — полный продукт; Telegram — попробовать за 3 секунды и позвать друзей.</p>
+    <div class="grid md:grid-cols-3 gap-4 mt-8">
+      <div class="card">
+        <iconify-icon icon="solar:smartphone-bold-duotone" style="font-size:30px;color:#4ade80"></iconify-icon>
+        <div class="g font-bold text-lg mt-3" data-t="plat.a">Android · Google Play</div>
+        <div class="text-[14px] text-slate-400 mt-1" data-t="plat.ad">Полный платный продукт</div>
+        <span class="badge b-work mt-3" data-t="plat.ab">релиз на подаче</span>
+      </div>
+      <div class="card" style="border-color:rgba(34,211,238,.28)">
+        <iconify-icon icon="solar:apple-bold" style="font-size:30px;color:#22d3ee"></iconify-icon>
+        <div class="g font-bold text-lg mt-3" data-t="plat.i">iOS</div>
+        <div class="text-[14px] text-slate-400 mt-1" data-t="plat.id">Носитель killer-фичи</div>
+        <span class="badge b-beta mt-3" data-t="plat.ib">бета, по запросу</span>
+      </div>
+      <div class="card">
+        <iconify-icon icon="solar:plain-bold-duotone" style="font-size:30px;color:#c4b5fd"></iconify-icon>
+        <div class="g font-bold text-lg mt-3" data-t="plat.t">Telegram Mini App</div>
+        <div class="text-[14px] text-slate-400 mt-1" data-t="plat.td">Вирусный бесплатный вход</div>
+        <span class="badge b-live mt-3" data-t="plat.tb">живой</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · GAMIFICATION -->
+<section class="sec">
+  <div class="wrap grid lg:grid-cols-2 gap-12 items-center">
+    <div>
+      <div class="eyebrow mb-3" data-t="gam.eyebrow">// удержание</div>
+      <h2 class="h2" data-t="gam.h">Механика удержания —<br>уже в коде.</h2>
+      <div class="mt-5">
+        <div class="li"><iconify-icon icon="solar:bolt-bold-duotone" style="font-size:19px;color:#fcd34d;flex:none"></iconify-icon><span data-t="gam.l1"><b>XP за повторы</b>, 6 типов упражнений (8–18 XP/повтор), квадратичная кривая уровней</span></div>
+        <div class="li"><iconify-icon icon="solar:cat-bold-duotone" style="font-size:19px;color:#22d3ee;flex:none"></iconify-icon><span data-t="gam.l2"><b>Эволюция героя-капибары</b>: 10 стадий × 3 формы = 30 состояний (новичок → легенда)</span></div>
+        <div class="li"><iconify-icon icon="solar:heart-pulse-bold-duotone" style="font-size:19px;color:#f472b6;flex:none"></iconify-icon><span data-t="gam.l3"><b>«Форма» героя</b>: простой −20%/день, герой теряет форму — но уровень не отнимается</span></div>
+        <div class="li"><iconify-icon icon="solar:fire-bold-duotone" style="font-size:19px;color:#fb923c;flex:none"></iconify-icon><span data-t="gam.l4"><b>Серии + заморозки</b>, дневная цель, голосовой коуч с гаптикой</span></div>
+        <div class="li"><iconify-icon icon="solar:cup-star-bold-duotone" style="font-size:19px;color:#f59e0b;flex:none"></iconify-icon><span data-t="gam.l5"><b>12 наград</b> (11 активны) · рейтинг + 4 лиги</span></div>
+      </div>
+      <div class="glass rounded-xl p-3 mt-5 text-[13px] text-slate-400 flex items-start gap-2">
+        <iconify-icon icon="solar:info-circle-bold" style="color:#94a3b8;flex:none;margin-top:2px"></iconify-icon>
+        <span data-t="gam.note">Честно: лидерборд пока наполнен ботами (🤖) — для старта, чтобы новичок не был один.</span>
+      </div>
+    </div>
+    <div class="flex justify-center gap-4">
+      <div class="phone" style="width:210px"><img src="now-profile.png" alt="Эволюция"></div>
+      <div class="phone hidden sm:block" style="width:210px;margin-top:28px"><img src="now-awards.png" alt="Награды"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · GROWTH LOOPS -->
+<section class="sec">
+  <div class="wrap">
+    <div class="eyebrow mb-3" data-t="gl.eyebrow">// виральность</div>
+    <h2 class="h2" data-t="gl.h">Двухконтурная воронка:<br>вирусный верх → платный низ.</h2>
+    <div class="grid lg:grid-cols-2 gap-10 mt-8 items-center">
+      <div class="space-y-4">
+        <div class="card">
+          <div class="flex items-center justify-between"><div class="g font-bold" data-t="gl.r">Telegram-реферал</div><span class="badge b-ok" data-t="gl.rb">работает end-to-end</span></div>
+          <div class="text-[14px] text-slate-300 mt-2" data-t="gl.rd"><b>+200</b> приглашённому / <b>+150</b> пригласившему. Защита от абуза на сервере, проверено на живых людях.</div>
+        </div>
+        <div class="card">
+          <div class="flex items-center justify-between"><div class="g font-bold" data-t="gl.d">Дуэли (duel-loop)</div><span class="badge b-plan" data-t="gl.db">концепт</span></div>
+          <div class="text-[14px] text-slate-300 mt-2" data-t="gl.dd">Вызвал друга на отжимания → чтобы принять, друг ставит апп → оба в общем стрике. Сильнейший вирусный рычаг, в роадмапе.</div>
+        </div>
+        <div class="glass rounded-xl p-4 text-[14px]">
+          <span class="mono text-[12px] text-slate-500" data-t="gl.nsl">North Star</span><br>
+          <span data-t="gl.ns"><b style="color:#5eead4">WAU</b> — недельно активные тренирующиеся (не installs)</span>
+        </div>
+      </div>
+      <!-- funnel -->
+      <div class="glass rounded-2xl p-6">
+        <div class="funnel-b" style="background:rgba(129,140,248,.1);border-color:rgba(129,140,248,.3)">
+          <div class="flex items-center gap-2 g font-semibold" style="color:#c4b5fd"><iconify-icon icon="solar:plain-bold-duotone"></iconify-icon> <span data-t="gl.f1">Telegram Mini App</span></div>
+          <div class="text-[12.5px] text-slate-400 mt-1" data-t="gl.f1d">Вирусный верх · CAC ≈ 0 · реферал/дуэль прямо в чатах</div>
+        </div>
+        <div class="text-center my-2 text-slate-500">↓</div>
+        <div class="funnel-b" style="background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.28)">
+          <div class="flex items-center gap-2 g font-semibold text-cyan-200"><iconify-icon icon="solar:hand-money-bold-duotone"></iconify-icon> <span data-t="gl.f2">Нативный продукт</span></div>
+          <div class="text-[12.5px] text-slate-400 mt-1" data-t="gl.f2d">Полный функционал · премиум-подписка · killer-счёт отжиманий</div>
+        </div>
+        <div class="text-[12px] text-slate-500 mt-4 text-center" data-t="gl.fnote">Общий бэкенд, единая капибара и прогресс — Telegram растит базу, натив монетизирует.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · MONETIZATION -->
+<section class="sec">
+  <div class="wrap">
+    <div class="eyebrow mb-3" data-t="mon.eyebrow">// монетизация</div>
+    <h2 class="h2" data-t="mon.h">Freemium + премиум. <span style="color:#94a3b8">Механика готова, запуск впереди.</span></h2>
+    <p class="lead mt-4" data-t="mon.sub">Бесплатное ядро навсегда + премиум: виджет серии на экране и усиленная мотивация. Годовая подписка + опция lifetime, триал 7 дней.</p>
+    <div class="grid grid-cols-3 gap-3 mt-7 max-w-[560px]">
+      <div class="price"><div class="text-[13px] text-slate-400">🇦🇷 AR</div><div class="cur mt-1">$12</div><div class="text-[11px] text-slate-500 mono" data-t="mon.yr">/год</div></div>
+      <div class="price"><div class="text-[13px] text-slate-400">🇷🇺 RU</div><div class="cur mt-1">~$18</div><div class="text-[11px] text-slate-500 mono" data-t="mon.yr2">/год</div></div>
+      <div class="price"><div class="text-[13px] text-slate-400">🌍 Global</div><div class="cur mt-1">~$27</div><div class="text-[11px] text-slate-500 mono" data-t="mon.yr3">/год</div></div>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 mt-6">
+      <span class="badge b-live"><iconify-icon icon="solar:star-bold"></iconify-icon> <span data-t="mon.tg">Telegram — Stars (перк, не вывод)</span></span>
+      <span class="badge b-plan" data-t="mon.plan">платящих пока нет · стор не запущен</span>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · FACT vs PLAN -->
+<section class="sec" id="invest">
+  <div class="wrap">
+    <div class="eyebrow mb-3" data-t="fp.eyebrow">// инвесторам · без прикрас</div>
+    <h2 class="h2" data-t="fp.h">Что уже есть — и что впереди.</h2>
+    <div class="grid md:grid-cols-2 gap-4 mt-8">
+      <div class="card" style="border-color:rgba(34,197,94,.28);background:rgba(34,197,94,.05)">
+        <div class="g font-bold text-lg mb-3" style="color:#86efac">✅ <span data-t="fp.fh">Есть</span></div>
+        <div class="li" data-t="fp.f1"><span>Рабочий продукт (React 19 + Supabase + Capacitor 8, 9 таблиц + RLS)</span></div>
+        <div class="li" data-t="fp.f2"><span>Killer-фича работает на iOS</span></div>
+        <div class="li" data-t="fp.f3"><span>Живой Telegram-апп</span></div>
+        <div class="li" data-t="fp.f4"><span>Реферальная петля работает end-to-end</span></div>
+        <div class="li" data-t="fp.f5"><span>Полная бренд-система (капибара выбрана аудиторией)</span></div>
+        <div class="li" data-t="fp.f6"><span>~$0 burn — соло + AI</span></div>
+      </div>
+      <div class="card" style="border-color:rgba(148,163,184,.25)">
+        <div class="g font-bold text-lg mb-3 text-slate-300">📋 <span data-t="fp.ph">Впереди</span></div>
+        <div class="li" data-t="fp.p1"><span>Публикация в сторах</span></div>
+        <div class="li" data-t="fp.p2"><span>Первая выручка</span></div>
+        <div class="li" data-t="fp.p3"><span>Метрики удержания (D1/D7/D30)</span></div>
+        <div class="li" data-t="fp.p4"><span>Android-датчик</span></div>
+        <div class="li" data-t="fp.p5"><span>Дуэли в проде</span></div>
+      </div>
+    </div>
+    <!-- unit econ -->
+    <div class="glass rounded-2xl p-5 mt-5">
+      <div class="flex items-center justify-between mb-3">
+        <div class="g font-semibold" data-t="fp.uh">Юнит-экономика</div>
+        <span class="badge b-plan" data-t="fp.ulabel">прогноз, не факт</span>
+      </div>
+      <div style="overflow-x:auto">
+      <table class="ue">
+        <tr><th data-t="fp.uc1">Рынок</th><th data-t="fp.uc2">Цена/год</th><th data-t="fp.uc3">LTV (net)</th><th data-t="fp.uc4">Потолок CAC</th></tr>
+        <tr><td>🇦🇷 AR</td><td class="num">$12</td><td class="num">~$18.5</td><td class="num">~$7.4</td></tr>
+        <tr><td>🇷🇺 RU</td><td class="num">~$18</td><td class="num">~$27.8</td><td class="num">~$11</td></tr>
+        <tr><td>🌍 EN</td><td class="num">~$27</td><td class="num">~$41.8</td><td class="num">~$17</td></tr>
+      </table>
+      </div>
+      <div class="text-[13px] text-slate-400 mt-3" data-t="fp.uconv">Конверсия install→paid: цель 1.5–2%. Верх воронки — вирусный Telegram с CAC ≈ 0.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · TEAM -->
+<section class="sec">
+  <div class="wrap glass rounded-3xl p-8 flex flex-col md:flex-row items-center gap-8">
+    <img src="../../sergio.jpg" alt="Sergio" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:2px solid rgba(34,211,238,.3);flex:none">
+    <div>
+      <div class="eyebrow mb-2" data-t="team.eyebrow">// команда</div>
+      <h2 class="h2" style="font-size:clamp(22px,3vw,30px)" data-t="team.h">Один человек + AI. Почти без денег.</h2>
+      <p class="lead mt-3" data-t="team.sub">Продукт на 3 платформах, бэкенд, CI/CD и бренд — собрано соло с Claude Code. Инфраструктура: Supabase (free/$25) + Codemagic (free-tier). Капитальная эффективность — вот что покупает инвестор на pre-seed.</p>
+      <div class="mono text-[12.5px] text-slate-500 mt-3">React · Supabase · Capacitor 8 · Codemagic · Telegram WebApp</div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · INVEST / ROUND -->
+<section class="sec">
+  <div class="wrap grid lg:grid-cols-2 gap-10 items-start">
+    <div>
+      <div class="eyebrow mb-3" data-t="rnd.eyebrow">// раунд</div>
+      <h2 class="h2" data-t="rnd.h">Pre-seed раунд.</h2>
+      <div class="mt-5 flex items-baseline gap-3">
+        <span class="g font-bold" style="font-size:44px;color:#22d3ee">$50k</span>
+        <span class="text-slate-400 g" data-t="rnd.for">за ~10% · SAFE</span>
+      </div>
+      <div class="mono text-[12px] text-slate-500 mt-1" data-t="rnd.cap">valuation cap ~$500k</div>
+      <div class="mt-6 space-y-2">
+        <div class="li" data-t="rnd.u1"><span>① Публикация в сторах + инфраструктура</span></div>
+        <div class="li" data-t="rnd.u2"><span>② Платный трафик на валидацию retention (Аргентина)</span></div>
+        <div class="li" data-t="rnd.u3"><span>③ Доводка Android-датчика + дуэли/рефералка в проде</span></div>
+        <div class="li" data-t="rnd.u4"><span>④ Контент-движок (Reels/TikTok «телефон сам считает»)</span></div>
+      </div>
+    </div>
+    <!-- request deck form -->
+    <div class="card" style="border-color:rgba(34,211,238,.25)">
+      <div class="g font-bold text-lg" data-t="rnd.fh">Запросить дек</div>
+      <div class="text-[13.5px] text-slate-400 mt-1 mb-4" data-t="rnd.fsub">Пришлю питч-дек и дам доступ к цифрам. Отвечаю лично.</div>
+      <form id="deckForm" class="space-y-3">
+        <input class="field" name="name" data-ta="placeholder:rnd.fname" placeholder="Имя / фонд" required>
+        <input class="field" name="contact" data-ta="placeholder:rnd.fcontact" placeholder="Email или Telegram" required>
+        <textarea class="field" name="message" rows="2" data-ta="placeholder:rnd.fmsg" placeholder="Пару слов (необязательно)"></textarea>
+        <button type="submit" class="btn btn-p w-full justify-center"><span data-t="rnd.fbtn">Запросить дек</span> →</button>
+        <div id="formOk" class="hidden text-[14px] text-center g" style="color:#86efac" data-t="rnd.fok">Готово! Отвечу лично в ближайшее время.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · CONSULTING LINK + FOOTER -->
+<footer class="sec" style="padding-bottom:56px">
+  <div class="wrap">
+    <div class="glass rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="text-[14px] text-slate-300" data-t="foot.consult">Этот продукт собран той же системой «соло + AI», которую я ставлю бизнесам.</div>
+      <a href="../../index.html" class="btn btn-g whitespace-nowrap"><span data-t="foot.clink">AI-консалтинг Sergio</span> →</a>
+    </div>
+    <div class="flex items-center justify-between mt-6 text-[12.5px] text-slate-600">
+      <a href="../../index.html#cases" class="hover:text-cyan-300" data-t="foot.back">← Все кейсы</a>
+      <span>PushUp · Buenos Aires · 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------- carousel ---------- */
+const SHOTS=[
+ {img:'now-home.png',k:'shot.c0'},
+ {img:'now-workout.png',k:'shot.c1'},
+ {img:'now-awards.png',k:'shot.c2'},
+ {img:'now-rating.png',k:'shot.c3'},
+ {img:'now-profile.png',k:'shot.c4'}
+];
+let curShot=0;
+function show(i){
+  curShot=i;
+  document.getElementById('shot').src=SHOTS[i].img;
+  const cap=document.getElementById('shotcap');
+  cap.setAttribute('data-t',SHOTS[i].k);
+  cap.innerHTML=(T[curLang]&&T[curLang][SHOTS[i].k])||T.ru[SHOTS[i].k];
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('act',j===i));
+}
+
+/* ---------- i18n ---------- */
+const T={ru:{
+ 'nav.badge':'pre-seed','nav.invest':'Инвесторам',
+ 'hero.eyebrow':'// продукт на пороге запуска',
+ 'hero.h1':'Duolingo для тела.<br>Телефон <span style="color:#22d3ee">сам считает</span> отжимания.',
+ 'hero.sub':'Killer-фича уже работает на iOS: кладёшь телефон под грудь — датчик приближения считает каждое отжимание голосом и вибрацией. Без камеры, без часов, без подписки.',
+ 'hero.cta1':'Попробовать в Telegram','hero.cta2':'Инвесторам',
+ 'hero.m1':'killer на iOS','hero.m1l':'работает','hero.m2':'3 платформы','hero.m2l':'1 бэкенд','hero.m3':'соло + AI','hero.m3l':'~$0 burn',
+ 'shot.t0':'Главная','shot.t1':'Тренировка','shot.t2':'Награды','shot.t3':'Рейтинг','shot.t4':'Профиль',
+ 'shot.c0':'Главный экран: герой-капибара, форма, дневная цель, XP и уровень.',
+ 'shot.c1':'Выбор упражнения: 6 типов отжиманий, каждый со своей капибарой и XP.',
+ 'shot.c2':'Награды: 12 ачивок с прогрессом — крючок удержания.',
+ 'shot.c3':'Рейтинг и лиги: соревновательная мотивация (на старте — с ботами).',
+ 'shot.c4':'Профиль: эволюция героя-капибары от новичка до легенды.',
+ 'kil.eyebrow':'// killer-фича','kil.h':'Телефон сам считает.<br>Это <span style="color:#22d3ee">нельзя накликать</span>.',
+ 'kil.sub':'Датчик приближения = «proof of effort». 6 типов отжиманий, каждый со своей ставкой XP.',
+ 'kil.s1':'Положи телефон под грудь','kil.s2':'Экран гаснет','kil.s3':'Отжимаешься — голос и вибрация считают',
+ 'kil.b1':'iOS — работает','kil.b2':'Android — в работе','kil.b3':'Telegram — акселерометр',
+ 'plat.eyebrow':'// мультиплатформа','plat.h':'Три фронта. Один бэкенд.',
+ 'plat.sub':'Общий Supabase → серии, XP, лиги и прогресс сквозные. Натив — полный продукт; Telegram — попробовать за 3 секунды и позвать друзей.',
+ 'plat.a':'Android · Google Play','plat.ad':'Полный платный продукт','plat.ab':'релиз на подаче',
+ 'plat.i':'iOS','plat.id':'Носитель killer-фичи','plat.ib':'бета, по запросу',
+ 'plat.t':'Telegram Mini App','plat.td':'Вирусный бесплатный вход','plat.tb':'живой',
+ 'gam.eyebrow':'// удержание','gam.h':'Механика удержания —<br>уже в коде.',
+ 'gam.l1':'<b>XP за повторы</b>, 6 типов упражнений (8–18 XP/повтор), квадратичная кривая уровней',
+ 'gam.l2':'<b>Эволюция героя-капибары</b>: 10 стадий × 3 формы = 30 состояний (новичок → легенда)',
+ 'gam.l3':'<b>«Форма» героя</b>: простой −20%/день, герой теряет форму — но уровень не отнимается',
+ 'gam.l4':'<b>Серии + заморозки</b>, дневная цель, голосовой коуч с гаптикой',
+ 'gam.l5':'<b>12 наград</b> (11 активны) · рейтинг + 4 лиги',
+ 'gam.note':'Честно: лидерборд пока наполнен ботами (🤖) — для старта, чтобы новичок не был один.',
+ 'gl.eyebrow':'// виральность','gl.h':'Двухконтурная воронка:<br>вирусный верх → платный низ.',
+ 'gl.r':'Telegram-реферал','gl.rb':'работает end-to-end','gl.rd':'<b>+200</b> приглашённому / <b>+150</b> пригласившему. Защита от абуза на сервере, проверено на живых людях.',
+ 'gl.d':'Дуэли (duel-loop)','gl.db':'концепт','gl.dd':'Вызвал друга на отжимания → чтобы принять, друг ставит апп → оба в общем стрике. Сильнейший вирусный рычаг, в роадмапе.',
+ 'gl.nsl':'North Star','gl.ns':'<b style="color:#5eead4">WAU</b> — недельно активные тренирующиеся (не installs)',
+ 'gl.f1':'Telegram Mini App','gl.f1d':'Вирусный верх · CAC ≈ 0 · реферал/дуэль прямо в чатах',
+ 'gl.f2':'Нативный продукт','gl.f2d':'Полный функционал · премиум-подписка · killer-счёт отжиманий',
+ 'gl.fnote':'Общий бэкенд, единая капибара и прогресс — Telegram растит базу, натив монетизирует.',
+ 'mon.eyebrow':'// монетизация','mon.h':'Freemium + премиум. <span style="color:#94a3b8">Механика готова, запуск впереди.</span>',
+ 'mon.sub':'Бесплатное ядро навсегда + премиум: виджет серии на экране и усиленная мотивация. Годовая подписка + опция lifetime, триал 7 дней.',
+ 'mon.yr':'/год','mon.yr2':'/год','mon.yr3':'/год',
+ 'mon.tg':'Telegram — Stars (перк, не вывод)','mon.plan':'платящих пока нет · стор не запущен',
+ 'fp.eyebrow':'// инвесторам · без прикрас','fp.h':'Что уже есть — и что впереди.',
+ 'fp.fh':'Есть','fp.f1':'Рабочий продукт (React 19 + Supabase + Capacitor 8, 9 таблиц + RLS)','fp.f2':'Killer-фича работает на iOS','fp.f3':'Живой Telegram-апп','fp.f4':'Реферальная петля работает end-to-end','fp.f5':'Полная бренд-система (капибара выбрана аудиторией)','fp.f6':'~$0 burn — соло + AI',
+ 'fp.ph':'Впереди','fp.p1':'Публикация в сторах','fp.p2':'Первая выручка','fp.p3':'Метрики удержания (D1/D7/D30)','fp.p4':'Android-датчик','fp.p5':'Дуэли в проде',
+ 'fp.uh':'Юнит-экономика','fp.ulabel':'прогноз, не факт','fp.uc1':'Рынок','fp.uc2':'Цена/год','fp.uc3':'LTV (net)','fp.uc4':'Потолок CAC',
+ 'fp.uconv':'Конверсия install→paid: цель 1.5–2%. Верх воронки — вирусный Telegram с CAC ≈ 0.',
+ 'team.eyebrow':'// команда','team.h':'Один человек + AI. Почти без денег.',
+ 'team.sub':'Продукт на 3 платформах, бэкенд, CI/CD и бренд — собрано соло с Claude Code. Инфраструктура: Supabase (free/$25) + Codemagic (free-tier). Капитальная эффективность — вот что покупает инвестор на pre-seed.',
+ 'rnd.eyebrow':'// раунд','rnd.h':'Pre-seed раунд.','rnd.for':'за ~10% · SAFE','rnd.cap':'valuation cap ~$500k',
+ 'rnd.u1':'① Публикация в сторах + инфраструктура','rnd.u2':'② Платный трафик на валидацию retention (Аргентина)','rnd.u3':'③ Доводка Android-датчика + дуэли/рефералка в проде','rnd.u4':'④ Контент-движок (Reels/TikTok «телефон сам считает»)',
+ 'rnd.fh':'Запросить дек','rnd.fsub':'Пришлю питч-дек и дам доступ к цифрам. Отвечаю лично.','rnd.fname':'Имя / фонд','rnd.fcontact':'Email или Telegram','rnd.fmsg':'Пару слов (необязательно)','rnd.fbtn':'Запросить дек','rnd.fok':'Готово! Отвечу лично в ближайшее время.',
+ 'foot.consult':'Этот продукт собран той же системой «соло + AI», которую я ставлю бизнесам.','foot.clink':'AI-консалтинг Sergio','foot.back':'← Все кейсы'
+},en:{"nav.badge": "pre-seed", "nav.invest": "For investors", "hero.eyebrow": "// product on the brink of launch", "hero.h1": "Duolingo for the body.<br>Your phone <span style=\"color:#22d3ee\">counts</span> push-ups for you.", "hero.sub": "The killer feature already works on iOS: put your phone under your chest and the proximity sensor counts every push-up with voice and vibration. No camera, no watch, no subscription.", "hero.cta1": "Try it in Telegram", "hero.cta2": "For investors", "hero.m1": "killer on iOS", "hero.m1l": "working", "hero.m2": "3 platforms", "hero.m2l": "1 backend", "hero.m3": "solo + AI", "hero.m3l": "~$0 burn", "shot.t0": "Home", "shot.t1": "Workout", "shot.t2": "Awards", "shot.t3": "Leaderboard", "shot.t4": "Profile", "shot.c0": "Home screen: your capybara hero, shape, daily goal, XP and level.", "shot.c1": "Exercise picker: 6 push-up types, each with its own capybara and XP.", "shot.c2": "Awards: 12 achievements with progress — a retention hook.", "shot.c3": "Leaderboard and leagues: competitive motivation (seeded with bots at launch).", "shot.c4": "Profile: your capybara hero evolves from rookie to legend.", "kil.eyebrow": "// killer feature", "kil.h": "The phone counts for you.<br>You <span style=\"color:#22d3ee\">can't fake it</span>.", "kil.sub": "The proximity sensor = \"proof of effort.\" 6 push-up types, each with its own XP rate.", "kil.s1": "Put your phone under your chest", "kil.s2": "The screen goes dark", "kil.s3": "You push up — voice and vibration count for you", "kil.b1": "iOS — working", "kil.b2": "Android — in progress", "kil.b3": "Telegram — accelerometer", "plat.eyebrow": "// multi-platform", "plat.h": "Three fronts. One backend.", "plat.sub": "Shared Supabase → streaks, XP, leagues and progress carry across. Native is the full product; Telegram is try it in 3 seconds and bring your friends.", "plat.a": "Android · Google Play", "plat.ad": "Full paid product", "plat.ab": "submitting for release", "plat.i": "iOS", "plat.id": "Home of the killer feature", "plat.ib": "beta, on request", "plat.t": "Telegram Mini App", "plat.td": "Viral free entry point", "plat.tb": "live", "gam.eyebrow": "// retention", "gam.h": "Retention mechanics —<br>already in the code.", "gam.l1": "<b>XP per rep</b>, 6 exercise types (8–18 XP/rep), quadratic level curve", "gam.l2": "<b>Capybara hero evolution</b>: 10 stages × 3 shapes = 30 states (rookie → legend)", "gam.l3": "<b>Hero \"shape\"</b>: idle −20%/day, the hero loses shape — but never loses its level", "gam.l4": "<b>Streaks + freezes</b>, daily goal, voice coach with haptics", "gam.l5": "<b>12 awards</b> (11 live) · leaderboard + 4 leagues", "gam.note": "Honestly: the leaderboard is still filled with bots (🤖) — at launch, so a newcomer isn't alone.", "gl.eyebrow": "// virality", "gl.h": "Two-loop funnel:<br>viral top → paid bottom.", "gl.r": "Telegram referral", "gl.rb": "works end-to-end", "gl.rd": "<b>+200</b> for the invitee / <b>+150</b> for the inviter. Server-side abuse protection, tested on real people.", "gl.d": "Duels (duel-loop)", "gl.db": "concept", "gl.dd": "Challenge a friend to push-ups → to accept, they install the app → both share a streak. The strongest viral lever, on the roadmap.", "gl.nsl": "North Star", "gl.ns": "<b style=\"color:#5eead4\">WAU</b> — weekly active trainers (not installs)", "gl.f1": "Telegram Mini App", "gl.f1d": "Viral top · CAC ≈ 0 · referrals/duels right inside chats", "gl.f2": "Native product", "gl.f2d": "Full functionality · premium subscription · killer push-up counting", "gl.fnote": "Shared backend, one capybara and progress — Telegram grows the base, native monetizes.", "mon.eyebrow": "// monetization", "mon.h": "Freemium + premium. <span style=\"color:#94a3b8\">Mechanics ready, launch ahead.</span>", "mon.sub": "Free core forever + premium: an on-screen streak widget and boosted motivation. Annual subscription + a lifetime option, 7-day trial.", "mon.yr": "/yr", "mon.yr2": "/yr", "mon.yr3": "/yr", "mon.tg": "Telegram — Stars (a perk, not a payout)", "mon.plan": "no paying users yet · store not launched", "fp.eyebrow": "// for investors · no sugarcoating", "fp.h": "What's already here — and what's ahead.", "fp.fh": "Have", "fp.f1": "Working product (React 19 + Supabase + Capacitor 8, 9 tables + RLS)", "fp.f2": "Killer feature works on iOS", "fp.f3": "Live Telegram app", "fp.f4": "Referral loop works end-to-end", "fp.f5": "Full brand system (capybara chosen by the audience)", "fp.f6": "~$0 burn — solo + AI", "fp.ph": "Ahead", "fp.p1": "Store publishing", "fp.p2": "First revenue", "fp.p3": "Retention metrics (D1/D7/D30)", "fp.p4": "Android sensor", "fp.p5": "Duels in production", "fp.uh": "Unit economics", "fp.ulabel": "projection, not fact", "fp.uc1": "Market", "fp.uc2": "Price/yr", "fp.uc3": "LTV (net)", "fp.uc4": "CAC ceiling", "fp.uconv": "install→paid conversion: target 1.5–2%. Top of funnel — viral Telegram with CAC ≈ 0.", "team.eyebrow": "// team", "team.h": "One person + AI. Almost no money.", "team.sub": "A product on 3 platforms, backend, CI/CD and brand — built solo with Claude Code. Infrastructure: Supabase (free/$25) + Codemagic (free tier). Capital efficiency is exactly what an investor buys at pre-seed.", "rnd.eyebrow": "// round", "rnd.h": "Pre-seed round.", "rnd.for": "for ~10% · SAFE", "rnd.cap": "valuation cap ~$500k", "rnd.u1": "① Store publishing + infrastructure", "rnd.u2": "② Paid traffic to validate retention (Argentina)", "rnd.u3": "③ Finishing the Android sensor + duels/referrals in production", "rnd.u4": "④ Content engine (Reels/TikTok \"the phone counts by itself\")", "rnd.fh": "Request the deck", "rnd.fsub": "I'll send the pitch deck and give access to the numbers. I reply personally.", "rnd.fname": "Name / fund", "rnd.fcontact": "Email or Telegram", "rnd.fmsg": "A few words (optional)", "rnd.fbtn": "Request the deck", "rnd.fok": "Done! I'll reply personally shortly.", "foot.consult": "This product was built with the same \"solo + AI\" system I set up for businesses.", "foot.clink": "Sergio's AI consulting", "foot.back": "← All cases"},es:{"nav.badge": "pre-seed", "nav.invest": "Para inversores", "hero.eyebrow": "// producto a punto de lanzar", "hero.h1": "Duolingo para el cuerpo.<br>El teléfono <span style=\"color:#22d3ee\">cuenta solo</span> las flexiones.", "hero.sub": "La killer-feature ya funciona en iOS: apoyás el teléfono bajo el pecho y el sensor de proximidad cuenta cada flexión con voz y vibración. Sin cámara, sin reloj, sin suscripción.", "hero.cta1": "Probar en Telegram", "hero.cta2": "Para inversores", "hero.m1": "killer en iOS", "hero.m1l": "funciona", "hero.m2": "3 plataformas", "hero.m2l": "1 backend", "hero.m3": "solo + AI", "hero.m3l": "~$0 burn", "shot.t0": "Inicio", "shot.t1": "Entrenamiento", "shot.t2": "Logros", "shot.t3": "Ranking", "shot.t4": "Perfil", "shot.c0": "Pantalla principal: el héroe-carpincho, la forma, la meta diaria, XP y nivel.", "shot.c1": "Elección del ejercicio: 6 tipos de flexiones, cada uno con su carpincho y su XP.", "shot.c2": "Logros: 12 insignias con progreso, el gancho de retención.", "shot.c3": "Ranking y ligas: motivación competitiva (al inicio, con bots).", "shot.c4": "Perfil: la evolución del héroe-carpincho, de novato a leyenda.", "kil.eyebrow": "// killer-feature", "kil.h": "El teléfono cuenta solo.<br>Esto <span style=\"color:#22d3ee\">no se puede falsear</span>.", "kil.sub": "El sensor de proximidad = «proof of effort». 6 tipos de flexiones, cada uno con su propia tasa de XP.", "kil.s1": "Apoyá el teléfono bajo el pecho", "kil.s2": "La pantalla se apaga", "kil.s3": "Hacés la flexión y la voz y la vibración cuentan", "kil.b1": "iOS — funciona", "kil.b2": "Android — en curso", "kil.b3": "Telegram — acelerómetro", "plat.eyebrow": "// multiplataforma", "plat.h": "Tres frentes. Un backend.", "plat.sub": "Supabase compartido → rachas, XP, ligas y progreso transversales. El nativo es el producto completo; Telegram es probar en 3 segundos e invitar amigos.", "plat.a": "Android · Google Play", "plat.ad": "Producto completo, de pago", "plat.ab": "release por publicar", "plat.i": "iOS", "plat.id": "Donde vive la killer-feature", "plat.ib": "beta, a pedido", "plat.t": "Telegram Mini App", "plat.td": "Entrada gratis y viral", "plat.tb": "en vivo", "gam.eyebrow": "// retención", "gam.h": "La mecánica de retención,<br>ya en el código.", "gam.l1": "<b>XP por repetición</b>, 6 tipos de ejercicio (8–18 XP/repetición), curva de niveles cuadrática", "gam.l2": "<b>Evolución del héroe-carpincho</b>: 10 etapas × 3 formas = 30 estados (novato → leyenda)", "gam.l3": "<b>La «forma» del héroe</b>: por inactividad −20%/día, el héroe pierde forma — pero el nivel no se pierde", "gam.l4": "<b>Rachas + congeladores</b>, meta diaria, coach por voz con háptica", "gam.l5": "<b>12 logros</b> (11 activos) · ranking + 4 ligas", "gam.note": "Con honestidad: por ahora el leaderboard está poblado con bots (🤖) — para el arranque, así el novato no está solo.", "gl.eyebrow": "// viralidad", "gl.h": "Embudo de doble circuito:<br>cima viral → base de pago.", "gl.r": "Referido de Telegram", "gl.rb": "funciona end-to-end", "gl.rd": "<b>+200</b> al invitado / <b>+150</b> al que invita. Anti-abuso del lado del servidor, probado con gente real.", "gl.d": "Duelos (duel-loop)", "gl.db": "concepto", "gl.dd": "Desafiás a un amigo a hacer flexiones → para aceptar, tu amigo instala la app → los dos comparten una racha. La palanca viral más fuerte, en el roadmap.", "gl.nsl": "North Star", "gl.ns": "<b style=\"color:#5eead4\">WAU</b> — usuarios que entrenan por semana (no installs)", "gl.f1": "Telegram Mini App", "gl.f1d": "Cima viral · CAC ≈ 0 · referido/duelo directo en los chats", "gl.f2": "Producto nativo", "gl.f2d": "Funcionalidad completa · suscripción premium · killer-conteo de flexiones", "gl.fnote": "Backend compartido, un mismo carpincho y progreso — Telegram hace crecer la base, el nativo monetiza.", "mon.eyebrow": "// monetización", "mon.h": "Freemium + premium. <span style=\"color:#94a3b8\">La mecánica está lista, el lanzamiento por delante.</span>", "mon.sub": "Núcleo gratis para siempre + premium: widget de racha en pantalla y motivación reforzada. Suscripción anual + opción lifetime, prueba de 7 días.", "mon.yr": "/año", "mon.yr2": "/año", "mon.yr3": "/año", "mon.tg": "Telegram — Stars (perk, no retiro)", "mon.plan": "todavía no hay pagos · store sin lanzar", "fp.eyebrow": "// para inversores · sin adornos", "fp.h": "Lo que ya hay, y lo que viene.", "fp.fh": "Hecho", "fp.f1": "Producto funcionando (React 19 + Supabase + Capacitor 8, 9 tablas + RLS)", "fp.f2": "La killer-feature funciona en iOS", "fp.f3": "App de Telegram en vivo", "fp.f4": "El loop de referidos funciona end-to-end", "fp.f5": "Sistema de marca completo (el carpincho lo eligió la audiencia)", "fp.f6": "~$0 burn — solo + AI", "fp.ph": "Por delante", "fp.p1": "Publicación en las stores", "fp.p2": "Primeros ingresos", "fp.p3": "Métricas de retención (D1/D7/D30)", "fp.p4": "Sensor de Android", "fp.p5": "Duelos en producción", "fp.uh": "Unit economics", "fp.ulabel": "proyección, no dato", "fp.uc1": "Mercado", "fp.uc2": "Precio/año", "fp.uc3": "LTV (net)", "fp.uc4": "Tope de CAC", "fp.uconv": "Conversión install→paid: objetivo 1.5–2%. La cima del embudo es Telegram viral con CAC ≈ 0.", "team.eyebrow": "// equipo", "team.h": "Una persona + AI. Casi sin plata.", "team.sub": "Producto en 3 plataformas, backend, CI/CD y marca, todo armado solo con Claude Code. Infraestructura: Supabase (free/$25) + Codemagic (free-tier). Eficiencia de capital: eso es lo que compra un inversor en pre-seed.", "rnd.eyebrow": "// ronda", "rnd.h": "Ronda pre-seed.", "rnd.for": "por ~10% · SAFE", "rnd.cap": "valuation cap ~$500k", "rnd.u1": "① Publicación en stores + infraestructura", "rnd.u2": "② Tráfico pago para validar retention (Argentina)", "rnd.u3": "③ Pulir el sensor de Android + duelos/referidos en producción", "rnd.u4": "④ Motor de contenido (Reels/TikTok «el teléfono cuenta solo»)", "rnd.fh": "Pedir el deck", "rnd.fsub": "Te mando el pitch deck y te doy acceso a los números. Respondo en persona.", "rnd.fname": "Nombre / fondo", "rnd.fcontact": "Email o Telegram", "rnd.fmsg": "Dos palabras (opcional)", "rnd.fbtn": "Pedir el deck", "rnd.fok": "¡Listo! Te respondo en persona a la brevedad.", "foot.consult": "Este producto está armado con el mismo sistema «solo + AI» que instalo en las empresas.", "foot.clink": "Consultoría AI de Sergio", "foot.back": "← Todos los casos"}};
+
+let curLang='ru';
+function applyLang(l){
+  curLang=l;
+  try{localStorage.setItem('lang',l);}catch(e){}
+  document.documentElement.lang=l;
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const k=el.getAttribute('data-t');
+    const v=(T[l]&&T[l][k]!=null)?T[l][k]:T.ru[k];
+    if(v!=null) el.innerHTML=v;
+  });
+  document.querySelectorAll('[data-ta]').forEach(el=>{
+    const [attr,k]=el.getAttribute('data-ta').split(':');
+    const v=(T[l]&&T[l][k]!=null)?T[l][k]:T.ru[k];
+    if(v!=null) el.setAttribute(attr,v);
+  });
+  document.querySelectorAll('.langbtn').forEach(b=>b.classList.toggle('act',b.dataset.l===l));
+}
+
+/* ---------- form ---------- */
+document.getElementById('deckForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target, data=new FormData(f);
+  data.append('_subject','PushUp — запрос дека от инвестора');
+  data.append('_captcha','false');
+  try{
+    await fetch('https://formsubmit.co/ajax/zsv3003@gmail.com',{method:'POST',body:data,headers:{'Accept':'application/json'}});
+  }catch(err){}
+  f.querySelectorAll('input,textarea,button').forEach(x=>x.style.display='none');
+  document.getElementById('formOk').classList.remove('hidden');
+});
+
+/* init */
+(function(){
+  let l='ru';
+  try{l=localStorage.getItem('lang')||'ru';}catch(e){}
+  if(!['ru','en','es'].includes(l))l='ru';
+  applyLang(l);
+})();
+</script>
+</body>
+</html>
