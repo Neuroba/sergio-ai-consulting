@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Личная ОС для Claude Code — подарок от Sergio AI</title>
+<meta name="description" content="Бесплатная система управления проектами и жизнью на базе Claude Code. Ассистент, который помнит тебя и твои проекты. Настраивается за 30–60 минут, без программирования.">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+<script>
+tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],display:['Space Grotesk','sans-serif']},colors:{dark:{50:'#f8fafc',100:'#e2e8f0',200:'#cbd5e1',300:'#94a3b8',400:'#64748b',500:'#475569',600:'#334155',700:'#1e293b',800:'#0f172a',900:'#020617',950:'#010409'},accent:{DEFAULT:'#6366f1',light:'#818cf8',dark:'#4f46e5'},neon:{green:'#22c55e',yellow:'#facc15',red:'#f43f5e',purple:'#a855f7',cyan:'#22d3ee',blue:'#3b82f6',pink:'#ec4899'}}}}}
+</script>
+<style>
+body{font-family:'Inter',sans-serif;overflow-x:hidden}
+
+/* Aurora background */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora-blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:float 20s infinite ease-in-out}
+.aurora-blob:nth-child(1){width:600px;height:600px;background:#6366f1;top:-10%;left:-10%;animation-delay:0s}
+.aurora-blob:nth-child(2){width:500px;height:500px;background:#22d3ee;top:30%;right:-10%;animation-delay:-5s}
+.aurora-blob:nth-child(3){width:400px;height:400px;background:#a855f7;bottom:-5%;left:30%;animation-delay:-10s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}
+
+/* Liquid glass */
+.glass{background:rgba(15,23,42,.45);backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.glass-strong{background:rgba(15,23,42,.7);backdrop-filter:blur(32px) saturate(200%);border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 20px 60px rgba(0,0,0,.3)}
+
+/* Gradient text */
+.gradient-text{background:linear-gradient(135deg,#6366f1 0%,#22d3ee 50%,#a855f7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:shimmer 8s ease-in-out infinite}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+/* Glow effects */
+.glow-accent{box-shadow:0 0 30px rgba(99,102,241,.2),0 0 60px rgba(99,102,241,.08)}
+.glow-green{box-shadow:0 0 30px rgba(34,197,94,.2),0 0 60px rgba(34,197,94,.08)}
+.glow-line{position:relative}.glow-line::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.5),transparent)}
+
+/* Card hover */
+.card-hover{transition:all .4s cubic-bezier(.25,.8,.25,1)}.card-hover:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 25px 80px rgba(99,102,241,.15)}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(40px);transition:all .9s cubic-bezier(.16,1,.3,1)}.reveal.visible{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:all .9s cubic-bezier(.16,1,.3,1)}.reveal-left.visible{opacity:1;transform:none}
+.reveal-right{opacity:0;transform:translateX(40px);transition:all .9s cubic-bezier(.16,1,.3,1)}.reveal-right.visible{opacity:1;transform:none}
+.stagger>*{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.stagger.visible>*{opacity:1;transform:none}
+.stagger.visible>*:nth-child(1){transition-delay:.05s}.stagger.visible>*:nth-child(2){transition-delay:.12s}
+.stagger.visible>*:nth-child(3){transition-delay:.19s}.stagger.visible>*:nth-child(4){transition-delay:.26s}
+
+/* Kinetic hero text */
+.hero-word{display:inline-block;opacity:0;transform:translateY(50px) rotateX(40deg);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.hero-word.show{opacity:1;transform:none}
+
+/* Pulse */
+.pulse-ring{position:relative}.pulse-ring::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(34,197,94,.4);animation:ring 2s infinite}
+@keyframes ring{0%{transform:scale(1);opacity:1}100%{transform:scale(1.8);opacity:0}}
+
+/* Pain card accent */
+.pain-glow{transition:all .3s}.pain-glow:hover{border-color:rgba(244,63,94,.3);box-shadow:0 0 40px rgba(244,63,94,.06)}
+
+/* Step connector */
+.step-connector{position:relative}.step-connector::after{content:'';position:absolute;top:24px;left:calc(50% + 30px);width:calc(100% - 60px);height:2px;background:linear-gradient(90deg,rgba(99,102,241,.4),rgba(34,197,94,.4));display:none}
+@media(min-width:768px){.step-connector::after{display:block}}
+.step-connector:last-child::after{display:none}
+
+/* FAQ */
+details summary{cursor:pointer;list-style:none}details summary::-webkit-details-marker{display:none}
+details[open] .faq-chevron{transform:rotate(180deg)}
+details[open]{border-color:rgba(99,102,241,.2)}
+
+/* Before/after divider */
+.ba-divider{position:relative}.ba-divider::before{content:'';position:absolute;left:50%;top:12px;bottom:12px;width:1px;background:linear-gradient(to bottom,transparent,#6366f1,transparent)}
+@media(max-width:768px){.ba-divider::before{display:none}}
+
+/* Lang */
+.lang-btn{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.02em}
+.lang-btn.active{background:rgba(99,102,241,.2);color:#818cf8}.lang-btn:not(.active){color:#64748b}.lang-btn:hover:not(.active){color:#94a3b8}
+
+/* Noise texture */
+.noise::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.015;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Marquee */
+.marquee{overflow:hidden;white-space:nowrap}.marquee-inner{display:inline-block;animation:marquee 30s linear infinite}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Mobile CTA */
+
+/* ═══════════════════════════════════════
+   NEURO-CYBER 2026
+═══════════════════════════════════════ */
+
+/* Neural canvas */
+#neural-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* Scan lines */
+body::after{content:'';position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px)}
+
+/* Cyber grid */
+.cyber-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(99,102,241,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.035) 1px,transparent 1px);background-size:80px 80px}
+
+/* HUD card corners */
+.hud-card{position:relative;overflow:visible}
+.hud-card::before,.hud-card::after{content:'';position:absolute;width:14px;height:14px;pointer-events:none;transition:all .35s cubic-bezier(.16,1,.3,1);z-index:10}
+.hud-card::before{top:-2px;left:-2px;border-top:2px solid rgba(99,102,241,.55);border-left:2px solid rgba(99,102,241,.55)}
+.hud-card::after{bottom:-2px;right:-2px;border-bottom:2px solid rgba(34,211,238,.55);border-right:2px solid rgba(34,211,238,.55)}
+.hud-card:hover::before{width:22px;height:22px;border-color:rgba(99,102,241,1);box-shadow:0 0 10px rgba(99,102,241,.5)}
+.hud-card:hover::after{width:22px;height:22px;border-color:rgba(34,211,238,1);box-shadow:0 0 10px rgba(34,211,238,.5)}
+
+/* JetBrains Mono for numbers */
+.counter,.mono-num{font-family:'JetBrains Mono',monospace!important;font-feature-settings:"tnum"}
+
+/* Glitch on gradient span */
+.glitch-text{animation:glitch-sh 9s infinite 4s}
+@keyframes glitch-sh{0%,88%,100%{filter:none;transform:none}89%{filter:hue-rotate(25deg) brightness(1.3);transform:translateX(-3px) skewX(-1deg)}90.5%{filter:hue-rotate(-20deg) brightness(.7);transform:translateX(3px) skewX(1deg)}92%{filter:none;transform:none}96%{filter:hue-rotate(50deg) brightness(1.4);transform:translateX(-1px)}97%{filter:none;transform:none}}
+
+/* Terminal cursor on badge */
+.terminal-badge::after{content:'_';display:inline-block;animation:t-blink .9s step-end infinite;color:#22d3ee;margin-left:4px;font-family:'JetBrains Mono',monospace;font-size:.85em}
+@keyframes t-blink{0%,100%{opacity:.9}50%{opacity:0}}
+
+/* 4th aurora blob */
+.aurora-blob:nth-child(4){width:350px;height:350px;background:linear-gradient(135deg,#22c55e,#22d3ee);top:52%;right:2%;animation-delay:-17s;animation-duration:27s;opacity:.08!important}
+
+/* System status */
+.sys-pulse{display:inline-block;width:5px;height:5px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px rgba(34,211,238,.9);animation:sys-blink 2.5s ease-in-out infinite}
+@keyframes sys-blink{0%,100%{opacity:1;box-shadow:0 0 8px rgba(34,211,238,.9)}50%{opacity:.3;box-shadow:none}}
+
+/* Animated neon border on featured pricing */
+.neon-sweep{background:linear-gradient(rgba(15,23,42,.6),rgba(15,23,42,.6)) padding-box,linear-gradient(135deg,rgba(99,102,241,.5) 0%,rgba(34,211,238,.6) 33%,rgba(168,85,247,.5) 66%,rgba(99,102,241,.5) 100%) border-box!important;border:1px solid transparent!important;background-size:100% 100%,300% 100%!important;animation:nsweep 4s linear infinite}
+@keyframes nsweep{0%{background-position:0 0,0 50%}100%{background-position:0 0,300% 50%}}
+
+/* Proof cards data stream */
+.proof-card{position:relative;overflow:hidden}
+.proof-card::before{content:'';position:absolute;top:0;right:20px;width:1px;height:100%;background:linear-gradient(to bottom,transparent 0%,rgba(34,211,238,.12) 50%,transparent 100%);pointer-events:none}
+
+/* Marquee cyber */
+.marquee-inner{font-family:'JetBrains Mono',monospace;letter-spacing:.12em;font-size:10px}
+
+/* Step numbers cyber */
+.step-num{font-family:'JetBrains Mono',monospace!important;box-shadow:0 0 20px rgba(99,102,241,.15),inset 0 0 20px rgba(99,102,241,.04)}
+
+/* Solar Duotone icons */
+iconify-icon{display:block;flex-shrink:0;line-height:1;transform-origin:center}
+.lc-sm iconify-icon{font-size:16px}
+.lc-md iconify-icon{font-size:22px}
+.lc-lg iconify-icon{font-size:26px}
+.lc-xl iconify-icon{font-size:32px}
+
+/* Icon animations */
+@keyframes i-spin{to{transform:rotate(360deg)}}
+@keyframes i-spin-r{to{transform:rotate(-360deg)}}
+@keyframes i-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes i-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+@keyframes i-zap{0%,80%,100%{transform:scale(1);filter:brightness(1)}90%{transform:scale(1.3);filter:brightness(1.8)}}
+@keyframes i-rocket{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-8px) rotate(-8deg)}}
+@keyframes i-flicker{0%,100%{transform:scale(1) skewX(0deg);filter:brightness(1)}30%{transform:scale(1.12) skewX(-3deg);filter:brightness(1.4)}65%{transform:scale(.94) skewX(2deg);filter:brightness(.85)}}
+@keyframes i-beat{0%,100%{transform:scale(1)}15%{transform:scale(1.2)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
+@keyframes i-scan{0%,100%{transform:translate(0,0)}33%{transform:translate(4px,0)}66%{transform:translate(4px,4px)}}
+@keyframes i-write{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-8deg)}75%{transform:rotate(4deg)}}
+@keyframes i-drop{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+.i-spin{animation:i-spin 18s linear infinite}
+.i-spin-r{animation:i-spin-r 7s linear infinite}
+.i-float{animation:i-float 3s ease-in-out infinite}
+.i-pulse{animation:i-pulse 2.5s ease-in-out infinite}
+.i-zap{animation:i-zap 3.5s ease-in-out infinite}
+.i-rocket{animation:i-rocket 2.6s ease-in-out infinite}
+.i-flicker{animation:i-flicker 2.4s ease-in-out infinite}
+.i-beat{animation:i-beat 1.8s ease-in-out infinite}
+.i-scan{animation:i-scan 4s ease-in-out infinite}
+.i-write{animation:i-write 3s ease-in-out infinite}
+.i-drop{animation:i-drop 2.2s ease-in-out infinite}
+
+/* ═══ RESPONSIVE ═══ */
+
+/* Mobile: section spacing */
+@media(max-width:767px){
+  section{padding-top:3.5rem!important;padding-bottom:3.5rem!important}
+  .pt-28{padding-top:3.5rem!important}.pb-16{padding-bottom:3rem!important}
+}
+
+/* Mobile: hero heading */
+@media(max-width:639px){
+  #hero-heading{font-size:2.1rem!important;line-height:1.12!important}
+  .text-\[4\.2rem\]{font-size:2.1rem!important}
+}
+@media(min-width:640px) and (max-width:767px){
+  #hero-heading{font-size:2.8rem!important}
+}
+
+/* Mobile: hero badge wrap */
+@media(max-width:479px){
+  .terminal-badge{font-size:12px}
+}
+
+/* Mobile: hero stat cards — tighter padding */
+@media(max-width:479px){
+  .hud-card.glass-strong{padding:0.85rem!important}
+  .hud-card.glass-strong .text-5xl{font-size:2.4rem!important}
+  .hud-card.glass-strong .text-4xl{font-size:1.9rem!important}
+  .hud-card.glass-strong .text-xs{display:none}
+}
+
+/* Mobile: hero pt */
+@media(max-width:767px){
+  .pt-28{padding-top:5rem!important}
+}
+
+/* Mobile: value stream arrows hidden on mobile already — just compact cards */
+@media(max-width:1023px){
+  .lg\:grid-cols-\[1fr_auto_1fr_auto_1fr\]>div{padding:1rem!important}
+}
+
+/* Mobile: nav compact */
+@media(max-width:479px){
+  nav .px-6{padding-left:0.85rem!important;padding-right:0.85rem!important}
+  .lang-btn{padding:3px 6px;font-size:10px}
+  .sys-pulse+span{display:none}
+}
+
+/* Mobile: aurora blobs — smaller */
+@media(max-width:767px){
+  .aurora-blob:nth-child(1){width:280px!important;height:280px!important}
+  .aurora-blob:nth-child(2){width:240px!important;height:240px!important}
+  .aurora-blob:nth-child(3){width:200px!important;height:200px!important}
+  .aurora-blob:nth-child(4){width:160px!important;height:160px!important}
+  body::after{background:repeating-linear-gradient(to bottom,transparent 0px,transparent 4px,rgba(0,0,0,.04) 4px,rgba(0,0,0,.04) 5px)}
+}
+
+/* Tablet: pricing 2-col */
+@media(min-width:640px) and (max-width:1023px){
+  .md\:grid-cols-2.lg\:grid-cols-4{grid-template-columns:repeat(2,1fr)!important}
+}
+
+/* Mobile: proof cards before/after */
+@media(max-width:639px){
+  .ba-divider{gap:2rem!important}
+  .ba-divider>div{padding-left:0!important;padding-right:0!important}
+}
+
+/* Mobile: CTA contact grid */
+@media(max-width:639px){
+  .md\:grid-cols-3{grid-template-columns:1fr!important}
+}
+
+/* Touch: disable hover transforms */
+@media(hover:none){
+  .card-hover:hover{transform:none!important;box-shadow:none!important}
+  .hud-card:hover::before{width:14px!important;height:14px!important;box-shadow:none!important;border-color:rgba(99,102,241,.55)!important}
+  .hud-card:hover::after{width:14px!important;height:14px!important;box-shadow:none!important;border-color:rgba(34,211,238,.55)!important}
+  .pain-glow:hover{border-color:transparent!important;box-shadow:none!important}
+}
+
+/* Tablet: hero 2-col grid — stat cards smaller */
+@media(min-width:768px) and (max-width:1023px){
+  #hero-heading{font-size:3rem!important}
+}
+
+/* ═══ CASES INLINE ═══ */
+
+/* Tab buttons */
+.case-tab-btn{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:rgba(15,23,42,.5);cursor:pointer;transition:all .25s;color:rgba(148,163,184,.7);min-width:180px;text-align:left}
+.case-tab-btn:hover{border-color:var(--tc,.5);background:rgba(15,23,42,.8);color:rgba(248,250,252,.9)}
+.case-tab-btn.active{border-color:var(--tc);background:rgba(15,23,42,.85);color:rgba(248,250,252,1);box-shadow:0 0 18px color-mix(in srgb,var(--tc) 20%,transparent)}
+
+/* Accordion cases */
+.case-acc{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.06);transition:border-color .25s,box-shadow .25s}
+.case-acc.open{border-color:rgba(var(--acc-rgb),.22);box-shadow:0 0 28px rgba(var(--acc-rgb),.05)}
+.acc-hdr{display:flex;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;background:rgba(15,23,42,.5);transition:background .2s;user-select:none}
+.acc-hdr:hover{background:rgba(15,23,42,.8)}
+.case-acc.open .acc-hdr{background:rgba(15,23,42,.65);border-bottom:1px solid rgba(255,255,255,.05)}
+.acc-icon-box{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(255,255,255,.07)}
+.acc-info{flex-shrink:1;min-width:0}
+.acc-title{font-weight:700;font-size:15px;color:#f1f5f9}
+.acc-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:#475569;letter-spacing:.04em;margin-top:2px}
+.acc-mgroup{display:flex;gap:18px;margin-left:auto;flex-shrink:0}
+.acc-metric{text-align:center}
+.acc-mnum{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:800;line-height:1}
+.acc-mlabel{font-size:9px;color:#475569;letter-spacing:.07em;margin-top:2px;text-transform:uppercase}
+.acc-hook{font-size:12.5px;color:#64748b;padding:0 16px;display:none;flex:1}
+.acc-chev{font-size:10px;color:#475569;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding-left:8px}
+.acc-chev-arrow{display:inline-block;transition:transform .35s;font-size:12px}
+.acc-chev-hint{font-size:9px;color:#334155;letter-spacing:.04em;white-space:nowrap;font-family:'JetBrains Mono',monospace;transition:color .2s}
+.case-acc:not(.open) .acc-hdr:hover .acc-chev-hint{color:#64748b}
+.case-acc.open .acc-chev-arrow{transform:rotate(180deg)}
+.case-acc.open .acc-chev-hint{display:none}
+/* Pulse animation on closed chevrons to hint clickability */
+@keyframes chev-pulse{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(2px)}}
+.case-acc:not(.open) .acc-chev-arrow{animation:chev-pulse 2.4s ease-in-out infinite}
+.case-acc:not(.open):hover .acc-chev-arrow,.case-acc.open .acc-chev-arrow{animation:none}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .6s cubic-bezier(.16,1,.3,1)}
+.case-acc.open .acc-body{max-height:4000px}
+@media(min-width:900px){.acc-hook{display:block}}
+@media(max-width:640px){
+  .acc-mgroup{display:none}
+  /* Flex-wrap позволяет ::after занять отдельную строку */
+  .acc-hdr{padding:14px 16px;flex-wrap:wrap}
+  /* Закрытые кейсы: акцентная рамка */
+  .case-acc:not(.open){border-color:rgba(var(--acc-rgb),.22)}
+  /* Прячем мелкий шеврон — заменяем полноширинной полосой */
+  .case-acc:not(.open) .acc-chev{display:none}
+  /* Полноширинная полоса "ОТКРЫТЬ" через ::after на flex-контейнере */
+  .case-acc:not(.open) .acc-hdr::after{
+    content:'↓  ОТКРЫТЬ КЕЙС';
+    flex:0 0 100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-top:10px;
+    padding:10px 0;
+    font-size:11px;
+    font-weight:700;
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:.1em;
+    border-top:1px solid rgba(var(--acc-rgb),.15);
+    color:rgba(var(--acc-rgb),.9);
+    background:rgba(var(--acc-rgb),.05);
+    border-radius:0 0 4px 4px;
+    animation:chev-pulse 2.4s ease-in-out infinite;
+  }
+  .case-acc:not(.open) .acc-hdr:active{background:rgba(var(--acc-rgb),.07)!important}
+  /* Открытый кейс — обычный шеврон вниз */
+  .case-acc.open .acc-chev{display:flex}
+}
+.acc-mobile-desc{display:none;font-size:11px;color:#475569;margin-top:3px;line-height:1.4}
+@media(max-width:899px){.acc-mobile-desc{display:block}}
+.acc-mobile-pills{display:none;gap:5px;flex-wrap:wrap;margin-top:5px}
+@media(max-width:640px){.acc-mobile-pills{display:flex}}
+.acc-mpill{font-size:10px;padding:2px 7px;border-radius:20px;font-family:'JetBrains Mono',monospace;font-weight:600}
+
+/* Tags */
+.cp-tag{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11px;font-family:'JetBrains Mono',monospace;background:var(--cc);color:var(--ct);border:1px solid color-mix(in srgb,var(--ct) 30%,transparent)}
+
+/* Metrics */
+.cp-metric{background:rgba(15,23,42,.6);border:1px solid color-mix(in srgb,var(--mc) 20%,transparent);border-radius:12px;padding:14px 10px;text-align:center}
+.cp-num{font-family:'JetBrains Mono',monospace;font-size:1.7rem;font-weight:800;color:var(--mc);line-height:1}
+.cp-label{font-size:11px;color:rgba(100,116,139,.8);margin-top:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em}
+
+/* Before / After table */
+.cp-col-head{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,.05)}
+.cp-row{font-size:12px;color:rgba(148,163,184,.75);padding:5px 9px;border-radius:7px;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cp-row::before{content:'';flex-shrink:0;width:5px;height:5px;border-radius:50%}
+.cp-bad{background:rgba(244,63,94,.04)}
+.cp-bad::before{background:rgba(244,63,94,.5)}
+.cp-good{background:rgba(34,197,94,.04)}
+.cp-good::before{background:rgba(34,197,94,.5)}
+
+/* Built list */
+.cp-built-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(203,213,225,.8);padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.cp-built-row:last-child{border-bottom:none}
+
+/* Code window */
+.cp-code{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#0d1117}
+.cp-code-bar{background:#161b22;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.cp-dot{width:11px;height:11px;border-radius:50%}
+.cp-dot.r{background:#ff5f57}.cp-dot.y{background:#ffbd2e}.cp-dot.g{background:#28c941}
+.cp-fname{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(100,116,139,.7);margin-left:4px}
+.cp-pre{margin:0;padding:16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:#e2e8f0}
+
+/* Syntax tokens */
+.ct{color:#ff79c6} /* keyword */
+.cf{color:#50fa7b} /* function */
+.cs{color:#f1fa8c} /* string */
+.cn{color:#bd93f9} /* number */
+.cg{color:#6272a4;font-style:italic} /* comment */
+
+/* Orb animations for phone mockup */
+@keyframes orbFloat{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes orbRing{0%,100%{opacity:.2}50%{opacity:.55}}
+@keyframes orbRing2{0%,100%{opacity:.08;transform:scale(1)}50%{opacity:.25;transform:scale(1.12)}}
+@keyframes orbPulse{0%{box-shadow:0 0 30px rgba(34,211,238,.25)}50%{box-shadow:0 0 60px rgba(34,211,238,.5),0 0 100px rgba(99,102,241,.2)}100%{box-shadow:0 0 30px rgba(34,211,238,.25)}}
+/* Page fade-in */
+@keyframes pageFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+body{animation:pageFadeIn .35s ease both}
+
+/* Notion cards */
+.n-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:7px;padding:7px 9px;font-size:10px;color:rgba(203,213,225,.7);margin-bottom:5px;font-family:'JetBrains Mono',monospace;line-height:1.3}
+.n-done{color:rgba(100,116,139,.4);text-decoration:line-through}
+
+/* Todoist tasks */
+.td-task{font-size:11px;font-family:'JetBrains Mono',monospace;color:rgba(203,213,225,.8);padding:4px 0;display:flex;align-items:center;gap:6px;border-bottom:1px solid rgba(255,255,255,.03)}
+.td-task:last-child{border-bottom:none}
+.td-task::before{content:'○';font-size:10px;flex-shrink:0}
+.td-p1::before{color:#db4035}
+.td-p2::before{color:#ff9a14}
+.td-p3::before{color:#4073ff}
+.td-done{color:rgba(100,116,139,.4);text-decoration:line-through}
+.td-done::before{content:'●';color:rgba(100,116,139,.4)}
+
+/* Health tracker rows */
+.ht-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(34,197,94,.05)}
+.ht-row:last-child{border-bottom:none}
+.ht-label{font-size:10px;color:rgba(34,197,94,.4);font-family:'JetBrains Mono',monospace}
+.ht-val{font-size:11px;color:rgba(203,213,225,.7);font-family:'JetBrains Mono',monospace}
+
+/* Panel CTA bar */
+.panel-cta-bar{margin-top:20px;padding:14px 18px;border-radius:14px;background:var(--pcc,rgba(34,211,238,.08));border:1px solid color-mix(in srgb,var(--pca,#22d3ee) 20%,transparent);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.pcta-stat{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:800;color:#22d3ee;margin-right:6px}
+.pcta-text{font-size:13px;color:rgba(148,163,184,.7)}
+.pcta-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:10px;background:var(--pb,#0e7490);color:white;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .2s;white-space:nowrap;border:none}
+.pcta-btn:hover{opacity:.85}
+
+@media(max-width:767px){
+  .cp-num{font-size:1.3rem}
+}
+
+/* ═══ CASES — RESPONSIVE ═══ */
+
+/* Prevent panel overflow — grid children must be able to shrink */
+.case-panel{overflow:hidden;max-width:100%;box-sizing:border-box}
+.case-panel .grid>*{min-width:0}
+
+/* Code window — must not push parent wider */
+.cp-code{overflow:hidden;max-width:100%}
+.cp-pre{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;word-break:normal;white-space:pre}
+
+/* Panel padding: full → comfortable → compact */
+@media(max-width:479px){
+  .case-panel{padding:.9rem!important}
+  .case-panel h3{font-size:1rem!important;line-height:1.35!important}
+  .cp-pre{font-size:10px!important;padding:10px!important;line-height:1.5!important}
+  .cp-built-row{font-size:12px!important}
+  .cp-row{font-size:11px!important;padding:4px 7px!important}
+  .cp-tag{font-size:10px!important;padding:2px 7px!important}
+}
+@media(min-width:480px) and (max-width:639px){
+  .case-panel{padding:1.1rem!important}
+  .case-panel h3{font-size:1.1rem!important}
+  .cp-pre{font-size:11px!important}
+}
+@media(min-width:640px) and (max-width:1023px){
+  .case-panel{padding:1.5rem!important}
+}
+
+/* Phone mockup — scale on small screens (inline px can't be overridden, use transform) */
+@media(max-width:479px){
+  #panel-pushup .flex.justify-center>div{
+    transform:scale(.78);transform-origin:top center;
+    margin-bottom:-114px  /* compensate scaled height: 520*(1-.78)=114 */
+  }
+}
+@media(min-width:480px) and (max-width:639px){
+  #panel-pushup .flex.justify-center>div{
+    transform:scale(.88);transform-origin:top center;
+    margin-bottom:-62px
+  }
+}
+
+/* Before/After 2-col — only collapse on tiny screens */
+@media(max-width:380px){
+  .case-panel .grid.grid-cols-2{grid-template-columns:1fr!important;gap:.75rem!important}
+}
+
+/* Metrics 3-col — stay 3-col but smaller padding */
+@media(max-width:479px){
+  .cp-metric{padding:10px 6px!important}
+  .cp-label{font-size:9px!important;letter-spacing:0!important}
+}
+
+/* Horizontal scroll containers inside panels (Notion kanban, Todoist mock) */
+.case-panel [style*="overflow-x"]{-webkit-overflow-scrolling:touch}
+
+/* Panel CTA bar — stack on very small screens */
+@media(max-width:479px){
+  .panel-cta-bar{flex-direction:column;align-items:stretch;gap:8px!important}
+  .panel-cta-bar>div:first-child{margin-bottom:2px}
+  .panel-cta-bar>div:last-child{display:flex;flex-direction:column;gap:8px}
+  .pcta-btn{justify-content:center}
+}
+
+/* Accordion header — compact on mobile */
+@media(max-width:479px){
+  .acc-hdr{padding:11px 13px!important;gap:9px!important}
+  .acc-icon-box{width:34px!important;height:34px!important;border-radius:9px!important}
+  .acc-title{font-size:13px!important}
+}
+
+/* Tablet: single-col gap fix */
+@media(max-width:1023px){
+  .case-panel .gap-10{gap:1.5rem!important}
+}
+
+/* Overflow scroll hint on mobile — faint right shadow on scrollable code */
+@media(max-width:639px){
+  .cp-code{position:relative}
+}
+</style>
+<style>.codeword{font-family:'JetBrains Mono',monospace;font-size:11px;color:#818cf8}</style>
+</head>
+<body class="bg-dark-950 text-dark-100 noise">
+
+<!-- Neural canvas + grid -->
+<canvas id="neural-canvas"></canvas>
+<div class="cyber-grid"></div>
+
+<!-- Aurora bg -->
+<div class="aurora"><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div><div class="aurora-blob"></div></div>
+
+<!-- NAV -->
+<nav class="fixed top-0 w-full z-50">
+  <div class="max-w-5xl mx-auto px-6 py-3 mt-3">
+    <div class="glass-strong rounded-2xl px-5 py-3 flex justify-between items-center gap-3">
+      <a href="index.html" class="flex items-center gap-2 text-sm font-semibold text-dark-300 hover:text-white transition flex-shrink-0"><iconify-icon icon="solar:arrow-left-bold-duotone"></iconify-icon> <span data-i18n="nav.back">На главную</span></a>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="es">ES</button>
+          <button class="lang-btn active" data-lang="ru">RU</button>
+        </div>
+        <a href="personal-os-kit.zip" download class="text-sm font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.03]" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35);color:#f59e0b"><span data-i18n="nav.download">Скачать</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="relative z-10 max-w-5xl mx-auto px-6 pt-36 pb-20 text-center">
+  <div class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full mb-7" style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.22)">
+    <iconify-icon icon="solar:gift-bold-duotone" class="i-pulse" style="font-size:20px;color:#f59e0b"></iconify-icon>
+    <span data-i18n="hero.badge" style="font-size:12px;color:#f59e0b;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Подарок · бесплатно навсегда</span>
+  </div>
+  <h1 data-i18n-html="hero.h1" class="reveal font-display font-bold leading-[1.05] mb-6" style="font-size:clamp(2.4rem,7vw,4.5rem)">Твой AI-ассистент,<br>который <span class="gradient-text">помнит</span> тебя</h1>
+  <p data-i18n-html="hero.sub" class="reveal max-w-2xl mx-auto text-dark-300 mb-9" style="font-size:clamp(1.05rem,2.4vw,1.35rem);line-height:1.6">Не разовый чат с амнезией, а <strong class="text-dark-100">личная операционная система</strong> для твоих проектов и жизни. Она держит контекст, помнит приоритеты и напоминает сама. Один раз настроил — дальше работает на тебя.</p>
+  <div class="reveal flex flex-wrap items-center justify-center gap-4">
+    <a href="personal-os-kit.zip" download class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl font-bold text-white transition-all hover:scale-[1.03] active:scale-95" style="background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 12px 34px -8px rgba(245,158,11,.55)">
+      <iconify-icon icon="solar:gift-bold-duotone" style="font-size:24px"></iconify-icon>
+      <span data-i18n="hero.btn_download">Скачать подарок · ZIP</span>
+      <iconify-icon icon="solar:download-minimalistic-bold-duotone" style="font-size:18px;opacity:.8"></iconify-icon>
+    </a>
+    <a href="#kak" class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-semibold glass hover:bg-dark-700/50 transition-all"><span data-i18n="hero.btn_how">Как это работает</span> <iconify-icon icon="solar:arrow-down-bold-duotone"></iconify-icon></a>
+  </div>
+  <div class="reveal flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8 text-dark-400" style="font-size:13px">
+    <span class="inline-flex items-center gap-1.5"><iconify-icon icon="solar:clock-circle-bold-duotone" style="color:#818cf8"></iconify-icon> <span data-i18n="hero.feat_time">Настройка 30–60 минут</span></span>
+    <span class="inline-flex items-center gap-1.5"><iconify-icon icon="solar:code-square-bold-duotone" style="color:#22d3ee"></iconify-icon> <span data-i18n="hero.feat_nocode">Без программирования</span></span>
+    <span class="inline-flex items-center gap-1.5"><iconify-icon icon="solar:infinity-bold-duotone" style="color:#22c55e"></iconify-icon> <span data-i18n="hero.feat_forever">Твоя навсегда</span></span>
+  </div>
+</section>
+
+<!-- PROBLEM -> SOLUTION -->
+<section class="relative z-10 max-w-4xl mx-auto px-6 py-14">
+  <div class="reveal glass rounded-3xl p-8 md:p-10">
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 mb-3" style="font-size:12px;color:#f43f5e;font-weight:700;letter-spacing:.08em;text-transform:uppercase"><iconify-icon icon="solar:ghost-bold-duotone" style="font-size:18px"></iconify-icon> <span data-i18n="prob.ai_label">Обычный AI</span></div>
+        <p data-i18n="prob.ai_text" class="text-dark-300" style="line-height:1.65">Сотрудник с амнезией. Каждый новый чат начинается с нуля: ты заново объясняешь, кто ты и что у тебя за проекты. Он не помнит вчерашних решений, не держит приоритеты, ничего не напоминает.</p>
+      </div>
+      <div>
+        <div class="inline-flex items-center gap-2 mb-3" style="font-size:12px;color:#22c55e;font-weight:700;letter-spacing:.08em;text-transform:uppercase"><iconify-icon icon="solar:cpu-bold-duotone" style="font-size:18px"></iconify-icon> <span data-i18n="prob.kit_label">С этим китом</span></div>
+        <p data-i18n-html="prob.kit_text" class="text-dark-100" style="line-height:1.65">Ассистент, который <strong>помнит</strong>. Один раз рассказал про себя и проекты — дальше он держит контекст, знает, что сейчас важнее, и сам подсказывает следующий шаг. Постоянная система вместо разрозненных чатов.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 PARTS -->
+<section id="kak" class="relative z-10 max-w-6xl mx-auto px-6 py-16">
+  <div class="text-center mb-12">
+    <h2 data-i18n="parts.title" class="reveal font-display font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem)">Из чего собрана система</h2>
+    <p data-i18n-html="parts.subtitle" class="reveal text-dark-400 max-w-xl mx-auto">По сути это <strong class="text-dark-200">папка с текстовыми файлами</strong>. Никакого кода — Claude читает их и ведёт себя по ним.</p>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger">
+    <div class="hud-card glass rounded-2xl p-6 card-hover">
+      <iconify-icon icon="solar:user-id-bold-duotone" style="font-size:34px;color:#6366f1"></iconify-icon>
+      <div class="flex items-baseline gap-2 mt-4 mb-1"><h3 data-i18n="parts.1_name" class="font-display font-semibold text-lg">Досье на тебя</h3><code class="codeword">CLAUDE.md</code></div>
+      <p data-i18n="parts.1_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Кто ты, какие проекты, как любишь работать. Читается автоматически при каждом запуске.</p>
+    </div>
+    <div class="hud-card glass rounded-2xl p-6 card-hover">
+      <iconify-icon icon="solar:notebook-bold-duotone" style="font-size:34px;color:#22d3ee"></iconify-icon>
+      <div class="flex items-baseline gap-2 mt-4 mb-1"><h3 data-i18n="parts.2_name" class="font-display font-semibold text-lg">Память</h3><code class="codeword" style="color:#22d3ee">memory/</code></div>
+      <p data-i18n="parts.2_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Факты, которые он узнаёт со временем и не забывает. Один факт — одна карточка.</p>
+    </div>
+    <div class="hud-card glass rounded-2xl p-6 card-hover">
+      <iconify-icon icon="solar:magic-stick-3-bold-duotone" style="font-size:34px;color:#a855f7"></iconify-icon>
+      <div class="flex items-baseline gap-2 mt-4 mb-1"><h3 data-i18n="parts.3_name" class="font-display font-semibold text-lg">Рецепты</h3><code class="codeword" style="color:#c084fc">skills/</code></div>
+      <p data-i18n="parts.3_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">«Когда говорю Х — делай по шагам Y». Повторяющиеся задачи как готовые процедуры.</p>
+    </div>
+    <div class="hud-card glass rounded-2xl p-6 card-hover">
+      <iconify-icon icon="solar:sun-2-bold-duotone" style="font-size:34px;color:#facc15"></iconify-icon>
+      <div class="flex items-baseline gap-2 mt-4 mb-1"><h3 data-i18n="parts.4_name" class="font-display font-semibold text-lg">Ритуалы дня</h3><code data-i18n="parts.4_code" class="codeword" style="color:#facc15">старт · финиш</code></div>
+      <p data-i18n="parts.4_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Утром — «вот твои задачи». Вечером — «сохранил, что нового».</p>
+    </div>
+    <div class="hud-card glass rounded-2xl p-6 card-hover">
+      <iconify-icon icon="solar:lock-keyhole-bold-duotone" style="font-size:34px;color:#22c55e"></iconify-icon>
+      <div class="flex items-baseline gap-2 mt-4 mb-1"><h3 data-i18n="parts.5_name" class="font-display font-semibold text-lg">Сейф для ключей</h3><code class="codeword" style="color:#4ade80">secrets</code></div>
+      <p data-i18n="parts.5_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Пароли и токены хранятся отдельно, не в переписке. Под защитой.</p>
+    </div>
+    <div class="hud-card glass rounded-2xl p-6 card-hover">
+      <iconify-icon icon="solar:cloud-upload-bold-duotone" style="font-size:34px;color:#3b82f6"></iconify-icon>
+      <div class="flex items-baseline gap-2 mt-4 mb-1"><h3 data-i18n="parts.6_name" class="font-display font-semibold text-lg">Бэкап в облако</h3><code class="codeword" style="color:#60a5fa">GitHub</code></div>
+      <p data-i18n="parts.6_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Копия всего в приватном репозитории. Ничего не потеряешь, можно откатить.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 STEPS -->
+<section class="relative z-10 max-w-5xl mx-auto px-6 py-16">
+  <div class="text-center mb-12">
+    <h2 data-i18n="steps.title" class="reveal font-display font-bold mb-3" style="font-size:clamp(1.8rem,4vw,2.8rem)">Как включить за 4 шага</h2>
+    <p data-i18n-html="steps.subtitle" class="reveal text-dark-400">Ты отдаёшь не свою систему, а <strong class="text-dark-200">пустой каркас + опросник</strong>. Claude заполнит его под тебя.</p>
+  </div>
+  <div class="grid md:grid-cols-2 gap-5 stagger">
+    <div class="glass rounded-2xl p-6 flex gap-5 items-start">
+      <span class="font-display font-bold flex-shrink-0" style="font-size:2.4rem;color:#6366f1;opacity:.5;line-height:1">1</span>
+      <div><h3 data-i18n="steps.1_name" class="font-display font-semibold text-lg mb-1">Поставь Claude Code</h3><p data-i18n="steps.1_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Бесплатный CLI-ассистент от Anthropic. Если уже стоит — пропусти.</p></div>
+    </div>
+    <div class="glass rounded-2xl p-6 flex gap-5 items-start">
+      <span class="font-display font-bold flex-shrink-0" style="font-size:2.4rem;color:#22d3ee;opacity:.5;line-height:1">2</span>
+      <div><h3 data-i18n="steps.2_name" class="font-display font-semibold text-lg mb-1">Положи папку к себе</h3><p data-i18n="steps.2_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Распакуй скачанный ZIP в рабочую директорию. Внутри уже есть инструкция и опросник.</p></div>
+    </div>
+    <div class="glass rounded-2xl p-6 flex gap-5 items-start">
+      <span class="font-display font-bold flex-shrink-0" style="font-size:2.4rem;color:#a855f7;opacity:.5;line-height:1">3</span>
+      <div><h3 data-i18n="steps.3_name" class="font-display font-semibold text-lg mb-1">Скажи одну фразу</h3><p data-i18n-html="steps.3_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">«Настрой меня по этому киту — проведи по <code class="codeword">INTERVIEW.md</code>».</p></div>
+    </div>
+    <div class="glass rounded-2xl p-6 flex gap-5 items-start">
+      <span class="font-display font-bold flex-shrink-0" style="font-size:2.4rem;color:#22c55e;opacity:.5;line-height:1">4</span>
+      <div><h3 data-i18n="steps.4_name" class="font-display font-semibold text-lg mb-1">Ответь на вопросы</h3><p data-i18n="steps.4_desc" class="text-dark-300" style="font-size:14px;line-height:1.55">Проекты, цели, стиль работы, сервисы. Claude сам соберёт из ответов твою систему.</p></div>
+    </div>
+  </div>
+  <div class="reveal text-center mt-8 text-dark-400" style="font-size:13px">
+    <span class="inline-flex items-center gap-1.5"><iconify-icon icon="solar:clock-circle-bold-duotone" style="color:#facc15"></iconify-icon> <span data-i18n="steps.time">30–60 минут — и система работает</span></span>
+  </div>
+</section>
+
+<!-- WHAT YOU GET + terminal -->
+<section class="relative z-10 max-w-5xl mx-auto px-6 py-16">
+  <div class="reveal glass-strong rounded-3xl p-8 md:p-10 grid lg:grid-cols-2 gap-10 items-center">
+    <div>
+      <h2 data-i18n="get.title" class="font-display font-bold mb-5" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Что ты получишь</h2>
+      <ul class="space-y-4">
+        <li class="flex gap-3"><iconify-icon icon="solar:sun-2-bold-duotone" style="font-size:22px;color:#facc15;flex-shrink:0;margin-top:2px"></iconify-icon><span data-i18n-html="get.b1" class="text-dark-200" style="line-height:1.55">Утром говоришь <strong>«старт»</strong> — видишь задачи и приоритеты на день.</span></li>
+        <li class="flex gap-3"><iconify-icon icon="solar:moon-stars-bold-duotone" style="font-size:22px;color:#818cf8;flex-shrink:0;margin-top:2px"></iconify-icon><span data-i18n-html="get.b2" class="text-dark-200" style="line-height:1.55">Вечером <strong>«финиш»</strong> — всё сохранилось, новое записалось в память.</span></li>
+        <li class="flex gap-3"><iconify-icon icon="solar:graph-up-bold-duotone" style="font-size:22px;color:#22c55e;flex-shrink:0;margin-top:2px"></iconify-icon><span data-i18n="get.b3" class="text-dark-200" style="line-height:1.55">Назавтра Claude всё помнит. Чем дольше пользуешься — тем умнее под тебя.</span></li>
+      </ul>
+    </div>
+    <div class="rounded-2xl overflow-hidden" style="background:#010409;border:1px solid rgba(255,255,255,.08);font-family:'JetBrains Mono';font-size:12.5px;line-height:1.7">
+      <div class="flex items-center gap-2 px-4 py-2.5" style="background:rgba(255,255,255,.03);border-bottom:1px solid rgba(255,255,255,.06)">
+        <span style="width:11px;height:11px;border-radius:50%;background:#f43f5e"></span>
+        <span style="width:11px;height:11px;border-radius:50%;background:#facc15"></span>
+        <span style="width:11px;height:11px;border-radius:50%;background:#22c55e"></span>
+        <span data-i18n="term.title" class="ml-2 text-dark-500" style="font-size:11px">claude — твоя ОС</span>
+      </div>
+      <div class="p-4" style="color:#94a3b8">
+        <div><span style="color:#22c55e">$</span> <span data-i18n="term.cmd_start" style="color:#f1f5f9">старт</span></div>
+        <div data-i18n="term.morning" style="color:#818cf8">▸ Доброе утро. Задачи на сегодня:</div>
+        <div>&nbsp;&nbsp;<span style="color:#f43f5e">●</span> p1 — <span data-i18n="term.t1">перезалить приложение на телефон</span></div>
+        <div>&nbsp;&nbsp;<span style="color:#facc15">●</span> p2 — <span data-i18n="term.t2">3 фото товара в каталог</span></div>
+        <div>&nbsp;&nbsp;<span style="color:#64748b">○</span> p3 — <span data-i18n="term.t3">написать пост</span></div>
+        <div class="mt-3"><span style="color:#22c55e">$</span> <span data-i18n="term.cmd_finish" style="color:#f1f5f9">финиш</span></div>
+        <div data-i18n="term.saved" style="color:#22c55e">✓ Сохранено. Записал в память:</div>
+        <div>&nbsp;&nbsp;<span data-i18n="term.mem">«поставщик отвечает быстрее в WhatsApp»</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="relative z-10 max-w-4xl mx-auto px-6 py-16">
+  <div class="reveal glass rounded-3xl p-8 md:p-12 text-center" style="border:1px solid rgba(245,158,11,.2)">
+    <iconify-icon icon="solar:gift-bold-duotone" class="i-pulse" style="font-size:52px;color:#f59e0b"></iconify-icon>
+    <h2 data-i18n="final.title" class="font-display font-bold mt-4 mb-3" style="font-size:clamp(1.7rem,4vw,2.6rem)">Забери систему — настрой под себя сегодня</h2>
+    <p data-i18n="final.sub" class="text-dark-300 max-w-xl mx-auto mb-8" style="line-height:1.6">Скачивай, распаковывай и запускай. А если хочешь, чтобы систему собрали под твои проекты «под ключ» — просто напиши.</p>
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <a href="personal-os-kit.zip" download class="inline-flex items-center gap-3 px-7 py-4 rounded-2xl font-bold text-white transition-all hover:scale-[1.03] active:scale-95" style="background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 12px 34px -8px rgba(245,158,11,.55)">
+        <iconify-icon icon="solar:download-minimalistic-bold-duotone" style="font-size:22px"></iconify-icon>
+        <span data-i18n="final.btn_download">Скачать подарок · ZIP</span>
+      </a>
+      <a href="index.html#cta" class="inline-flex items-center gap-2 px-6 py-4 rounded-2xl font-semibold text-white transition-all hover:scale-[1.03]" style="background:linear-gradient(to right,#6366f1,#4f46e5);box-shadow:0 10px 30px -8px rgba(99,102,241,.5)">
+        <span data-i18n="final.btn_setup">Настроить под меня</span> <iconify-icon icon="solar:arrow-right-bold-duotone"></iconify-icon>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- BACK TO SITE — как вернуться и зачем -->
+<section class="relative z-10 max-w-4xl mx-auto px-6 pb-8">
+  <div class="reveal glass rounded-2xl p-6 md:p-7 flex flex-col md:flex-row items-center gap-5 text-center md:text-left">
+    <iconify-icon icon="solar:home-smile-bold-duotone" style="font-size:40px;color:#818cf8;flex-shrink:0"></iconify-icon>
+    <div class="flex-1">
+      <h3 data-i18n="back.title" class="font-display font-semibold text-lg mb-1">Это подарок с сайта Sergio AI</h3>
+      <p data-i18n="back.text" class="text-dark-300" style="font-size:14px;line-height:1.55">Здесь я показываю, как ставлю AI-системы предпринимателям: реальные кейсы, услуги и бесплатный AI-аудит для твоего бизнеса.</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+      <a href="index.html" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white transition-all hover:scale-[1.03]" style="background:linear-gradient(to right,#6366f1,#4f46e5)"><iconify-icon icon="solar:arrow-left-bold-duotone"></iconify-icon> <span data-i18n="back.btn_home">Вернуться на главную</span></a>
+      <a href="index.html#cta" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold glass hover:bg-dark-700/50 transition-all"><span data-i18n="back.btn_audit">Получить бесплатный аудит</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative z-10 max-w-5xl mx-auto px-6 py-10 text-center text-dark-500" style="font-size:13px;border-top:1px solid rgba(255,255,255,.06)">
+  <p data-i18n-html="footer.text">Личная ОС для Claude Code · подарок от <a href="index.html" style="color:#818cf8">Sergio AI</a> · Buenos Aires</p>
+</footer>
+
+
+<script>
+const T={"ru": {"nav.back": "На главную", "nav.gifttag": "Подарок · бесплатно", "nav.download": "Скачать", "hero.badge": "Подарок · бесплатно навсегда", "hero.h1": "Твой AI-ассистент,<br>который <span class=\"gradient-text\">помнит</span> тебя", "hero.sub": "Не разовый чат с амнезией, а <strong class=\"text-dark-100\">личная операционная система</strong> для твоих проектов и жизни. Она держит контекст, помнит приоритеты и напоминает сама. Один раз настроил — дальше работает на тебя.", "hero.btn_download": "Скачать подарок · ZIP", "hero.btn_how": "Как это работает", "hero.feat_time": "Настройка 30–60 минут", "hero.feat_nocode": "Без программирования", "hero.feat_forever": "Твоя навсегда", "prob.ai_label": "Обычный AI", "prob.ai_text": "Сотрудник с амнезией. Каждый новый чат начинается с нуля: ты заново объясняешь, кто ты и что у тебя за проекты. Он не помнит вчерашних решений, не держит приоритеты, ничего не напоминает.", "prob.kit_label": "С этим китом", "prob.kit_text": "Ассистент, который <strong>помнит</strong>. Один раз рассказал про себя и проекты — дальше он держит контекст, знает, что сейчас важнее, и сам подсказывает следующий шаг. Постоянная система вместо разрозненных чатов.", "parts.title": "Из чего собрана система", "parts.subtitle": "По сути это <strong class=\"text-dark-200\">папка с текстовыми файлами</strong>. Никакого кода — Claude читает их и ведёт себя по ним.", "parts.1_name": "Досье на тебя", "parts.1_desc": "Кто ты, какие проекты, как любишь работать. Читается автоматически при каждом запуске.", "parts.2_name": "Память", "parts.2_desc": "Факты, которые он узнаёт со временем и не забывает. Один факт — одна карточка.", "parts.3_name": "Рецепты", "parts.3_desc": "«Когда говорю Х — делай по шагам Y». Повторяющиеся задачи как готовые процедуры.", "parts.4_name": "Ритуалы дня", "parts.4_code": "старт · финиш", "parts.4_desc": "Утром — «вот твои задачи». Вечером — «сохранил, что нового».", "parts.5_name": "Сейф для ключей", "parts.5_desc": "Пароли и токены хранятся отдельно, не в переписке. Под защитой.", "parts.6_name": "Бэкап в облако", "parts.6_desc": "Копия всего в приватном репозитории. Ничего не потеряешь, можно откатить.", "steps.title": "Как включить за 4 шага", "steps.subtitle": "Ты отдаёшь не свою систему, а <strong class=\"text-dark-200\">пустой каркас + опросник</strong>. Claude заполнит его под тебя.", "steps.1_name": "Поставь Claude Code", "steps.1_desc": "Бесплатный CLI-ассистент от Anthropic. Если уже стоит — пропусти.", "steps.2_name": "Положи папку к себе", "steps.2_desc": "Распакуй скачанный ZIP в рабочую директорию. Внутри уже есть инструкция и опросник.", "steps.3_name": "Скажи одну фразу", "steps.3_desc": "«Настрой меня по этому киту — проведи по <code class=\"codeword\">INTERVIEW.md</code>».", "steps.4_name": "Ответь на вопросы", "steps.4_desc": "Проекты, цели, стиль работы, сервисы. Claude сам соберёт из ответов твою систему.", "steps.time": "30–60 минут — и система работает", "get.title": "Что ты получишь", "get.b1": "Утром говоришь <strong>«старт»</strong> — видишь задачи и приоритеты на день.", "get.b2": "Вечером <strong>«финиш»</strong> — всё сохранилось, новое записалось в память.", "get.b3": "Назавтра Claude всё помнит. Чем дольше пользуешься — тем умнее под тебя.", "term.title": "claude — твоя ОС", "term.cmd_start": "старт", "term.cmd_finish": "финиш", "term.morning": "▸ Доброе утро. Задачи на сегодня:", "term.t1": "перезалить приложение на телефон", "term.t2": "3 фото товара в каталог", "term.t3": "написать пост", "term.saved": "✓ Сохранено. Записал в память:", "term.mem": "«поставщик отвечает быстрее в WhatsApp»", "final.title": "Забери систему — настрой под себя сегодня", "final.sub": "Скачивай, распаковывай и запускай. А если хочешь, чтобы систему собрали под твои проекты «под ключ» — просто напиши.", "final.btn_download": "Скачать подарок · ZIP", "final.btn_setup": "Настроить под меня", "back.title": "Это подарок с сайта Sergio AI", "back.text": "Здесь я показываю, как ставлю AI-системы предпринимателям: реальные кейсы, услуги и бесплатный AI-аудит для твоего бизнеса.", "back.btn_home": "Вернуться на главную", "back.btn_audit": "Получить бесплатный аудит", "footer.text": "Личная ОС для Claude Code · подарок от <a href=\"index.html\" style=\"color:#818cf8\">Sergio AI</a> · Buenos Aires"}, "es": {"nav.back": "Al inicio", "nav.gifttag": "Regalo · gratis", "nav.download": "Descargar", "hero.badge": "Regalo · gratis para siempre", "hero.h1": "Tu asistente de IA,<br>que <span class=\"gradient-text\">se acuerda</span> de vos", "hero.sub": "No un chat de una sola vez con amnesia, sino un <strong class=\"text-dark-100\">sistema operativo personal</strong> para tus proyectos y tu vida. Mantiene el contexto, se acuerda de las prioridades y te avisa solo. Lo configurás una vez y después trabaja para vos.", "hero.btn_download": "Descargar el regalo · ZIP", "hero.btn_how": "Cómo funciona", "hero.feat_time": "Configuración en 30–60 minutos", "hero.feat_nocode": "Sin programar", "hero.feat_forever": "Tuyo para siempre", "prob.ai_label": "IA común", "prob.ai_text": "Un empleado con amnesia. Cada chat nuevo arranca de cero: le explicás otra vez quién sos y qué proyectos tenés. No se acuerda de las decisiones de ayer, no mantiene las prioridades, no te avisa de nada.", "prob.kit_label": "Con este kit", "prob.kit_text": "Un asistente que <strong>se acuerda</strong>. Le contás una vez sobre vos y tus proyectos, y de ahí en más mantiene el contexto, sabe qué es lo más importante en cada momento y te marca solo el próximo paso. Un sistema permanente en vez de chats sueltos.", "parts.title": "De qué está hecho el sistema", "parts.subtitle": "En el fondo es una <strong class=\"text-dark-200\">carpeta con archivos de texto</strong>. Nada de código: Claude los lee y se comporta según eso.", "parts.1_name": "Tu ficha", "parts.1_desc": "Quién sos, qué proyectos tenés, cómo te gusta trabajar. Se lee automáticamente en cada arranque.", "parts.2_name": "Memoria", "parts.2_desc": "Datos que va aprendiendo con el tiempo y no se olvida. Un dato, una tarjeta.", "parts.3_name": "Recetas", "parts.3_desc": "«Cuando digo X, hacé los pasos Y». Las tareas repetidas como procedimientos ya listos.", "parts.4_name": "Rituales del día", "parts.4_code": "arrancar · cerrar", "parts.4_desc": "A la mañana: «acá están tus tareas». A la noche: «guardé lo nuevo».", "parts.5_name": "Caja fuerte para las claves", "parts.5_desc": "Las contraseñas y los tokens se guardan aparte, no en la conversación. Bien protegidos.", "parts.6_name": "Backup en la nube", "parts.6_desc": "Una copia de todo en un repositorio privado. No perdés nada y podés volver atrás.", "steps.title": "Cómo ponerlo en marcha en 4 pasos", "steps.subtitle": "No entregás tu sistema, sino un <strong class=\"text-dark-200\">esqueleto vacío + un cuestionario</strong>. Claude lo completa a tu medida.", "steps.1_name": "Instalá Claude Code", "steps.1_desc": "El asistente CLI gratuito de Anthropic. Si ya lo tenés, salteá este paso.", "steps.2_name": "Poné la carpeta en tu máquina", "steps.2_desc": "Descomprimí el ZIP que bajaste en tu directorio de trabajo. Adentro ya vienen la instrucción y el cuestionario.", "steps.3_name": "Decí una sola frase", "steps.3_desc": "«Configurame con este kit: llevame por el <code class=\"codeword\">INTERVIEW.md</code>».", "steps.4_name": "Respondé las preguntas", "steps.4_desc": "Proyectos, objetivos, estilo de trabajo, servicios. Con tus respuestas, Claude arma solo tu sistema.", "steps.time": "30–60 minutos y el sistema ya funciona", "get.title": "Qué te llevás", "get.b1": "A la mañana decís <strong>«arrancar»</strong> y ves las tareas y prioridades del día.", "get.b2": "A la noche <strong>«cerrar»</strong> y quedó todo guardado, lo nuevo se anotó en la memoria.", "get.b3": "Al día siguiente Claude se acuerda de todo. Cuanto más lo usás, más se adapta a vos.", "term.title": "claude — tu SO", "term.cmd_start": "arrancar", "term.cmd_finish": "cerrar", "term.morning": "▸ Buen día. Tareas para hoy:", "term.t1": "resubir la app al teléfono", "term.t2": "3 fotos del producto para el catálogo", "term.t3": "escribir un posteo", "term.saved": "✓ Guardado. Anoté en la memoria:", "term.mem": "«el proveedor responde más rápido por WhatsApp»", "final.title": "Llevate el sistema y configuralo a tu medida hoy", "final.sub": "Descargá, descomprimí y arrancá. Y si querés que te armen el sistema para tus proyectos «llave en mano», escribime nomás.", "final.btn_download": "Descargar el regalo · ZIP", "final.btn_setup": "Que lo configuren para mí", "back.title": "Este es un regalo del sitio de Sergio AI", "back.text": "Acá muestro cómo instalo sistemas de IA para emprendedores: casos reales, servicios y una auditoría de IA gratis para tu negocio.", "back.btn_home": "Volver al inicio", "back.btn_audit": "Pedir la auditoría gratis", "footer.text": "SO personal para Claude Code · un regalo de <a href=\"index.html\" style=\"color:#818cf8\">Sergio AI</a> · Buenos Aires"}, "en": {"nav.back": "Home", "nav.gifttag": "Gift · free", "nav.download": "Download", "hero.badge": "Gift · free forever", "hero.h1": "An AI assistant<br>that <span class=\"gradient-text\">remembers</span> you", "hero.sub": "Not a one-off chat with amnesia, but a <strong class=\"text-dark-100\">personal operating system</strong> for your projects and your life. It holds context, remembers your priorities, and reminds you on its own. Set it up once — after that it works for you.", "hero.btn_download": "Download the gift · ZIP", "hero.btn_how": "How it works", "hero.feat_time": "Setup in 30–60 minutes", "hero.feat_nocode": "No coding", "hero.feat_forever": "Yours forever", "prob.ai_label": "Regular AI", "prob.ai_text": "An employee with amnesia. Every new chat starts from zero: you explain again who you are and what your projects are. It doesn't remember yesterday's decisions, doesn't hold your priorities, reminds you of nothing.", "prob.kit_label": "With this kit", "prob.kit_text": "An assistant that <strong>remembers</strong>. Tell it about yourself and your projects once — from then on it holds context, knows what matters most right now, and suggests the next step on its own. A permanent system instead of scattered chats.", "parts.title": "What the system is made of", "parts.subtitle": "At its core it's a <strong class=\"text-dark-200\">folder of text files</strong>. No code — Claude reads them and behaves accordingly.", "parts.1_name": "A profile on you", "parts.1_desc": "Who you are, what your projects are, how you like to work. Read automatically on every launch.", "parts.2_name": "Memory", "parts.2_desc": "Facts it learns over time and never forgets. One fact — one card.", "parts.3_name": "Recipes", "parts.3_desc": "\"When I say X — do Y step by step.\" Recurring tasks as ready-made procedures.", "parts.4_name": "Daily rituals", "parts.4_code": "start · finish", "parts.4_desc": "In the morning — \"here are your tasks.\" In the evening — \"saved, here's what's new.\"", "parts.5_name": "A vault for keys", "parts.5_desc": "Passwords and tokens are stored separately, not in the chat. Protected.", "parts.6_name": "Cloud backup", "parts.6_desc": "A copy of everything in a private repository. You won't lose a thing, and you can roll back.", "steps.title": "How to turn it on in 4 steps", "steps.subtitle": "You're not handing over my system, but an <strong class=\"text-dark-200\">empty framework + a questionnaire</strong>. Claude fills it in for you.", "steps.1_name": "Install Claude Code", "steps.1_desc": "A free CLI assistant from Anthropic. If you already have it — skip.", "steps.2_name": "Drop the folder in place", "steps.2_desc": "Unpack the downloaded ZIP into your working directory. Inside there's already an instruction file and a questionnaire.", "steps.3_name": "Say one line", "steps.3_desc": "\"Set me up from this kit — walk me through <code class=\"codeword\">INTERVIEW.md</code>.\"", "steps.4_name": "Answer the questions", "steps.4_desc": "Projects, goals, work style, services. Claude builds your system out of the answers itself.", "steps.time": "30–60 minutes — and the system is running", "get.title": "What you get", "get.b1": "In the morning you say <strong>\"start\"</strong> — you see your tasks and priorities for the day.", "get.b2": "In the evening <strong>\"finish\"</strong> — everything's saved, the new stuff written into memory.", "get.b3": "The next day Claude remembers it all. The longer you use it — the smarter it gets about you.", "term.title": "claude — your OS", "term.cmd_start": "start", "term.cmd_finish": "finish", "term.morning": "▸ Good morning. Today's tasks:", "term.t1": "re-upload the app to the phone", "term.t2": "3 product photos into the catalog", "term.t3": "write a post", "term.saved": "✓ Saved. Written to memory:", "term.mem": "\"the supplier replies faster on WhatsApp\"", "final.title": "Take the system — set it up for yourself today", "final.sub": "Download, unpack, and run. And if you'd rather have the system built around your projects \"turnkey\" — just message me.", "final.btn_download": "Download the gift · ZIP", "final.btn_setup": "Set it up for me", "back.title": "This is a gift from the Sergio AI site", "back.text": "Here I show how I set up AI systems for entrepreneurs: real cases, services, and a free AI audit for your business.", "back.btn_home": "Back to home", "back.btn_audit": "Get a free audit", "footer.text": "Personal OS for Claude Code · a gift from <a href=\"index.html\" style=\"color:#818cf8\">Sergio AI</a> · Buenos Aires"}};
+function detectLang(){const n=navigator.language||'';if(n.startsWith('ru'))return'ru';if(n.startsWith('es'))return'es';return'en';}
+let curLang=localStorage.getItem('lang')||detectLang();
+function setLang(l){if(!T[l])l='en';curLang=l;localStorage.setItem('lang',l);document.documentElement.lang=l;
+document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
+const d=T[l];
+document.querySelectorAll('[data-i18n]').forEach(e=>{const v=d[e.dataset.i18n];if(v!=null)e.textContent=v});
+document.querySelectorAll('[data-i18n-html]').forEach(e=>{const v=d[e.dataset.i18nHtml];if(v!=null)e.innerHTML=v});}
+document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+setLang(curLang);
+</script>
+<script>
+// ═══ Scroll reveal ═══
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal,.stagger,.reveal-left,.reveal-right').forEach(el=>obs.observe(el));
+
+// ═══ Kinetic hero text ═══
+setTimeout(()=>{document.querySelectorAll('.hero-word').forEach((w,i)=>{setTimeout(()=>w.classList.add('show'),200+i*250)})},300);
+
+// ═══ Animated counters ═══
+const counterObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const t=+e.target.dataset.target,s=e.target.dataset.suffix||'';let c=0;const step=Math.max(1,Math.floor(t/40));const iv=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(iv)}e.target.textContent=c+s},30);counterObs.unobserve(e.target)}})},{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>counterObs.observe(el));
+
+// ═══ Neural network canvas ═══
+(function(){
+  const cv=document.getElementById('neural-canvas');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let W,H,nodes=[];
+  const isMobile=window.innerWidth<768;
+  const N=isMobile?25:55,MAX_DIST=isMobile?110:160,COLORS=['rgba(99,102,241,','rgba(34,211,238,','rgba(168,85,247,'];
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight}
+  function Node(){
+    this.x=Math.random()*W;this.y=Math.random()*H;
+    this.vx=(Math.random()-.5)*.35;this.vy=(Math.random()-.5)*.35;
+    this.r=Math.random()*1.5+.5;
+    this.col=COLORS[Math.floor(Math.random()*COLORS.length)];
+  }
+  function init(){resize();nodes=[];for(let i=0;i<N;i++)nodes.push(new Node())}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      const a=nodes[i];
+      a.x+=a.vx;a.y+=a.vy;
+      if(a.x<0||a.x>W)a.vx*=-1;
+      if(a.y<0||a.y>H)a.vy*=-1;
+      for(let j=i+1;j<N;j++){
+        const b=nodes[j];
+        const d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(d<MAX_DIST){
+          const alpha=(.55*(1-d/MAX_DIST)).toFixed(3);
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle=a.col+alpha+')';ctx.lineWidth=.6;ctx.stroke();
+        }
+      }
+      ctx.beginPath();ctx.arc(a.x,a.y,a.r,0,Math.PI*2);
+      ctx.fillStyle=a.col+'.7)';ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize',()=>{resize()});
+  init();draw();
+})();
+</script>
+</body>
+</html>

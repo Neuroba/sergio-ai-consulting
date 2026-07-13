@@ -544,7 +544,7 @@ body{animation:pageFadeIn .35s ease both}
           <a href="#cases" class="px-8 py-4 glass rounded-2xl font-medium hover:bg-dark-700/50 transition-all" data-i18n="hero.cta2">See real results</a>
         </div>
         <!-- Gift: AI Personal OS -->
-        <a href="#panel-personal" onclick="document.getElementById('acc-personal').classList.add('open')" class="mt-5 inline-flex items-center gap-3 px-5 py-3 rounded-2xl transition-all hover:scale-[1.02] reveal" style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);text-decoration:none">
+        <a href="personal-os-kit.html" class="mt-5 inline-flex items-center gap-3 px-5 py-3 rounded-2xl transition-all hover:scale-[1.02] reveal" style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18);text-decoration:none">
           <iconify-icon icon="solar:gift-bold-duotone" class="i-pulse" style="font-size:26px;color:#f59e0b;flex-shrink:0"></iconify-icon>
           <div>
             <div style="font-size:10px;color:#f59e0b;font-weight:700;letter-spacing:.1em;text-transform:uppercase" data-i18n="hero.gift_tag">Bonus with every package</div>
@@ -1188,7 +1188,7 @@ STATUS_LABELS = {
       <div class="panel-cta-bar" style="--pcc:rgba(245,158,11,.12);--pca:#f59e0b">
         <div><span class="pcta-stat" style="color:#f59e0b">Free · forever</span> <span class="pcta-text" data-i18n="pcta.p4">you get this system with any audit — for life</span></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a id="os-template-link" href="https://app.notion.com/p/38b6a70ce737810994a6e12c7c97bd56" target="_blank" class="pcta-btn" style="--pb:#f59e0b;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35)"><iconify-icon icon="solar:notebook-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="os.get_template">Get template →</span></a>
+          <a id="os-template-link" href="personal-os-kit.html" class="pcta-btn" style="--pb:#f59e0b;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35)"><iconify-icon icon="solar:gift-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="os.get_template">Get the gift →</span></a>
           <a href="#cta" class="pcta-btn" style="--pb:#d97706"><iconify-icon icon="solar:document-text-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="pcta.cta">Get free audit →</span></a>
         </div>
       </div>
@@ -2043,11 +2043,11 @@ Object.assign(T.es,{"fk.sub":"Research · Diseño · Estrategia · Prototipo","f
 Object.assign(T.ru,{"fk.sub":"Research · Дизайн · Стратегия · Прототип","fk.mdesc":"Симулятор финграмотности для детей под аргентинскую инфляцию. От анализа до дизайна и прототипа — за дни, с ИИ.","fk.hook":"Симулятор финграмотности для детей под инфляцию Аргентины — от research к дизайну и прототипу, за дни.","fk.open":"открыть","fk.h":"От идеи к защитимой нише, дизайну и рабочему прототипу — за дни","fk.lbl_desc":"Описание","fk.desc":"Симулятор финграмотности для детей под аргентинскую инфляцию: дети учатся защищать ценность своих денег играя — и, главное, расти. Продаётся банку под белой маркой как готовый CSR.","fk.lbl_work":"Работа","fk.w1":"Глубокий AI-research рынка и категории — 90+ источников, честная юнит-экономика","fk.w2":"Стратегия: white-label банку + многоканальный план роста","fk.w3":"Дизайн-прототип (тренды 2026): детское приложение + панель родителя + демо для банка","fk.bstat":"Research → стратегия → дизайн → демо","fk.benefit":"за дни, в одиночку, с ИИ — так же двину твой проект","fk.see_app":"Открыть детское приложение →","fk.see_bank":"Демо для банка →","fk.n1":"дней","fk.ml1":"идея → прототип","fk.ml2":"источников","fk.ml3":"экранов"});
 
 const OS_TEMPLATES={
-  en:'https://app.notion.com/p/38b6a70ce737810994a6e12c7c97bd56',
-  es:'https://app.notion.com/p/38b6a70ce737812db9fdecae05bcdbfb',
-  ru:'https://app.notion.com/p/38b6a70ce73781cd9d44d69d3aa55091'
+  en:'personal-os-kit.html',
+  es:'personal-os-kit.html',
+  ru:'personal-os-kit.html'
 };
-const OS_BTN_TEXT={en:'Get template →',es:'Obtener plantilla →',ru:'Получить шаблон →'};
+const OS_BTN_TEXT={en:'Get the gift →',es:'Recibir el regalo →',ru:'Забрать подарок →'};
 
 function detectLang(){const nav=navigator.language||'';if(nav.startsWith('ru'))return'ru';if(nav.startsWith('es'))return'es';return'en';}
 let curLang=localStorage.getItem('lang')||detectLang();
