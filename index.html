@@ -709,7 +709,137 @@ body{animation:pageFadeIn .35s ease both}
     <div id="cases-accordion" class="space-y-3 reveal">
 
     <!-- 1 · Mercado Radar -->
-    <div class="case-acc open" id="acc-mercado" style="--acc-rgb:45,212,191">
+    <!-- 1 · kruzement.com -->
+    <div class="case-acc open" id="acc-kruzement" style="--acc-rgb:59,130,246">
+      <div class="acc-hdr" onclick="toggleAcc('kruzement')">
+        <div class="acc-icon-box" style="background:rgba(59,130,246,.07)">
+          <iconify-icon icon="solar:global-bold-duotone" class="i-spin" style="font-size:20px;color:#3b82f6"></iconify-icon>
+        </div>
+        <div class="acc-info">
+          <div class="acc-title">kruzement.com</div>
+          <div class="acc-sub" data-i18n="kz.sub">One-page site · Canvas 2D animation · Cal.com booking · RU/EN</div>
+          <div class="acc-mobile-desc" data-i18n="kz.mdesc">A one-page site for a business developer in Buenos Aires: price, format and a live grid of open slots instead of a personal handle. Seven days from brief to launch.</div>
+          <div class="acc-mobile-pills">
+            <span class="acc-mpill" style="background:rgba(59,130,246,.1);color:#3b82f6" data-i18n="kz.mp1">7 days</span>
+            <span class="acc-mpill" style="background:rgba(129,140,248,.12);color:#818cf8" data-i18n="kz.mp2">2 formats</span>
+            <span class="acc-mpill" style="background:rgba(245,158,11,.1);color:#f59e0b" data-i18n="kz.mp3">RU + EN</span>
+          </div>
+        </div>
+        <div class="acc-mgroup">
+          <div class="acc-metric"><div class="acc-mnum" style="color:#3b82f6">7</div><div class="acc-mlabel" data-i18n="kz.ml1">days, brief to launch</div></div>
+          <div class="acc-metric"><div class="acc-mnum" style="color:#818cf8">2</div><div class="acc-mlabel" data-i18n="kz.ml2">formats, both live</div></div>
+          <div class="acc-metric"><div class="acc-mnum" style="color:#f59e0b">13</div><div class="acc-mlabel" data-i18n="kz.ml3">topics named on the page</div></div>
+        </div>
+        <div class="acc-hook" data-i18n="kz.hook">Seven days from brief to a page that names the price and opens his calendar.</div>
+        <div class="acc-chev"><span class="acc-chev-arrow">&#9660;</span><span class="acc-chev-hint">открыть</span></div>
+      </div>
+      <div class="acc-body">
+    <!-- Panel: kruzement.com -->
+    <div class="case-panel glass-strong rounded-3xl p-8" id="panel-kruzement">
+      <div class="grid lg:grid-cols-2 gap-10 items-start">
+
+        <!-- Left -->
+        <div class="space-y-7">
+          <div>
+            <div class="flex flex-wrap gap-2 mb-3">
+              <span class="cp-tag" style="--cc:rgba(59,130,246,.2);--ct:#3b82f6" data-i18n="kz.tg1">Live animation</span>
+              <span class="cp-tag" style="--cc:rgba(99,102,241,.2);--ct:#818cf8">Canvas 2D</span>
+              <span class="cp-tag" style="--cc:rgba(34,197,94,.2);--ct:#4ade80">Zero dependencies</span>
+              <span class="cp-tag" style="--cc:rgba(244,63,94,.2);--ct:#fb7185">Cal.com API</span>
+              <span class="cp-tag" style="--cc:rgba(148,163,184,.2);--ct:#cbd5e1">Cloudflare Pages</span>
+            </div>
+            <h3 class="font-display text-2xl font-bold" data-i18n="kz.h">kruzement.com: seven days from a personal handle to a page that names the price</h3>
+            <p class="text-[13.5px] text-dark-300 mt-3 leading-relaxed" data-i18n="kz.lead">Nikita Kruzement is a business developer in Buenos Aires: he connects founders with the people who open a market for them. Strangers reached him the same way everywhere — a personal handle in a channel description, an Instagram bio, LinkedIn. No price, no format, no calendar, so every request turned into a free hour. Now there is one link to answer with.</p>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="cp-metric" style="--mc:#3b82f6"><div class="cp-num">7</div><div class="cp-label" data-i18n="kz.ml1">days, brief to launch</div></div>
+            <div class="cp-metric" style="--mc:#818cf8"><div class="cp-num">13</div><div class="cp-label" data-i18n="kz.ml3">topics named on the page</div></div>
+            <div class="cp-metric" style="--mc:#f59e0b"><div class="cp-num">19</div><div class="cp-label" data-i18n="kz.ml4">real cities on the globe</div></div>
+          </div>
+          <!-- Before / After -->
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <div class="cp-col-head" style="color:#f43f5e">// Before</div>
+              <div class="cp-row cp-bad" data-i18n="kz.b1">No site of his own — the entry point was a personal handle: channel description, Instagram bio, LinkedIn</div>
+              <div class="cp-row cp-bad" data-i18n="kz.b2">Strangers wrote in DMs with a request, and the conversation was free</div>
+              <div class="cp-row cp-bad" data-i18n="kz.b3">No price, no format, no calendar link — he explained it in words every time</div>
+              <div class="cp-row cp-bad" data-i18n="kz.b4">Agreeing on a time took a thread of messages: he is in Buenos Aires, the other person anywhere</div>
+            </div>
+            <div>
+              <div class="cp-col-head" style="color:#4ade80">// After</div>
+              <div class="cp-row cp-good" data-i18n="kz.a1">One link to answer a cold request with — price, format and the nearest open slots visible at once</div>
+              <div class="cp-row cp-good" data-i18n="kz.a2">Two formats: 30 minutes for $100, an hour for $150 — picking one changes both the grid and where the booking lands</div>
+              <div class="cp-row cp-good" data-i18n="kz.a3">Times shown in the visitor timezone with a Buenos Aires clock beside them</div>
+              <div class="cp-row cp-good" data-i18n="kz.a4">Booking is free, the invoice comes after he confirms — that is on the page, not discovered later</div>
+            </div>
+          </div>
+          <!-- Built -->
+          <div class="space-y-2.5">
+            <div class="cp-built-row"><iconify-icon icon="solar:planet-bold-duotone" style="font-size:16px;color:#3b82f6;flex-shrink:0"></iconify-icon><span data-i18n="kz.w1">The hero is a dotted Earth replaying the mechanics of his work: a request arrives from another city into Buenos Aires, he routes it to the right person in a third country, those two connect directly. Real cities, generalised stories</span></div>
+            <div class="cp-built-row"><iconify-icon icon="solar:calendar-bold-duotone" style="font-size:16px;color:#818cf8;flex-shrink:0"></iconify-icon><span data-i18n="kz.w2">The slot grid pulls from his Cal.com for real — no invented openings. It offers a few convenient windows a day inside Buenos Aires working hours instead of the whole calendar; his own request</span></div>
+            <div class="cp-built-row"><iconify-icon icon="solar:list-check-bold-duotone" style="font-size:16px;color:#fb7185;flex-shrink:0"></iconify-icon><span data-i18n="kz.w3">One page in two languages: hero, 13 topics people come with, open slots, Who I am with the LatAm Insights conference inside, booking. Relocation and moving capital sit on their own wide row</span></div>
+            <div class="cp-built-row"><iconify-icon icon="solar:shield-check-bold-duotone" style="font-size:16px;color:#4ade80;flex-shrink:0"></iconify-icon><span data-i18n="kz.w4">If the calendar does not answer, the page says so plainly and keeps a working booking button instead of drawing slots that do not exist</span></div>
+          </div>
+        </div>
+
+        <!-- Right: browser frame -->
+        <div class="space-y-5">
+          <style>
+          .kz-hint{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#93c5fd;font-weight:600;margin-bottom:10px;font-family:'Space Grotesk',sans-serif}
+          .kz-hint .pt{display:inline-block;font-size:15px;animation:kzPoint 1.2s ease-in-out infinite}
+          @keyframes kzPoint{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+          .kz-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+          .kz-tab{display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;padding:9px 13px;border-radius:12px;border:1px solid rgba(59,130,246,.28);background:rgba(15,23,42,.6);color:#cbd5e1;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 0 rgba(59,130,246,.12)}
+          .kz-tab iconify-icon{font-size:15px;color:#93c5fd}
+          .kz-tab:hover{transform:translateY(-2px);border-color:rgba(59,130,246,.55);color:#eaf2ff;box-shadow:0 6px 16px rgba(59,130,246,.2)}
+          .kz-tab.act{background:linear-gradient(180deg,#3b82f6,#1d4ed8);border-color:#3b82f6;color:#eaf2ff;box-shadow:0 0 18px rgba(59,130,246,.4)}
+          .kz-tab.act iconify-icon{color:#eaf2ff}
+          .kz-frame{width:100%;border-radius:16px;border:1px solid rgba(59,130,246,.18);box-shadow:0 28px 60px rgba(0,0,0,.55);overflow:hidden;background:#060a14}
+          .kz-bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(15,23,42,.9);border-bottom:1px solid rgba(148,163,184,.12)}
+          .kz-dot{width:9px;height:9px;border-radius:50%;background:rgba(148,163,184,.3)}
+          .kz-url{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#93c5fd}
+          .kz-frame img{display:block;width:100%}
+          .kz-mob{display:flex;gap:16px;align-items:flex-start;margin-top:20px;padding-top:18px;border-top:1px solid rgba(148,163,184,.12)}
+          .kz-phone{width:124px;flex-shrink:0;border-radius:20px;border:5px solid #060a14;box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(59,130,246,.12);overflow:hidden;background:#060a14}
+          .kz-phone img{display:block;width:100%}
+          @media (prefers-reduced-motion:reduce){.kz-hint .pt{animation:none}}
+          </style>
+          <div id="kz-hint" class="kz-hint"><span class="pt">&#128072;</span><span id="kz-hint-t"></span></div>
+          <div id="kz-tabs" class="kz-tabs">
+            <div class="kz-tab act" onclick="kzShow(0)"><iconify-icon icon="solar:home-2-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
+            <div class="kz-tab" onclick="kzShow(1)"><iconify-icon icon="solar:global-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
+            <div class="kz-tab" onclick="kzShow(2)"><iconify-icon icon="solar:list-check-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
+            <div class="kz-tab" onclick="kzShow(3)"><iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
+            <div class="kz-tab" onclick="kzShow(4)"><iconify-icon icon="solar:user-id-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
+            <div class="kz-tab" onclick="kzShow(5)"><iconify-icon icon="solar:ticket-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
+          </div>
+          <div class="flex flex-col">
+            <div class="kz-frame">
+              <div class="kz-bar"><span class="kz-dot"></span><span class="kz-dot"></span><span class="kz-dot"></span><span class="kz-url">kruzement.com</span></div>
+              <img id="kz-shot" src="cases/kruzement/hero-1.jpg" alt="kruzement.com" loading="lazy">
+            </div>
+            <div id="kz-desc" class="text-[12.5px] text-slate-400 mt-4 leading-relaxed"></div>
+            <div class="kz-mob">
+              <div class="kz-phone"><img src="cases/kruzement/mobile-hero.jpg" alt="kruzement.com on a phone" loading="lazy"></div>
+              <div class="text-[12.5px] text-slate-400 leading-relaxed" data-i18n="kz.mobnote">The same page on a phone: the globe keeps running behind the text, and the price and the booking button stay on the first screen. One layout, no separate mobile version.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 mb-4 text-sm text-dark-200 leading-relaxed" style="border-left:2px solid rgba(59,130,246,.45);padding-left:14px" data-i18n="kz.bridge">Seven days from an empty folder to a live page, and the entry into his paid time now works without a single message exchanged. It took a week because the client answered the same day and already had an audience to send the link to. If your clients also start with a quick question and end with a free hour, that is the kind of entry point I build.</div>
+      <div class="panel-cta-bar" style="--pcc:rgba(59,130,246,.12);--pca:#3b82f6">
+        <div><span class="pcta-stat" data-i18n="kz.pctastat">A live site, not a mockup</span> <span class="pcta-text" data-i18n="kz.pcta">— open it and drag the planet yourself</span></div>
+        <div class="flex gap-2 flex-wrap">
+          <a href="https://kruzement.com/" target="_blank" rel="noopener" class="pcta-btn" style="background:linear-gradient(180deg,#3b82f6,#1d4ed8);color:#eaf2ff;border-color:#3b82f6"><iconify-icon icon="solar:arrow-right-up-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="kz.open">Open kruzement.com</span></a>
+          <a href="#cta" class="pcta-btn"><iconify-icon icon="solar:document-text-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="pcta.cta">Free audit &#8594;</span></a>
+        </div>
+      </div>
+    </div>
+      </div><!-- /acc-body -->
+    </div><!-- /acc-kruzement -->
+
+    <div class="case-acc" id="acc-mercado" style="--acc-rgb:45,212,191">
       <div class="acc-hdr" onclick="toggleAcc('mercado')">
         <div class="acc-icon-box" style="background:rgba(45,212,191,.07)">
           <iconify-icon icon="solar:radar-2-bold-duotone" class="i-float" style="font-size:20px;color:#2dd4bf"></iconify-icon>
@@ -1088,151 +1218,6 @@ body{animation:pageFadeIn .35s ease both}
     </div>
       </div><!-- /acc-body -->
     </div><!-- /acc-tickline -->
-
-    <!-- 3.5 · kruzement.com -->
-    <div class="case-acc" id="acc-kruzement" style="--acc-rgb:59,130,246">
-      <div class="acc-hdr" onclick="toggleAcc('kruzement')">
-        <div class="acc-icon-box" style="background:rgba(59,130,246,.07)">
-          <iconify-icon icon="solar:global-bold-duotone" class="i-spin" style="font-size:20px;color:#3b82f6"></iconify-icon>
-        </div>
-        <div class="acc-info">
-          <div class="acc-title">kruzement.com</div>
-          <div class="acc-sub" data-i18n="kz.sub">One-page site · Canvas 2D animation · Cal.com booking · RU/EN</div>
-          <div class="acc-mobile-desc" data-i18n="kz.mdesc">A one-page site for a business developer in Buenos Aires: price, format and a live grid of open slots instead of a personal handle. Seven days from brief to launch.</div>
-          <div class="acc-mobile-pills">
-            <span class="acc-mpill" style="background:rgba(59,130,246,.1);color:#3b82f6" data-i18n="kz.mp1">7 days</span>
-            <span class="acc-mpill" style="background:rgba(129,140,248,.12);color:#818cf8" data-i18n="kz.mp2">2 formats</span>
-            <span class="acc-mpill" style="background:rgba(245,158,11,.1);color:#f59e0b" data-i18n="kz.mp3">RU + EN</span>
-          </div>
-        </div>
-        <div class="acc-mgroup">
-          <div class="acc-metric"><div class="acc-mnum" style="color:#3b82f6">7</div><div class="acc-mlabel" data-i18n="kz.ml1">days, brief to launch</div></div>
-          <div class="acc-metric"><div class="acc-mnum" style="color:#818cf8">2</div><div class="acc-mlabel" data-i18n="kz.ml2">formats, both live</div></div>
-          <div class="acc-metric"><div class="acc-mnum" style="color:#f59e0b">13</div><div class="acc-mlabel" data-i18n="kz.ml3">topics named on the page</div></div>
-        </div>
-        <div class="acc-hook" data-i18n="kz.hook">Seven days from brief to a page that names the price and opens his calendar.</div>
-        <div class="acc-chev"><span class="acc-chev-arrow">&#9660;</span><span class="acc-chev-hint">открыть</span></div>
-      </div>
-      <div class="acc-body">
-    <!-- Panel: kruzement.com -->
-    <div class="case-panel glass-strong rounded-3xl p-8" id="panel-kruzement">
-      <div class="grid lg:grid-cols-2 gap-10 items-start">
-
-        <!-- Left -->
-        <div class="space-y-7">
-          <div>
-            <div class="flex flex-wrap gap-2 mb-3">
-              <span class="cp-tag" style="--cc:rgba(59,130,246,.2);--ct:#3b82f6" data-i18n="kz.tg1">Live animation</span>
-              <span class="cp-tag" style="--cc:rgba(99,102,241,.2);--ct:#818cf8">Canvas 2D</span>
-              <span class="cp-tag" style="--cc:rgba(34,197,94,.2);--ct:#4ade80">Zero dependencies</span>
-              <span class="cp-tag" style="--cc:rgba(244,63,94,.2);--ct:#fb7185">Cal.com API</span>
-              <span class="cp-tag" style="--cc:rgba(148,163,184,.2);--ct:#cbd5e1">Cloudflare Pages</span>
-            </div>
-            <h3 class="font-display text-2xl font-bold" data-i18n="kz.h">kruzement.com: seven days from a personal handle to a page that names the price</h3>
-            <p class="text-[13.5px] text-dark-300 mt-3 leading-relaxed" data-i18n="kz.lead">Nikita Kruzement is a business developer in Buenos Aires: he connects founders with the people who open a market for them. Strangers reached him the same way everywhere — a personal handle in a channel description, an Instagram bio, LinkedIn. No price, no format, no calendar, so every request turned into a free hour. Now there is one link to answer with.</p>
-          </div>
-          <div class="grid grid-cols-3 gap-3">
-            <div class="cp-metric" style="--mc:#3b82f6"><div class="cp-num">7</div><div class="cp-label" data-i18n="kz.ml1">days, brief to launch</div></div>
-            <div class="cp-metric" style="--mc:#818cf8"><div class="cp-num">13</div><div class="cp-label" data-i18n="kz.ml3">topics named on the page</div></div>
-            <div class="cp-metric" style="--mc:#f59e0b"><div class="cp-num">19</div><div class="cp-label" data-i18n="kz.ml4">real cities on the globe</div></div>
-          </div>
-          <!-- Before / After -->
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <div class="cp-col-head" style="color:#f43f5e">// Before</div>
-              <div class="cp-row cp-bad" data-i18n="kz.b1">No site of his own — the entry point was a personal handle: channel description, Instagram bio, LinkedIn</div>
-              <div class="cp-row cp-bad" data-i18n="kz.b2">Strangers wrote in DMs with a request, and the conversation was free</div>
-              <div class="cp-row cp-bad" data-i18n="kz.b3">No price, no format, no calendar link — he explained it in words every time</div>
-              <div class="cp-row cp-bad" data-i18n="kz.b4">Agreeing on a time took a thread of messages: he is in Buenos Aires, the other person anywhere</div>
-            </div>
-            <div>
-              <div class="cp-col-head" style="color:#4ade80">// After</div>
-              <div class="cp-row cp-good" data-i18n="kz.a1">One link to answer a cold request with — price, format and the nearest open slots visible at once</div>
-              <div class="cp-row cp-good" data-i18n="kz.a2">Two formats: 30 minutes for $100, an hour for $150 — picking one changes both the grid and where the booking lands</div>
-              <div class="cp-row cp-good" data-i18n="kz.a3">Times shown in the visitor timezone with a Buenos Aires clock beside them</div>
-              <div class="cp-row cp-good" data-i18n="kz.a4">Booking is free, the invoice comes after he confirms — that is on the page, not discovered later</div>
-            </div>
-          </div>
-          <!-- Built -->
-          <div class="space-y-2.5">
-            <div class="cp-built-row"><iconify-icon icon="solar:planet-bold-duotone" style="font-size:16px;color:#3b82f6;flex-shrink:0"></iconify-icon><span data-i18n="kz.w1">The hero is a dotted Earth replaying the mechanics of his work: a request arrives from another city into Buenos Aires, he routes it to the right person in a third country, those two connect directly. Real cities, generalised stories</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:calendar-bold-duotone" style="font-size:16px;color:#818cf8;flex-shrink:0"></iconify-icon><span data-i18n="kz.w2">The slot grid pulls from his Cal.com for real — no invented openings. It offers a few convenient windows a day inside Buenos Aires working hours instead of the whole calendar; his own request</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:list-check-bold-duotone" style="font-size:16px;color:#fb7185;flex-shrink:0"></iconify-icon><span data-i18n="kz.w3">One page in two languages: hero, 13 topics people come with, open slots, Who I am with the LatAm Insights conference inside, booking. Relocation and moving capital sit on their own wide row</span></div>
-            <div class="cp-built-row"><iconify-icon icon="solar:shield-check-bold-duotone" style="font-size:16px;color:#4ade80;flex-shrink:0"></iconify-icon><span data-i18n="kz.w4">If the calendar does not answer, the page says so plainly and keeps a working booking button instead of drawing slots that do not exist</span></div>
-          </div>
-        </div>
-
-        <!-- Right: browser frame -->
-        <div class="space-y-5">
-          <style>
-          .kz-hint{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#93c5fd;font-weight:600;margin-bottom:10px;font-family:'Space Grotesk',sans-serif}
-          .kz-hint .pt{display:inline-block;font-size:15px;animation:kzPoint 1.2s ease-in-out infinite}
-          @keyframes kzPoint{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-          .kz-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-          .kz-tab{display:inline-flex;align-items:center;gap:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;padding:9px 13px;border-radius:12px;border:1px solid rgba(59,130,246,.28);background:rgba(15,23,42,.6);color:#cbd5e1;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 0 rgba(59,130,246,.12)}
-          .kz-tab iconify-icon{font-size:15px;color:#93c5fd}
-          .kz-tab:hover{transform:translateY(-2px);border-color:rgba(59,130,246,.55);color:#eaf2ff;box-shadow:0 6px 16px rgba(59,130,246,.2)}
-          .kz-tab.act{background:linear-gradient(180deg,#3b82f6,#1d4ed8);border-color:#3b82f6;color:#eaf2ff;box-shadow:0 0 18px rgba(59,130,246,.4)}
-          .kz-tab.act iconify-icon{color:#eaf2ff}
-          .kz-frame{width:100%;border-radius:16px;border:1px solid rgba(59,130,246,.18);box-shadow:0 28px 60px rgba(0,0,0,.55);overflow:hidden;background:#060a14}
-          .kz-bar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(15,23,42,.9);border-bottom:1px solid rgba(148,163,184,.12)}
-          .kz-dot{width:9px;height:9px;border-radius:50%;background:rgba(148,163,184,.3)}
-          .kz-url{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#93c5fd}
-          .kz-frame img{display:block;width:100%}
-          .kz-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
-          .kz-beat img{display:block;width:100%;border-radius:10px;border:1px solid rgba(59,130,246,.16)}
-          .kz-beat-cap{font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:600;color:#93c5fd;margin-top:7px;line-height:1.35}
-          @media (max-width:640px){.kz-strip{grid-template-columns:1fr}}
-          .kz-mob{display:flex;gap:16px;align-items:flex-start;margin-top:20px;padding-top:18px;border-top:1px solid rgba(148,163,184,.12)}
-          .kz-phone{width:124px;flex-shrink:0;border-radius:20px;border:5px solid #060a14;box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(59,130,246,.12);overflow:hidden;background:#060a14}
-          .kz-phone img{display:block;width:100%}
-          @media (prefers-reduced-motion:reduce){.kz-hint .pt{animation:none}}
-          </style>
-          <div id="kz-hint" class="kz-hint"><span class="pt">&#128072;</span><span id="kz-hint-t"></span></div>
-          <div id="kz-tabs" class="kz-tabs">
-            <div class="kz-tab act" onclick="kzShow(0)"><iconify-icon icon="solar:home-2-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
-            <div class="kz-tab" onclick="kzShow(1)"><iconify-icon icon="solar:global-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
-            <div class="kz-tab" onclick="kzShow(2)"><iconify-icon icon="solar:list-check-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
-            <div class="kz-tab" onclick="kzShow(3)"><iconify-icon icon="solar:calendar-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
-            <div class="kz-tab" onclick="kzShow(4)"><iconify-icon icon="solar:user-id-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
-            <div class="kz-tab" onclick="kzShow(5)"><iconify-icon icon="solar:ticket-bold-duotone"></iconify-icon><span class="kz-lbl"></span></div>
-          </div>
-          <div class="flex flex-col">
-            <div class="kz-frame">
-              <div class="kz-bar"><span class="kz-dot"></span><span class="kz-dot"></span><span class="kz-dot"></span><span class="kz-url">kruzement.com</span></div>
-              <img id="kz-shot" src="cases/kruzement/hero-1.jpg" alt="kruzement.com" loading="lazy">
-            </div>
-            <div id="kz-desc" class="text-[12.5px] text-slate-400 mt-4 leading-relaxed"></div>
-            <div class="kz-mob">
-              <div class="kz-phone"><img src="cases/kruzement/mobile-hero.jpg" alt="kruzement.com on a phone" loading="lazy"></div>
-              <div class="text-[12.5px] text-slate-400 leading-relaxed" data-i18n="kz.mobnote">The same page on a phone: the globe keeps running behind the text, and the price and the booking button stay on the first screen. One layout, no separate mobile version.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Storyboard: three beats of the hero animation -->
-      <div class="mt-8">
-        <div class="cp-col-head" style="color:#3b82f6" data-i18n="kz.sth">// How the globe tells his job</div>
-        <div class="kz-strip">
-          <div class="kz-beat"><img src="cases/kruzement/story-1.jpg" alt="beat 1" loading="lazy"><div class="kz-beat-cap" data-i18n="kz.st1">1 · A request comes in from Almaty — looking for a pilot with a network</div></div>
-          <div class="kz-beat"><img src="cases/kruzement/story-2.jpg" alt="beat 2" loading="lazy"><div class="kz-beat-cap" data-i18n="kz.st2">2 · Nikita routes it on — the second person opens a café chain in Montevideo</div></div>
-          <div class="kz-beat"><img src="cases/kruzement/story-3.jpg" alt="beat 3" loading="lazy"><div class="kz-beat-cap" data-i18n="kz.st3">3 · The two connect directly, bypassing the hub — matched</div></div>
-        </div>
-        <div class="text-[12px] text-slate-500 mt-3 leading-relaxed" data-i18n="kz.stnote">Three beats of the hero animation, captured from the live site. It runs on its own, reacts to the cursor and turns so the cities of the current beat always stay on the visible side.</div>
-      </div>
-
-      <div class="mt-6 mb-4 text-sm text-dark-200 leading-relaxed" style="border-left:2px solid rgba(59,130,246,.45);padding-left:14px" data-i18n="kz.bridge">Seven days from an empty folder to a live page, and the entry into his paid time now works without a single message exchanged. It took a week because the client answered the same day and already had an audience to send the link to. If your clients also start with a quick question and end with a free hour, that is the kind of entry point I build.</div>
-      <div class="panel-cta-bar" style="--pcc:rgba(59,130,246,.12);--pca:#3b82f6">
-        <div><span class="pcta-stat" data-i18n="kz.pctastat">A live site, not a mockup</span> <span class="pcta-text" data-i18n="kz.pcta">— open it and drag the planet yourself</span></div>
-        <div class="flex gap-2 flex-wrap">
-          <a href="https://kruzement.com/" target="_blank" rel="noopener" class="pcta-btn" style="background:linear-gradient(180deg,#3b82f6,#1d4ed8);color:#eaf2ff;border-color:#3b82f6"><iconify-icon icon="solar:arrow-right-up-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="kz.open">Open kruzement.com</span></a>
-          <a href="#cta" class="pcta-btn"><iconify-icon icon="solar:document-text-bold-duotone" style="font-size:14px"></iconify-icon> <span data-i18n="pcta.cta">Free audit &#8594;</span></a>
-        </div>
-      </div>
-    </div>
-      </div><!-- /acc-body -->
-    </div><!-- /acc-kruzement -->
 
     <!-- 3 · PicadaRica -->
     <div class="case-acc" id="acc-picadarica" style="--acc-rgb:244,63,94">
@@ -2446,9 +2431,9 @@ function detectLang(){const nav=navigator.language||'';if(nav.startsWith('ru'))r
 Object.assign(T.en,{"cases.c1m1": "commits / 3 weeks", "cases.c1m2": "unit tests", "cases.c1m3": "min per build", "cases.c1status": "Status: beta. iOS runs through TestFlight, the Android build works — 7 testers in the crew. Bug-hunting now, release next."});
 Object.assign(T.es,{"cases.c1m1": "commits / 3 semanas", "cases.c1m2": "tests unitarios", "cases.c1m3": "min por build", "cases.c1status": "Estado: beta. iOS va por TestFlight y la build de Android funciona — 7 testers en el equipo. Ahora cazamos bugs y después sale el release."});
 Object.assign(T.ru,{"cases.c1m1": "коммитов / 3 недели", "cases.c1m2": "юнит-тестов", "cases.c1m3": "мин на сборку", "cases.c1status": "Статус: бета. iOS раздаётся через TestFlight, Android-сборка работает — 7 тестеров в команде. Сейчас ловим баги, дальше релиз."});
-Object.assign(T.en,{"kz.sub": "One-page site · Canvas 2D animation · Cal.com booking · RU/EN", "kz.mdesc": "A one-page site for a business developer in Buenos Aires: price, format and a live grid of open slots instead of a personal handle. Seven days from brief to launch.", "kz.mp1": "7 days", "kz.mp2": "2 formats", "kz.mp3": "RU + EN", "kz.ml1": "days, brief to launch", "kz.ml2": "formats, both live", "kz.ml3": "topics named on the page", "kz.ml4": "real cities on the globe", "kz.hook": "Seven days from brief to a page that names the price and opens his calendar.", "kz.tg1": "Live animation", "kz.h": "kruzement.com: seven days from a personal handle to a page that names the price", "kz.lead": "Nikita Kruzement is a business developer in Buenos Aires: he connects founders with the people who open a market for them. Strangers reached him the same way everywhere — a personal handle in a channel description, an Instagram bio, LinkedIn. No price, no format, no calendar, so every request turned into a free hour. Now there is one link to answer with.", "kz.b1": "No site of his own — the entry point was a personal handle: channel description, Instagram bio, LinkedIn", "kz.b2": "Strangers wrote in DMs with a request, and the conversation was free", "kz.b3": "No price, no format, no calendar link — he explained it in words every time", "kz.b4": "Agreeing on a time took a thread of messages: he is in Buenos Aires, the other person anywhere", "kz.a1": "One link to answer a cold request with — price, format and the nearest open slots visible at once", "kz.a2": "Two formats: 30 minutes for $100, an hour for $150 — picking one changes both the grid and where the booking lands", "kz.a3": "Times shown in the visitor timezone with a Buenos Aires clock beside them", "kz.a4": "Booking is free, the invoice comes after he confirms — that is on the page, not discovered later", "kz.w1": "The hero is a dotted Earth replaying the mechanics of his work: a request arrives from another city into Buenos Aires, he routes it to the right person in a third country, those two connect directly. Real cities, generalised stories", "kz.w2": "The slot grid pulls from his Cal.com for real — no invented openings. It offers a few convenient windows a day inside Buenos Aires working hours instead of the whole calendar; his own request", "kz.w3": "One page in two languages: hero, 13 topics people come with, open slots, Who I am with the LatAm Insights conference inside, booking. Relocation and moving capital sit on their own wide row", "kz.w4": "If the calendar does not answer, the page says so plainly and keeps a working booking button instead of drawing slots that do not exist", "kz.sth": "// How the globe tells his job", "kz.st1": "1 · A request comes in from Almaty — looking for a pilot with a network", "kz.st2": "2 · Nikita routes it on — the second person opens a café chain in Montevideo", "kz.st3": "3 · The two connect directly, bypassing the hub — matched", "kz.stnote": "Three beats of the hero animation, captured from the live site. It runs on its own, reacts to the cursor and turns so the cities of the current beat always stay on the visible side.", "kz.bridge": "Seven days from an empty folder to a live page, and the entry into his paid time now works without a single message exchanged. It took a week because the client answered the same day and already had an audience to send the link to. If your clients also start with a quick question and end with a free hour, that is the kind of entry point I build.", "kz.pctastat": "A live site, not a mockup", "kz.pcta": "— open it and drag the planet yourself", "kz.open": "Open kruzement.com", "kz.mobnote": "The same page on a phone: the globe keeps running behind the text, and the price and the booking button stay on the first screen. One layout, no separate mobile version."});
-Object.assign(T.es,{"kz.sub": "Sitio de una página · animación en canvas · reservas con Cal.com · RU/EN", "kz.mdesc": "El sitio de un business developer en Buenos Aires: precio, formato y una grilla viva de horarios libres en lugar de un usuario personal. Siete días del brief al lanzamiento.", "kz.mp1": "7 días", "kz.mp2": "2 formatos", "kz.mp3": "RU + EN", "kz.ml1": "días, del brief al lanzamiento", "kz.ml2": "formatos, los dos en vivo", "kz.ml3": "temas nombrados en la página", "kz.ml4": "ciudades reales en el globo", "kz.hook": "Siete días del brief a una página que dice el precio y abre su calendario.", "kz.tg1": "Animación en vivo", "kz.h": "kruzement.com: siete días de un usuario personal a una página que dice el precio", "kz.lead": "Nikita Kruzement es business developer en Buenos Aires: conecta founders con la gente que les abre un mercado. Los desconocidos le llegaban siempre igual — un usuario personal en la descripción del canal, en la bio de Instagram, en LinkedIn. Sin precio, sin formato y sin calendario, así que cada consulta terminaba en una hora gratis. Ahora hay un solo link para responder.", "kz.b1": "No tenía sitio propio — la entrada era siempre la misma: su usuario en la descripción del canal, en la bio de Instagram, en LinkedIn", "kz.b2": "Desconocidos le escribían al privado con una consulta y la charla salía gratis", "kz.b3": "Ni precio, ni formato, ni link al calendario — lo explicaba con palabras cada vez", "kz.b4": "Acordar un horario llevaba varios mensajes: él está en Buenos Aires y el otro en cualquier lado", "kz.a1": "Un solo link para responder una consulta fría — precio, formato y los próximos horarios libres se ven de una", "kz.a2": "Dos formatos: 30 minutos a $100 y una hora a $150 — elegir uno cambia la grilla y adónde entra la reserva", "kz.a3": "Los horarios se muestran en la zona del visitante, con el reloj de Buenos Aires al lado", "kz.a4": "Reservar es gratis y la factura llega después de que él confirma — está dicho en la página, no se descubre después", "kz.w1": "La primera pantalla es una Tierra de puntos donde se repite la mecánica de su trabajo: una consulta llega desde otra ciudad a Buenos Aires, él la deriva a la persona indicada en un tercer país y esos dos se conectan directo. Ciudades reales, historias generalizadas", "kz.w2": "La grilla de horarios sale de su Cal.com de verdad — no hay huecos inventados. Muestra unas pocas ventanas cómodas por día dentro del horario de Buenos Aires y no el calendario entero; lo pidió él mismo", "kz.w3": "Una página en dos idiomas: primera pantalla, 13 temas con los que le escriben, horarios libres, «Quién soy» con la conferencia LatAm Insights adentro, y la reserva. Mudanza y traslado de capitales van en su propia fila ancha", "kz.w4": "Si el calendario no responde, la página lo dice de frente y deja el botón de reserva funcionando, en vez de dibujar horarios que no existen", "kz.sth": "// Cómo el globo cuenta su trabajo", "kz.st1": "1 · Llega una consulta desde Almaty — «busca un piloto con red»", "kz.st2": "2 · Nikita la deriva — el segundo «abre una cadena de cafés» en Montevideo", "kz.st3": "3 · Los dos se conectan directo, salteando el hub — «conectados»", "kz.stnote": "Tres tiempos de la animación de la primera pantalla, tomados del sitio en vivo. Corre sola, responde al cursor y gira el globo para que las ciudades del tiempo actual queden siempre del lado visible.", "kz.bridge": "Siete días de una carpeta vacía a una página en vivo, y la entrada a su tiempo pago ahora funciona sin un solo mensaje. Acá llevó una semana porque el cliente contestaba el mismo día y ya tenía a quién mandarle el link. Si tus charlas también arrancan con «una consulta rápida» y terminan en una hora gratis, armo esa misma puerta de entrada.", "kz.pctastat": "Un sitio en vivo, no una maqueta", "kz.pcta": "— abrilo y girá el planeta vos mismo", "kz.open": "Abrir kruzement.com", "kz.mobnote": "La misma página desde el celular: el globo sigue girando detrás del texto y el precio y el botón de reserva quedan en la primera pantalla. Un solo layout, sin versión mobile aparte."});
-Object.assign(T.ru,{"kz.sub": "Одностраничный сайт · анимация на canvas · бронь через Cal.com · RU/EN", "kz.mdesc": "Сайт бизнес-девелопера в Буэнос-Айресе: цена, формат и живая сетка свободных окон вместо личного ника. Семь дней от брифа до запуска.", "kz.mp1": "7 дней", "kz.mp2": "2 формата", "kz.mp3": "RU + EN", "kz.ml1": "дней, бриф → запуск", "kz.ml2": "формата, оба живые", "kz.ml3": "направлений названы словами", "kz.ml4": "настоящих городов на планете", "kz.hook": "Семь дней от брифа до страницы, которая называет цену и открывает календарь.", "kz.tg1": "Живая анимация", "kz.h": "kruzement.com: семь дней от личного ника до страницы, которая называет цену", "kz.lead": "Никита Круземент — бизнес-девелопер в Буэнос-Айресе: связывает основателей с людьми, которые открывают им рынок. Незнакомые приходили к нему одинаково — личный ник в описании канала, в био инстаграма, в LinkedIn. Ни цены, ни формата, ни календаря, поэтому любой запрос превращался в бесплатный час. Теперь есть одна ссылка, которую можно отправить в ответ.", "kz.b1": "Своего сайта не было — вход везде один и тот же: личный ник в описании канала, в био инстаграма, в LinkedIn", "kz.b2": "Незнакомые люди писали в личку с запросом, и разговор шёл бесплатно", "kz.b3": "Ни цены, ни формата, ни ссылки на календарь — каждый раз объяснять словами заново", "kz.b4": "Договориться о времени — переписка на несколько сообщений: он в Буэнос-Айресе, собеседник где угодно", "kz.a1": "Одна ссылка в ответ на холодный запрос — цена, формат и ближайшие свободные окна видны сразу", "kz.a2": "Два формата: 30 минут за $100, час за $150 — выбор меняет и сетку времени, и то, куда уходит бронь", "kz.a3": "Время показано в часовом поясе гостя, рядом часы Буэнос-Айреса", "kz.a4": "Бронь бесплатная, счёт приходит после подтверждения — это написано на странице, а не выясняется потом", "kz.w1": "Первый экран — точечная Земля, на которой проигрывается механика его работы: запрос приходит из чужого города в Буэнос-Айрес, он выводит на нужного человека в третьей стране, эти двое соединяются напрямую. Города настоящие, сюжеты обобщённые", "kz.w2": "Сетка окон тянется из его Cal.com по-настоящему — выдуманных слотов нет. Показывает не весь календарь, а несколько удобных окон в день внутри рабочих часов Буэнос-Айреса; так попросил он сам", "kz.w3": "Одна страница на двух языках: первый экран, 13 направлений, свободные окна, «Кто я» с блоком конференции LatAm Insights внутри, бронирование. Переезд и перевод капиталов — отдельной широкой строкой", "kz.w4": "Если календарь не отвечает, страница честно об этом пишет и оставляет рабочую кнопку брони, а не рисует окна, которых нет", "kz.sth": "// Как планета рассказывает его работу", "kz.st1": "1 · Из Алматы приходит запрос — «ищет пилот с сетью»", "kz.st2": "2 · Никита выводит дальше — у второго «вход в сеть кафе» в Монтевидео", "kz.st3": "3 · Двое соединяются напрямую, минуя хаб — «состыковано»", "kz.stnote": "Три такта анимации первого экрана, сняты с живого сайта. Она идёт сама, отзывается на курсор и доворачивает шар так, чтобы города текущего такта всегда оставались на видимой стороне.", "kz.bridge": "Семь дней от пустой папки до живой страницы — и вход в его платное время теперь работает без единого сообщения. Здесь ушла неделя, потому что заказчик отвечал в тот же день и у него уже была аудитория, которой можно разослать ссылку. Если ваши разговоры тоже начинаются с «есть вопрос» и заканчиваются бесплатным часом — соберу такую же точку входа.", "kz.pctastat": "Живой сайт, а не макет", "kz.pcta": "— откройте и покрутите планету сами", "kz.open": "Открыть kruzement.com", "kz.mobnote": "Та же страница с телефона: планета продолжает идти за текстом, а цена и кнопка брони остаются на первом экране. Одна вёрстка, отдельной мобильной версии нет."});
+Object.assign(T.en,{"kz.sub": "One-page site · Canvas 2D animation · Cal.com booking · RU/EN", "kz.mdesc": "A one-page site for a business developer in Buenos Aires: price, format and a live grid of open slots instead of a personal handle. Seven days from brief to launch.", "kz.mp1": "7 days", "kz.mp2": "2 formats", "kz.mp3": "RU + EN", "kz.ml1": "days, brief to launch", "kz.ml2": "formats, both live", "kz.ml3": "topics named on the page", "kz.ml4": "real cities on the globe", "kz.hook": "Seven days from brief to a page that names the price and opens his calendar.", "kz.tg1": "Live animation", "kz.h": "kruzement.com: seven days from a personal handle to a page that names the price", "kz.lead": "Nikita Kruzement is a business developer in Buenos Aires: he connects founders with the people who open a market for them. Strangers reached him the same way everywhere — a personal handle in a channel description, an Instagram bio, LinkedIn. No price, no format, no calendar, so every request turned into a free hour. Now there is one link to answer with.", "kz.b1": "No site of his own — the entry point was a personal handle: channel description, Instagram bio, LinkedIn", "kz.b2": "Strangers wrote in DMs with a request, and the conversation was free", "kz.b3": "No price, no format, no calendar link — he explained it in words every time", "kz.b4": "Agreeing on a time took a thread of messages: he is in Buenos Aires, the other person anywhere", "kz.a1": "One link to answer a cold request with — price, format and the nearest open slots visible at once", "kz.a2": "Two formats: 30 minutes for $100, an hour for $150 — picking one changes both the grid and where the booking lands", "kz.a3": "Times shown in the visitor timezone with a Buenos Aires clock beside them", "kz.a4": "Booking is free, the invoice comes after he confirms — that is on the page, not discovered later", "kz.w1": "The hero is a dotted Earth replaying the mechanics of his work: a request arrives from another city into Buenos Aires, he routes it to the right person in a third country, those two connect directly. Real cities, generalised stories", "kz.w2": "The slot grid pulls from his Cal.com for real — no invented openings. It offers a few convenient windows a day inside Buenos Aires working hours instead of the whole calendar; his own request", "kz.w3": "One page in two languages: hero, 13 topics people come with, open slots, Who I am with the LatAm Insights conference inside, booking. Relocation and moving capital sit on their own wide row", "kz.w4": "If the calendar does not answer, the page says so plainly and keeps a working booking button instead of drawing slots that do not exist", "kz.bridge": "Seven days from an empty folder to a live page, and the entry into his paid time now works without a single message exchanged. It took a week because the client answered the same day and already had an audience to send the link to. If your clients also start with a quick question and end with a free hour, that is the kind of entry point I build.", "kz.pctastat": "A live site, not a mockup", "kz.pcta": "— open it and drag the planet yourself", "kz.open": "Open kruzement.com", "kz.mobnote": "The same page on a phone: the globe keeps running behind the text, and the price and the booking button stay on the first screen. One layout, no separate mobile version."});
+Object.assign(T.es,{"kz.sub": "Sitio de una página · animación en canvas · reservas con Cal.com · RU/EN", "kz.mdesc": "El sitio de un business developer en Buenos Aires: precio, formato y una grilla viva de horarios libres en lugar de un usuario personal. Siete días del brief al lanzamiento.", "kz.mp1": "7 días", "kz.mp2": "2 formatos", "kz.mp3": "RU + EN", "kz.ml1": "días, del brief al lanzamiento", "kz.ml2": "formatos, los dos en vivo", "kz.ml3": "temas nombrados en la página", "kz.ml4": "ciudades reales en el globo", "kz.hook": "Siete días del brief a una página que dice el precio y abre su calendario.", "kz.tg1": "Animación en vivo", "kz.h": "kruzement.com: siete días de un usuario personal a una página que dice el precio", "kz.lead": "Nikita Kruzement es business developer en Buenos Aires: conecta founders con la gente que les abre un mercado. Los desconocidos le llegaban siempre igual — un usuario personal en la descripción del canal, en la bio de Instagram, en LinkedIn. Sin precio, sin formato y sin calendario, así que cada consulta terminaba en una hora gratis. Ahora hay un solo link para responder.", "kz.b1": "No tenía sitio propio — la entrada era siempre la misma: su usuario en la descripción del canal, en la bio de Instagram, en LinkedIn", "kz.b2": "Desconocidos le escribían al privado con una consulta y la charla salía gratis", "kz.b3": "Ni precio, ni formato, ni link al calendario — lo explicaba con palabras cada vez", "kz.b4": "Acordar un horario llevaba varios mensajes: él está en Buenos Aires y el otro en cualquier lado", "kz.a1": "Un solo link para responder una consulta fría — precio, formato y los próximos horarios libres se ven de una", "kz.a2": "Dos formatos: 30 minutos a $100 y una hora a $150 — elegir uno cambia la grilla y adónde entra la reserva", "kz.a3": "Los horarios se muestran en la zona del visitante, con el reloj de Buenos Aires al lado", "kz.a4": "Reservar es gratis y la factura llega después de que él confirma — está dicho en la página, no se descubre después", "kz.w1": "La primera pantalla es una Tierra de puntos donde se repite la mecánica de su trabajo: una consulta llega desde otra ciudad a Buenos Aires, él la deriva a la persona indicada en un tercer país y esos dos se conectan directo. Ciudades reales, historias generalizadas", "kz.w2": "La grilla de horarios sale de su Cal.com de verdad — no hay huecos inventados. Muestra unas pocas ventanas cómodas por día dentro del horario de Buenos Aires y no el calendario entero; lo pidió él mismo", "kz.w3": "Una página en dos idiomas: primera pantalla, 13 temas con los que le escriben, horarios libres, «Quién soy» con la conferencia LatAm Insights adentro, y la reserva. Mudanza y traslado de capitales van en su propia fila ancha", "kz.w4": "Si el calendario no responde, la página lo dice de frente y deja el botón de reserva funcionando, en vez de dibujar horarios que no existen", "kz.bridge": "Siete días de una carpeta vacía a una página en vivo, y la entrada a su tiempo pago ahora funciona sin un solo mensaje. Acá llevó una semana porque el cliente contestaba el mismo día y ya tenía a quién mandarle el link. Si tus charlas también arrancan con «una consulta rápida» y terminan en una hora gratis, armo esa misma puerta de entrada.", "kz.pctastat": "Un sitio en vivo, no una maqueta", "kz.pcta": "— abrilo y girá el planeta vos mismo", "kz.open": "Abrir kruzement.com", "kz.mobnote": "La misma página desde el celular: el globo sigue girando detrás del texto y el precio y el botón de reserva quedan en la primera pantalla. Un solo layout, sin versión mobile aparte."});
+Object.assign(T.ru,{"kz.sub": "Одностраничный сайт · анимация на canvas · бронь через Cal.com · RU/EN", "kz.mdesc": "Сайт бизнес-девелопера в Буэнос-Айресе: цена, формат и живая сетка свободных окон вместо личного ника. Семь дней от брифа до запуска.", "kz.mp1": "7 дней", "kz.mp2": "2 формата", "kz.mp3": "RU + EN", "kz.ml1": "дней, бриф → запуск", "kz.ml2": "формата, оба живые", "kz.ml3": "направлений названы словами", "kz.ml4": "настоящих городов на планете", "kz.hook": "Семь дней от брифа до страницы, которая называет цену и открывает календарь.", "kz.tg1": "Живая анимация", "kz.h": "kruzement.com: семь дней от личного ника до страницы, которая называет цену", "kz.lead": "Никита Круземент — бизнес-девелопер в Буэнос-Айресе: связывает основателей с людьми, которые открывают им рынок. Незнакомые приходили к нему одинаково — личный ник в описании канала, в био инстаграма, в LinkedIn. Ни цены, ни формата, ни календаря, поэтому любой запрос превращался в бесплатный час. Теперь есть одна ссылка, которую можно отправить в ответ.", "kz.b1": "Своего сайта не было — вход везде один и тот же: личный ник в описании канала, в био инстаграма, в LinkedIn", "kz.b2": "Незнакомые люди писали в личку с запросом, и разговор шёл бесплатно", "kz.b3": "Ни цены, ни формата, ни ссылки на календарь — каждый раз объяснять словами заново", "kz.b4": "Договориться о времени — переписка на несколько сообщений: он в Буэнос-Айресе, собеседник где угодно", "kz.a1": "Одна ссылка в ответ на холодный запрос — цена, формат и ближайшие свободные окна видны сразу", "kz.a2": "Два формата: 30 минут за $100, час за $150 — выбор меняет и сетку времени, и то, куда уходит бронь", "kz.a3": "Время показано в часовом поясе гостя, рядом часы Буэнос-Айреса", "kz.a4": "Бронь бесплатная, счёт приходит после подтверждения — это написано на странице, а не выясняется потом", "kz.w1": "Первый экран — точечная Земля, на которой проигрывается механика его работы: запрос приходит из чужого города в Буэнос-Айрес, он выводит на нужного человека в третьей стране, эти двое соединяются напрямую. Города настоящие, сюжеты обобщённые", "kz.w2": "Сетка окон тянется из его Cal.com по-настоящему — выдуманных слотов нет. Показывает не весь календарь, а несколько удобных окон в день внутри рабочих часов Буэнос-Айреса; так попросил он сам", "kz.w3": "Одна страница на двух языках: первый экран, 13 направлений, свободные окна, «Кто я» с блоком конференции LatAm Insights внутри, бронирование. Переезд и перевод капиталов — отдельной широкой строкой", "kz.w4": "Если календарь не отвечает, страница честно об этом пишет и оставляет рабочую кнопку брони, а не рисует окна, которых нет", "kz.bridge": "Семь дней от пустой папки до живой страницы — и вход в его платное время теперь работает без единого сообщения. Здесь ушла неделя, потому что заказчик отвечал в тот же день и у него уже была аудитория, которой можно разослать ссылку. Если ваши разговоры тоже начинаются с «есть вопрос» и заканчиваются бесплатным часом — соберу такую же точку входа.", "kz.pctastat": "Живой сайт, а не макет", "kz.pcta": "— откройте и покрутите планету сами", "kz.open": "Открыть kruzement.com", "kz.mobnote": "Та же страница с телефона: планета продолжает идти за текстом, а цена и кнопка брони остаются на первом экране. Одна вёрстка, отдельной мобильной версии нет."});
 let curLang=localStorage.getItem('lang')||detectLang();
 function setLang(l){curLang=l;localStorage.setItem('lang',l);document.documentElement.lang=l;
 document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
